@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chitopia Franchise – Wireframe v0.3</title>
+<style>
+  :root{
+    --ink:#222; --mid:#666; --soft:#999; --line:#cfcfcf; --bg:#f4f4f4; --box:#e6e6e6; --white:#fff;
+    --ann:#2f6fed; --ann-bg:#eaf1ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI","Malgun Gothic",Roboto,Arial,sans-serif;color:var(--ink);background:var(--white);line-height:1.5;font-size:15px}
+  a{color:inherit;text-decoration:none}
+  button,input,select,textarea{font:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+  /* ---------- Review bar (not part of design) ---------- */
+  .review{background:#111;color:#ddd;font-size:13px;position:sticky;top:0;z-index:100}
+  .review .wrap{display:flex;gap:16px;align-items:center;height:40px;flex-wrap:wrap}
+  .review b{color:#fff}
+  .review select,.review button{background:#2a2a2a;color:#fff;border:1px solid #444;border-radius:4px;padding:3px 8px;cursor:pointer}
+  .review .sp{flex:1}
+
+  /* ---------- Header ---------- */
+  header.site{border-bottom:1px solid var(--line);background:var(--white);position:sticky;top:40px;z-index:90}
+  header.site .wrap{display:flex;align-items:center;height:72px;gap:32px}
+  .logo{width:140px;height:40px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:700;letter-spacing:2px;font-size:13px}
+  nav.gnb{display:flex;gap:28px;flex:1}
+  nav.gnb a{font-weight:600;color:var(--mid);padding:24px 0;border-bottom:3px solid transparent}
+  nav.gnb a.on{color:var(--ink);border-color:var(--ink)}
+  .hdr-r{display:flex;gap:12px;align-items:center}
+  .lang{display:flex;border:1px solid var(--ink);border-radius:20px;overflow:hidden;font-size:12px;font-weight:700}
+  .lang button{border:0;background:none;padding:5px 10px;cursor:pointer}
+  .lang button.on{background:var(--ink);color:#fff}
+  .burger{display:none;width:36px;height:36px;border:1px solid var(--ink);background:none;border-radius:4px}
+
+  /* ---------- Generic blocks ---------- */
+  .btn{display:inline-block;padding:12px 22px;border:2px solid var(--ink);border-radius:4px;font-weight:700;cursor:pointer;background:var(--white);color:var(--ink)}
+  .btn.pri{background:var(--ink);color:#fff}
+  .btn.sm{padding:7px 14px;font-size:13px}
+  .ph{background:var(--box);position:relative;display:flex;align-items:center;justify-content:center;color:var(--mid);font-size:12px;text-align:center;padding:8px;overflow:hidden;
+      background-image:linear-gradient(to top right,transparent calc(50% - 1px),var(--line) 50%,transparent calc(50% + 1px)),linear-gradient(to bottom right,transparent calc(50% - 1px),var(--line) 50%,transparent calc(50% + 1px))}
+  .ph span{background:var(--box);padding:2px 6px;position:relative;z-index:1}
+  .ph.circle{border-radius:50%}
+  .line{height:10px;background:var(--box);border-radius:2px;margin:6px 0}
+  .line.w60{width:60%}.line.w80{width:80%}.line.w40{width:40%}
+  section.blk{padding:72px 0;border-bottom:1px dashed var(--line);position:relative}
+  section.blk.gray{background:var(--bg)}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:2px;color:var(--soft);text-transform:uppercase;margin-bottom:8px}
+  h1{font-size:44px;line-height:1.15;margin-bottom:16px}
+  h2{font-size:30px;margin-bottom:12px}
+  h3{font-size:18px;margin-bottom:6px}
+  .lead{color:var(--mid);font-size:17px;max-width:680px}
+  .center{text-align:center}.center .lead{margin:0 auto}
+  .grid{display:grid;gap:24px}
+  .g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}.g6{grid-template-columns:repeat(6,1fr)}
+  .card{border:1px solid var(--line);border-radius:6px;padding:20px;background:var(--white)}
+  .mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mt40{margin-top:40px}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .tag{display:inline-block;font-size:11px;border:1px solid var(--soft);border-radius:10px;padding:1px 8px;color:var(--mid)}
+  .muted{color:var(--mid)}
+  .small{font-size:13px}
+
+  /* ---------- Annotations ---------- */
+  .ann{position:absolute;top:10px;left:10px;z-index:5;background:var(--ann);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:3px;font-family:Consolas,monospace}
+  .ann-desc{background:var(--ann-bg);border-left:3px solid var(--ann);color:#1d3f8a;font-size:12.5px;padding:8px 12px;margin-bottom:24px;border-radius:0 4px 4px 0}
+  body.no-ann .ann,body.no-ann .ann-desc{display:none}
+
+  /* ---------- Hero / banner ---------- */
+  .hero{min-height:560px;display:flex;align-items:center;position:relative}
+  .hero .ph{position:absolute;inset:0;align-items:flex-end;justify-content:flex-end}
+  .hero .inner{position:relative;z-index:2;background:rgba(255,255,255,.92);padding:40px;max-width:620px;border:1px solid var(--line)}
+  .banner{padding:64px 0;background:var(--bg);border-bottom:1px solid var(--line);position:relative}
+  .crumb{font-size:12px;color:var(--soft);margin-bottom:8px}
+
+  .stat b{display:block;font-size:36px}
+  .steps{counter-reset:s;display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+  .step{border:1px solid var(--line);border-radius:6px;padding:16px;background:var(--white);position:relative}
+  .step::before{counter-increment:s;content:counter(s,decimal-leading-zero);font-weight:800;font-size:22px;color:var(--soft);display:block;margin-bottom:6px}
+  .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+  .flow .card{flex:1;min-width:140px;text-align:center}
+  .flow .arr{display:flex;align-items:center;padding:0 8px;color:var(--soft);font-size:22px}
+  details{border:1px solid var(--line);border-radius:6px;padding:14px 18px;background:var(--white);margin-bottom:10px}
+  summary{font-weight:700;cursor:pointer}
+  details p{color:var(--mid);margin-top:8px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px}
+  .tabs a,.tabs button{border:1px solid var(--line);border-radius:20px;padding:6px 16px;font-size:14px;background:var(--white);cursor:pointer}
+  .tabs .on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .subnav{position:sticky;top:112px;background:var(--white);z-index:20;border-bottom:1px solid var(--line)}
+  .subnav .wrap{display:flex;gap:28px;height:52px;align-items:center;overflow-x:auto}
+  .subnav a{font-weight:600;color:var(--mid);white-space:nowrap}
+
+  /* form */
+  .form label{display:block;font-size:13px;font-weight:600;margin-bottom:4px}
+  .form input,.form select,.form textarea{width:100%;border:1px solid var(--line);border-radius:4px;padding:10px 12px;background:var(--white)}
+  .form .f{margin-bottom:14px}
+  .consent{display:flex;gap:8px;font-size:12.5px;color:var(--mid);align-items:flex-start}
+  .consent input{width:auto;margin-top:3px}
+  .stepper{display:flex;gap:8px;margin-bottom:20px}
+  .stepper span{flex:1;height:6px;background:var(--box);border-radius:3px}
+  .stepper span.on{background:var(--ink)}
+
+  /* stores */
+  .loc{display:grid;grid-template-columns:380px 1fr;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;min-height:520px}
+  .loc-list{border-right:1px solid var(--line);overflow:auto}
+  .store{padding:20px;border-bottom:1px solid var(--line);cursor:pointer}
+  .store.on{background:var(--bg);border-left:4px solid var(--ink)}
+  .pin{position:absolute;width:28px;height:28px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;z-index:2}
+  .pin i{transform:rotate(45deg);font-style:normal}
+
+  /* footer */
+  footer{background:#2b2b2b;color:#bbb;padding:48px 0 24px;font-size:13px}
+  footer .logo{border-color:#bbb;color:#bbb}
+  footer h4{color:#fff;font-size:13px;margin-bottom:10px}
+  footer li{list-style:none;margin-bottom:6px}
+  footer .copy{border-top:1px solid #444;margin-top:32px;padding-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+
+  /* mobile sticky bar */
+  .mbar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--line);z-index:95;grid-template-columns:1fr 1fr 1.4fr}
+  .mbar a{padding:14px 6px;text-align:center;font-weight:700;font-size:13px;border-right:1px solid var(--line)}
+  .mbar a:last-child{background:var(--ink);color:#fff}
+
+  /* page index (sitemap) */
+  .pindex{font-size:13px}
+  .pindex td,.pindex th{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  .pindex th{background:var(--bg)}
+
+  .page[hidden]{display:none}
+
+  /* ================= RESPONSIVE ================= */
+  .drawer{display:none}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .g-21{grid-template-columns:2fr 1fr}
+  .g-apply{grid-template-columns:1.6fr 1fr}
+  .g-foot{grid-template-columns:1.5fr 1fr 1fr 1fr}
+  img,video,iframe{max-width:100%}
+
+  /* Tablet ≤1024 */
+  @media (max-width:1024px){
+    nav.gnb{display:none}
+    .hdr-r{margin-left:auto}
+    .burger{display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer}
+    /* drawer */
+    .drawer{display:block;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:89;opacity:0;pointer-events:none;transition:opacity .2s}
+    .drawer.open{opacity:1;pointer-events:auto}
+    .drawer .panel{background:var(--white);padding:8px 24px 24px;transform:translateY(-12px);transition:transform .2s}
+    .drawer.open .panel{transform:none}
+    .drawer .panel a.nv{display:block;padding:16px 4px;border-bottom:1px solid var(--line);font-weight:700;font-size:17px}
+    .drawer .panel a.nv.on{color:var(--ink);text-decoration:underline}
+    .drawer .panel .btn{display:block;text-align:center;margin-top:16px}
+    .drawer .panel{max-height:100%;overflow:auto}
+    body.lock{overflow:hidden}    .g5,.g6{grid-template-columns:repeat(3,1fr)}
+    .steps{grid-template-columns:repeat(3,1fr)}
+    h1{font-size:38px}
+    .loc{grid-template-columns:320px 1fr}
+    .g-apply{grid-template-columns:1fr 1fr}
+  }
+
+  /* Mobile ≤768 */
+  @media (max-width:767px){
+    body{font-size:15px;padding-bottom:calc(52px + env(safe-area-inset-bottom))}
+    .wrap{padding:0 16px}
+    /* review bar: not sticky on mobile */
+    .review{position:static}
+    .review .wrap{height:auto;padding:6px 16px;gap:8px}
+    .review .sp,.review > .wrap > span:not(.sp){display:none}
+    .review .wrap{font-size:12px;flex-wrap:nowrap;overflow-x:auto}
+    .review select{max-width:150px}
+    /* header */
+    header.site{top:0}
+    header.site .wrap{height:60px;gap:12px}
+    .logo{width:110px;height:34px;font-size:11px}
+    .hdr-r .btn{display:none}
+
+    /* type & spacing */
+    h1{font-size:30px}
+    h2{font-size:23px}
+    .lead{font-size:15px}
+    section.blk{padding:48px 0}
+    .banner{padding:40px 0}
+    .mt40{margin-top:28px}
+    /* grids */
+    .g2,.g-21,.g-apply{grid-template-columns:1fr}
+    .g3,.g4,.g6{grid-template-columns:repeat(2,1fr)}
+    .g5{grid-template-columns:repeat(3,1fr)}
+    .g-foot{grid-template-columns:1fr 1fr}
+    .g-foot > div:first-child{grid-column:1/-1}
+    .grid{gap:16px}
+    .card{padding:16px}
+    .zig .ph{order:-1}
+    .g-21 .ph[style*="grid-row"]{grid-row:auto !important;min-height:220px !important}
+    .g-21{grid-template-columns:1fr 1fr}
+    .g-21 > .ph:first-child{grid-column:1/-1}
+    /* hero */
+    .hero{min-height:auto;flex-direction:column;align-items:stretch}
+    .hero .ph{position:relative;inset:auto;height:260px;align-items:center;justify-content:center}
+    .hero .wrap{padding:0}
+    .hero .inner{max-width:none;border:0;border-bottom:1px solid var(--line);padding:24px 16px;background:var(--white)}
+    .hero .row .btn{flex:1;text-align:center}
+    .stat b{font-size:28px}
+    /* steps → vertical timeline */
+    .steps{grid-template-columns:1fr;gap:0}
+    .step{display:grid;grid-template-columns:44px 1fr;column-gap:12px;border-radius:0;border-bottom:0;padding:14px 16px}
+    .step:last-child{border-bottom:1px solid var(--line)}
+    .step::before{grid-row:span 2;margin:0;font-size:20px}
+    .step h3{margin:0}
+    /* flow → vertical */
+    .flow{flex-direction:column}
+    .flow .card{min-width:0}
+    .flow .arr{justify-content:center;align-self:center;padding:4px 0;transform:rotate(90deg)}
+    /* tabs → horizontal scroll */
+    .tabs{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -16px;padding:0 16px 12px}
+    .tabs::-webkit-scrollbar{display:none}
+    .tabs a,.tabs button{white-space:nowrap;flex:none}
+    .tabs{justify-content:flex-start !important;-webkit-mask-image:linear-gradient(to right,#000 82%,transparent);mask-image:linear-gradient(to right,#000 82%,transparent)}
+    .subnav .wrap{-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent);padding-right:40px}
+    .subnav{top:60px}
+    .subnav .wrap{height:46px;gap:20px;scrollbar-width:none}
+    .subnav .wrap::-webkit-scrollbar{display:none}
+    .subnav .ann{display:none}
+    /* forms: 16px prevents iOS zoom */
+    .form input,.form select,.form textarea{font-size:16px;padding:12px}
+    .btn{padding:13px 18px}
+    /* store locator */
+    .loc{grid-template-columns:1fr;min-height:0}
+    .loc-list{border-right:0;order:2}
+    #map{min-height:260px !important;order:1}
+    .store .row .btn{flex:1;text-align:center}
+    /* misc */
+    .mbar{display:grid;padding-bottom:env(safe-area-inset-bottom)}
+    footer .copy{flex-direction:column}
+    .ann{font-size:10px}
+  }
+
+  /* Small mobile ≤480 */
+  @media (max-width:480px){
+    h1{font-size:26px}
+    .g3{grid-template-columns:1fr}
+    .form .g2{grid-template-columns:1fr !important}
+    .g-foot{grid-template-columns:1fr}
+    .hero .row{flex-direction:column}
+    .hero .row .btn{width:100%}
+    .lang button{padding:5px 8px}
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= REVIEW BAR (wireframe tool only) ================= -->
+<div class="review">
+  <div class="wrap">
+    <b>WIREFRAME v0.3</b>
+    <span>Page:</span>
+    <select id="pageSel" aria-label="Page selector">
+      <option value="sitemap">00 · Page Index (Sitemap)</option>
+      <option value="home">01 · Home</option>
+      <option value="brand">02 · Brand</option>
+      <option value="menu">03 · Menu</option>
+      <option value="proof">04 · Korea Proof</option>
+      <option value="franchise">05 · Franchise</option>
+      <option value="stores">06 · Store Locator</option>
+      <option value="apply">07 · Apply / Contact</option>
+      <option value="privacy">08 · Privacy Policy</option>
+    </select>
+    <span class="sp"></span>
+    <a href="preview.html" style="color:#9cf;text-decoration:underline">📱 Device Preview</a>
+    <button id="annBtn">Annotations: ON</button>
+  </div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header class="site">
+  <div class="wrap">
+    <a href="#home" class="logo" style="border:none;padding:0;"><img src="img/logo.png" alt="CHITOPIA" style="height:38px;object-fit:contain;"></a>
+    <nav class="gnb">
+      <a href="#brand" data-nav="brand" data-ko="브랜드">Brand</a>
+      <a href="#menu" data-nav="menu" data-ko="메뉴">Menu</a>
+      <a href="#proof" data-nav="proof" data-ko="한국 본사·품질">Korea Proof</a>
+      <a href="#franchise" data-nav="franchise" data-ko="가맹 안내">Franchise</a>
+      <a href="#stores" data-nav="stores" data-ko="매장 찾기">Stores</a>
+    </nav>
+    <div class="hdr-r">
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="en" class="on">EN</button><button data-lang="ko">KO</button>
+      </div>
+      <a href="#apply" class="btn pri sm" data-ko="가맹 상담 신청">Apply Now</a>
+      <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false">≡</button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="panel">
+    <a href="#brand" class="nv" data-nav="brand" data-ko="브랜드">Brand</a>
+    <a href="#menu" class="nv" data-nav="menu" data-ko="메뉴">Menu</a>
+    <a href="#proof" class="nv" data-nav="proof" data-ko="한국 본사·품질">Korea Proof</a>
+    <a href="#franchise" class="nv" data-nav="franchise" data-ko="가맹 안내">Franchise</a>
+    <a href="#stores" class="nv" data-nav="stores" data-ko="매장 찾기">Stores</a>
+    <a href="#apply" class="btn pri" data-ko="가맹 상담 신청">Apply Now</a>
+  </div>
+</div>
+
+<main>
+
+<!-- =====================================================================
+     00 · PAGE INDEX (review only)
+====================================================================== -->
+<section class="page" id="page-sitemap">
+  <div class="wrap" style="padding:48px 24px">
+    <h2>Page Index — MVP (권장 순서)</h2>
+    <p class="muted small">이 페이지는 검토용이며 실제 사이트에는 포함되지 않습니다. 각 페이지 이름을 클릭하면 해당 와이어프레임으로 이동합니다.</p>
+    <div class="tbl-scroll mt24"><table class="pindex" style="border-collapse:collapse;width:100%;min-width:640px">
+      <tr><th>#</th><th>Page</th><th>URL</th><th>주요 섹션</th><th>목적</th></tr>
+      <tr><td>01</td><td><a href="#home"><b>Home</b></a></td><td>/</td><td>Hero · Key Numbers · Signature Menu · Proven in Korea · Factory & Certs · Why Partner · PH Stores · Process · FAQ · Quick Inquiry</td><td>한 페이지로 전체 스토리 전달 및 상담 신청</td></tr>
+      <tr><td>02</td><td><a href="#brand"><b>Brand</b></a></td><td>/brand</td><td>Story · Philosophy · Why K-Chicken in PH · Company</td><td>브랜드 정통성, 운영 주체 신뢰</td></tr>
+      <tr><td>03</td><td><a href="#menu"><b>Menu</b></a></td><td>/menu</td><td>Category Tabs · Menu Grid · Sauces · Operator Note</td><td>상품력 (상세 내용 미정 → 플레이스홀더)</td></tr>
+      <tr><td>04</td><td><a href="#proof"><b>Korea Proof</b></a></td><td>/korea</td><td>Korean Stores · Factory & R&D · Certifications · Supply Chain to PH</td><td>핵심 차별점: 검증된 사업 + 품질 + 공급</td></tr>
+      <tr><td>05</td><td><a href="#franchise"><b>Franchise</b></a></td><td>/franchise</td><td>Why Partner · Store Format · Process · Training & Support · Requirements · FAQ</td><td>단일 매장 가맹 안내 (투자비 미공개)</td></tr>
+      <tr><td>06</td><td><a href="#stores"><b>Store Locator</b></a></td><td>/stores</td><td>Search · Store List · Map</td><td>현지 운영 실체 증명 (Market! Market! 2개 매장: 몰 내부 4층 / 몰 외부 1층)</td></tr>
+      <tr><td>07</td><td><a href="#apply"><b>Apply / Contact</b></a></td><td>/apply</td><td>2-Step Form · Contact Channels · Brochure</td><td>리드 확보 (최종 전환)</td></tr>
+      <tr><td>08</td><td><a href="#privacy"><b>Privacy Policy</b></a></td><td>/privacy</td><td>Text page</td><td>필리핀 개인정보보호법(RA 10173) 대응 — 폼 운영 시 필수</td></tr>
+    </table></div>
+    <h3 class="mt40">Global Elements</h3>
+    <ul class="small muted" style="margin-left:18px">
+      <li>Header: Logo · GNB 5개 · EN/KO 언어 전환 · Apply Now 버튼 (스크롤해도 상단 고정)</li>
+      <li>Mobile: 햄버거 메뉴 + 하단 고정 바 [Messenger] [Call] [Apply]</li>
+      <li>Footer: 회사 정보(한국 본사 / 필리핀 법인), 바로가기, SNS, 개인정보처리방침</li>
+      <li>모든 페이지 하단: 상담 신청 CTA 띠 배너</li>
+    </ul>
+  </div>
+</section>
+
+<!-- =====================================================================
+     01 · HOME
+====================================================================== -->
+<section class="page" id="page-home" hidden>
+
+  <!-- H1 HERO -->
+  <section class="hero">
+    <i class="ann">H1 · Hero</i>
+    <div class="ph" style="background-image:url('img/menu_classic_chicken.jpg');background-size:cover;background-position:center;"><span style="background:rgba(0,0,0,0.65);color:#fff;border-radius:4px;padding:6px 12px;font-size:13px;">CHITOPIA Authentic Korean Chicken</span></div>
+    <div class="wrap" style="width:100%">
+      <div class="inner">
+        <div class="eyebrow" data-ko="한국 정통 치킨 프랜차이즈">Authentic Korean Chicken Franchise</div>
+        <h1 data-ko="한국에서 검증된 맛,<br>이제 필리핀에서 당신의 사업으로.">Proven in Korea.<br>Now Your Business in the Philippines.</h1>
+        <p class="lead" data-ko="한국 공장에서 직접 만든 소스와 검증된 운영 시스템으로 필리핀 가맹점주님을 모십니다.">Factory-made Korean sauces and a proven operating system — we're looking for franchise partners in the Philippines.</p>
+        <div class="row mt24">
+          <a href="#apply" class="btn pri" data-ko="가맹 상담 신청">Apply for Franchise</a>
+          <a href="#franchise" class="btn" data-ko="가맹 안내 보기">Explore Franchise</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- H2 KEY NUMBERS -->
+  <section class="blk">
+    <i class="ann">H2 · Key Numbers</i>
+    <div class="wrap">
+      <div class="ann-desc">숫자 카운트업 애니메이션. 실제 수치는 확정 후 입력. 첫 화면 바로 아래에서 신뢰를 확보하는 섹션.</div>
+      <div class="grid g4 center">
+        <div class="stat"><b>000+</b><span data-ko="한국 매장 수">Stores in Korea</span></div>
+        <div class="stat"><b>00</b><span data-ko="업력 (년)">Years of Experience</span></div>
+        <div class="stat"><b>00t</b><span data-ko="일일 소스 생산량">Daily Sauce Production</span></div>
+        <div class="stat"><b>0</b><span data-ko="식품 안전 인증">Food Safety Certifications</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- H3 SIGNATURE MENU -->
+  <section class="blk gray">
+    <i class="ann">H3 · Signature Menu</i>
+    <div class="wrap">
+      <div class="ann-desc">시그니처 메뉴 4개. 메뉴 상세가 아직 없어 플레이스홀더로 표시. 카드를 클릭하면 Menu 페이지로 이동.</div>
+      <div class="center">
+        <div class="eyebrow" data-ko="시그니처 메뉴">Signature Menu</div>
+        <h2 data-ko="한 번 맛보면 다시 찾게 되는 맛">One Bite, and They Come Back</h2>
+      </div>
+      <div class="grid g4 mt40">
+        <div class="card">
+          <div class="ph" style="aspect-ratio:1;background:url('img/menu_classic_chicken.jpg') center/cover;"></div>
+          <div class="row mt16"><span class="tag">Signature</span></div>
+          <h3 class="mt8" data-ko="클래식 프라이드 치킨">Classic Fried Chicken</h3>
+          <p class="small muted" data-ko="바삭한 튀김옷의 황금빛 순살 치킨 & 그레이비">Golden boneless chicken with crisp coating & gravy</p>
+        </div>
+        <div class="card">
+          <div class="ph" style="aspect-ratio:1;background:url('img/menu_creamy_onion.jpg') center/cover;"></div>
+          <div class="row mt16"><span class="tag">Best Seller</span></div>
+          <h3 class="mt8" data-ko="크리미 어니언 치킨">Creamy Onion Chicken</h3>
+          <p class="small muted" data-ko="신선한 양파 슬라이스와 부드러운 화이트 크림 소스">Crispy chicken topped with fresh sliced onions & white cream sauce</p>
+        </div>
+        <div class="card">
+          <div class="ph" style="aspect-ratio:1;background:url('img/menu_takoyaki.jpg') center/cover;"></div>
+          <div class="row mt16"><span class="tag">K-Street Combo</span></div>
+          <h3 class="mt8" data-ko="치킨 & 타코야키 콤보">Chicken & Takoyaki Combo</h3>
+          <p class="small muted" data-ko="바삭한 치킨과 고소한 타코야키의 환상 조합">Crispy chicken bites and savory takoyaki in one meal</p>
+        </div>
+        <div class="card">
+          <div class="ph" style="aspect-ratio:1;background:url('img/menu_tteokbokki.jpg') center/cover;"></div>
+          <div class="row mt16"><span class="tag">K-Food</span></div>
+          <h3 class="mt8" data-ko="빠사시 쌀 떡볶이">Classic Rice Tteokbokki</h3>
+          <p class="small muted" data-ko="특제 소스로 맛을 낸 쫄깃한 쌀떡볶이">Chewy Korean rice cakes with special signature sauce</p>
+        </div>
+      </div>
+      <div class="center mt24"><a href="#menu" class="btn" data-ko="전체 메뉴 보기 →">See Full Menu →</a></div>
+    </div>
+  </section>
+
+  <!-- H4 PROVEN IN KOREA -->
+  <section class="blk">
+    <i class="ann">H4 · Proven in Korea</i>
+    <div class="wrap">
+      <div class="ann-desc">한국 매장 사진 갤러리(큰 사진 1 + 작은 사진 3). 실제 매장 사진 사용 권장 (스톡 이미지 X).</div>
+      <div class="grid g2" style="align-items:center">
+        <div>
+          <div class="eyebrow" data-ko="한국에서 검증">Proven in Korea</div>
+          <h2 data-ko="한국 전역에서 사랑받는 브랜드">Loved Across Korea</h2>
+          <p class="lead" data-ko="[한국 매장 운영 성과 요약 – 매장 수, 대표 상권, 고객 반응 등 2~3문장]">[Summary of Korean store performance – number of stores, key locations, customer love – 2–3 sentences]</p>
+          <a href="#proof" class="btn mt24" data-ko="한국 매장 더 보기 →">See Korean Stores →</a>
+        </div>
+        <div class="grid g-21" style="gap:12px">
+          <div class="ph" style="grid-row:span 3;min-height:320px;background:url('img/store_kr1.jpg') center/cover;"><span style="background:rgba(0,0,0,0.6);color:#fff;border-radius:3px;">Korea Store #1</span></div>
+          <div class="ph" style="background:url('img/store_kr2.jpg') center/cover;"><span style="background:rgba(0,0,0,0.6);color:#fff;border-radius:3px;">Store #2</span></div>
+          <div class="ph" style="background:url('img/store_kr3.jpg') center/cover;"><span style="background:rgba(0,0,0,0.6);color:#fff;border-radius:3px;">Store #3</span></div>
+          <div class="ph" style="background:url('img/store_kr4.jpg') center/cover;"><span style="background:rgba(0,0,0,0.6);color:#fff;border-radius:3px;">Store #4</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- H5 FACTORY & CERTS -->
+  <section class="blk gray">
+    <i class="ann">H5 · Korean Factory & Certifications</i>
+    <div class="wrap">
+      <div class="ann-desc">공장 소개 영상(30~60초) + 인증 로고 띠. 로고를 클릭하면 Korea Proof › Certifications 섹션으로 이동.</div>
+      <div class="grid g2" style="align-items:center">
+        <div class="ph" style="aspect-ratio:16/9;background:url('img/factory.jpg') center/cover;"><span style="background:rgba(0,0,0,0.65);color:#fff;padding:6px 12px;border-radius:4px;">LFL Own Ingredient & Sauce Factory in Korea</span></div>
+        <div>
+          <div class="eyebrow" data-ko="한국 공장">Made in Korea</div>
+          <h2 data-ko="한국 자체 공장에서 만드는 일관된 맛">Consistent Taste from Our Own Korean Factory</h2>
+          <p class="lead" data-ko="[공장 소개 – 위치, 규모, 생산 공정, 위생 관리 2~3문장]">[Factory intro – location, scale, process, hygiene – 2–3 sentences]</p>
+          <a href="#proof/factory" class="btn mt24" data-ko="공장 둘러보기 →">Tour the Factory →</a>
+        </div>
+      </div>
+      <div class="grid g5 mt40">
+        <div class="ph" style="height:80px"><span>CERT LOGO 1<br>(HACCP)</span></div>
+        <div class="ph" style="height:80px"><span>CERT LOGO 2<br>(ISO 22000)</span></div>
+        <div class="ph" style="height:80px"><span>CERT LOGO 3</span></div>
+        <div class="ph" style="height:80px"><span>CERT LOGO 4</span></div>
+        <div class="ph" style="height:80px"><span>CERT LOGO 5</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- H6 WHY PARTNER -->
+  <section class="blk">
+    <i class="ann">H6 · Why Partner with Us</i>
+    <div class="wrap">
+      <div class="ann-desc">가맹점주 관점의 장점 6개 (아이콘 + 제목 + 1줄 설명). 투자비·수익 관련 내용은 MVP에서 제외.</div>
+      <div class="center">
+        <div class="eyebrow" data-ko="가맹 장점">Why Partner with Us</div>
+        <h2 data-ko="성공하는 가맹점을 위한 6가지 이유">6 Reasons Our Partners Succeed</h2>
+      </div>
+      <div class="grid g3 mt40">
+        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="한국 공장 직공급 소스">Factory-Direct Korean Sauce</h3><p class="muted small" data-ko="한국 공장에서 만든 소스를 직접 공급해 어느 매장이든 같은 맛.">Same taste in every store, supplied directly from Korea.</p></div>
+        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="간단한 조리 공정">Simple Kitchen Operation</h3><p class="muted small" data-ko="표준화된 레시피로 숙련 셰프 없이도 운영 가능.">Standardized recipes — no expert chef required.</p></div>
+        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="체계적인 교육">Complete Training</h3><p class="muted small" data-ko="조리, 서비스, 매장 관리까지 오픈 전 교육.">Cooking, service and store management training before opening.</p></div>
+        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="오픈 지원">Grand Opening Support</h3><p class="muted small" data-ko="입지 검토부터 인테리어, 오픈 운영까지 현장 지원.">On-site support from site review to opening day.</p></div>
+        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="마케팅·배달앱 지원">Marketing & Delivery Apps</h3><p class="muted small" data-ko="SNS 마케팅과 GrabFood·foodpanda 입점 지원.">Social media marketing and GrabFood / foodpanda onboarding.</p></div>
+        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="상권 보호">Territory Protection</h3><p class="muted small" data-ko="가맹점 상권을 보호하는 출점 정책.">Store-opening policy that protects your trade area.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- H7 NOW IN PH -->
+  <section class="blk gray">
+    <i class="ann">H7 · Now in the Philippines</i>
+    <div class="wrap">
+      <div class="ann-desc">현재 운영 중인 필리핀 매장 2곳 미리보기 → Store Locator로 연결. 현지에서 실제로 운영 중이라는 것을 보여줘 신뢰를 높임.</div>
+      <div class="grid g2" style="align-items:center">
+        <div>
+          <div class="eyebrow" data-ko="필리핀 매장">Now in the Philippines</div>
+          <h2 data-ko="BGC에서 먼저 만나보세요">Visit Us in BGC</h2>
+          <p class="lead" data-ko="가맹 상담 전에 직영 매장에서 맛과 운영 방식을 직접 경험해 보세요.">Taste the food and see how we operate at our stores before you apply.</p>
+          <a href="#stores" class="btn mt24" data-ko="매장 찾기 →">Find a Store →</a>
+        </div>
+        <div class="grid g2">
+          <div class="card"><div class="ph" style="aspect-ratio:4/3"><span>STORE 1 PHOTO</span></div><h3 class="mt16" data-ko="마켓! 마켓! – 몰 내부 4층">Market! Market! – 4F Inside Mall</h3><p class="small muted">BGC, Taguig · [Unit No. TBD]</p></div>
+          <div class="card"><div class="ph" style="aspect-ratio:4/3"><span>STORE 2 PHOTO</span></div><h3 class="mt16" data-ko="마켓! 마켓! – 몰 외부 1층">Market! Market! – G/F Outside Mall</h3><p class="small muted">BGC, Taguig · [Unit No. TBD]</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- H8 PROCESS -->
+  <section class="blk">
+    <i class="ann">H8 · Franchise Process</i>
+    <div class="wrap">
+      <div class="center">
+        <div class="eyebrow" data-ko="가맹 절차">How to Start</div>
+        <h2 data-ko="6단계로 시작하는 가맹 절차">Your Franchise Journey in 6 Steps</h2>
+      </div>
+      <div class="steps mt40">
+        <div class="step"><h3 data-ko="문의">Inquiry</h3><p class="small muted" data-ko="온라인 상담 신청">Submit online form</p></div>
+        <div class="step"><h3 data-ko="상담">Consultation</h3><p class="small muted" data-ko="1:1 미팅 및 매장 방문">1:1 meeting & store visit</p></div>
+        <div class="step"><h3 data-ko="입지 승인">Site Approval</h3><p class="small muted" data-ko="후보지 상권 분석">Location assessment</p></div>
+        <div class="step"><h3 data-ko="계약">Agreement</h3><p class="small muted" data-ko="가맹 계약 체결">Sign franchise agreement</p></div>
+        <div class="step"><h3 data-ko="교육·공사">Training & Build</h3><p class="small muted" data-ko="교육과 인테리어 공사 동시 진행">Training & store fit-out</p></div>
+        <div class="step"><h3 data-ko="오픈">Grand Opening</h3><p class="small muted" data-ko="오픈 현장 지원">On-site opening support</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- H9 FAQ -->
+  <section class="blk gray">
+    <i class="ann">H9 · FAQ (Top 5)</i>
+    <div class="wrap" style="max-width:820px">
+      <div class="center"><h2 data-ko="자주 묻는 질문">Frequently Asked Questions</h2></div>
+      <div class="mt24">
+        <details><summary data-ko="F&B 경험이 없어도 가맹점을 운영할 수 있나요?">Can I run a store without F&B experience?</summary><p data-ko="[답변 – 교육 프로그램 안내]">[Answer – training program]</p></details>
+        <details><summary data-ko="원재료와 소스는 어떻게 공급되나요?">How are sauces and ingredients supplied?</summary><p data-ko="[답변 – 한국 공장 → 필리핀 공급 구조]">[Answer – Korea factory → PH supply]</p></details>
+        <div class="ann-desc" style="margin:8px 0">투자비 관련 질문은 MVP에서 "상담 시 안내"로 처리.</div>
+        <details><summary data-ko="투자 비용은 얼마인가요?">How much is the investment?</summary><p data-ko="투자 비용은 매장 입지와 규모에 따라 달라 1:1 상담 시 자세히 안내해 드립니다.">Investment varies by location and size. Details are provided during a 1:1 consultation.</p></details>
+        <details><summary data-ko="오픈까지 얼마나 걸리나요?">How long does it take to open?</summary><p data-ko="[답변 – 예: 계약 후 약 00일]">[Answer – e.g., approx. 00 days after agreement]</p></details>
+        <details><summary data-ko="원하는 지역에 매장을 열 수 있나요?">Can I open in my preferred area?</summary><p data-ko="[답변 – 입지 승인 절차]">[Answer – site approval process]</p></details>
+      </div>
+      <div class="center mt24"><a href="#franchise/faq" class="btn" data-ko="FAQ 전체 보기 →">View All FAQ →</a></div>
+    </div>
+  </section>
+
+  <!-- H10 QUICK INQUIRY -->
+  <section class="blk" style="background:#ddd">
+    <i class="ann">H10 · Quick Inquiry (Final CTA)</i>
+    <div class="wrap">
+      <div class="ann-desc">간단 문의 폼(입력 항목 5개). 제출하면 Apply 페이지의 2단계 폼으로 이어지거나 감사 메시지 표시. 이메일 알림 + Google Sheets/CRM 연동.</div>
+      <div class="grid g2" style="align-items:center">
+        <div>
+          <h2 data-ko="지금 가맹 상담을 신청하세요">Start Your Franchise Journey Today</h2>
+          <p class="lead" data-ko="담당자가 영업일 기준 2일 이내에 연락드립니다.">Our franchise team will contact you within 2 business days.</p>
+          <div class="row mt24">
+            <a class="btn sm" data-ko="💬 메신저">💬 Messenger</a>
+            <a class="btn sm" data-ko="📱 바이버">📱 Viber</a>
+            <a class="btn sm" data-ko="📞 전화">📞 Call</a>
+          </div>
+        </div>
+        <form class="card form" onsubmit="return false">
+          <div class="grid g2" style="gap:12px">
+            <div class="f"><label data-ko="이름 *">Full Name *</label><input data-ko-ph="홍길동" placeholder="Juan Dela Cruz"></div>
+            <div class="f"><label data-ko="휴대폰 *">Mobile *</label><input placeholder="09XX XXX XXXX"></div>
+          </div>
+          <div class="f"><label data-ko="이메일 *">Email *</label><input placeholder="name@email.com"></div>
+          <div class="grid g2" style="gap:12px">
+            <div class="f"><label data-ko="희망 지역 *">Preferred City *</label><select><option data-ko="선택">Select</option></select></div>
+            <div class="f"><label data-ko="매장 확보 여부">Location Secured?</label><select><option data-ko="예">Yes</option><option data-ko="아니오">No</option></select></div>
+          </div>
+          <label class="consent"><input type="checkbox"><span data-ko="개인정보처리방침에 동의합니다 (필리핀 개인정보보호법 RA 10173). *">I agree to the Privacy Policy (Data Privacy Act of 2012, RA 10173). *</span></label>
+          <button class="btn pri mt16" style="width:100%" data-ko="상담 신청하기">Submit Inquiry</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- =====================================================================
+     02 · BRAND
+====================================================================== -->
+<section class="page" id="page-brand" hidden>
+  <div class="banner"><i class="ann">B0 · Page Banner</i><div class="wrap">
+    <div class="crumb">Home › Brand</div>
+    <h1 data-ko="브랜드 이야기">Our Brand</h1>
+    <p class="lead" data-ko="[브랜드 한 줄 슬로건]">[Brand one-line slogan]</p>
+  </div></div>
+
+  <section class="blk"><i class="ann">B1 · Brand Story</i><div class="wrap">
+    <div class="grid g2" style="align-items:center">
+      <div class="ph" style="aspect-ratio:4/3;background:url('img/brand_data.jpg') center/contain;background-repeat:no-repeat;background-color:#fff;"></div>
+      <div>
+        <div class="eyebrow" data-ko="우리의 시작">Our Story</div>
+        <h2 data-ko="한국의 맛을 필리핀 식탁에">Korean Flavors for Filipino Tables</h2>
+        <div class="line"></div><div class="line"></div><div class="line w80"></div><div class="line"></div><div class="line w60"></div>
+        <p class="small muted mt8" data-ko="치토피아는 한국 본사 LFL이 전개하는 K-푸드 프랜차이즈 브랜드입니다. 한국에서 두 개의 성공적인 외식 브랜드와 소스·파우더 등 원부자재를 생산하는 자체 직영 제조 공장을 운영해왔습니다.">CHITOPIA is a Korean food franchise brand developed by LFL. In Korea, LFL operates two established restaurant brands and its own manufacturing facility producing sauces, coating mixes, and core ingredients.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="blk gray"><i class="ann">B2 · Philosophy / Core Values</i><div class="wrap">
+    <div class="center"><h2 data-ko="우리가 지키는 약속">What We Stand For</h2></div>
+    <div class="grid g3 mt40">
+      <div class="card center"><div class="ph circle" style="width:72px;height:72px;margin:0 auto"><span>ICON</span></div><h3 class="mt16">[Value 1]</h3><div class="line"></div><div class="line w60" style="margin:6px auto"></div></div>
+      <div class="card center"><div class="ph circle" style="width:72px;height:72px;margin:0 auto"><span>ICON</span></div><h3 class="mt16">[Value 2]</h3><div class="line"></div><div class="line w60" style="margin:6px auto"></div></div>
+      <div class="card center"><div class="ph circle" style="width:72px;height:72px;margin:0 auto"><span>ICON</span></div><h3 class="mt16">[Value 3]</h3><div class="line"></div><div class="line w60" style="margin:6px auto"></div></div>
+    </div>
+  </div></section>
+
+  <section class="blk"><i class="ann">B3 · Why K-Chicken in the Philippines</i><div class="wrap">
+    <div class="ann-desc">투자자 설득용 시장 근거. 한류 열풍, 필리핀의 치킨 소비 문화, 배달 시장 성장 등 출처가 있는 데이터 3개.</div>
+    <div class="center"><h2 data-ko="왜 필리핀에서 K-치킨인가">Why Korean Chicken in the Philippines?</h2></div>
+    <div class="grid g3 mt40">
+      <div class="card"><b style="font-size:32px">00%</b><h3 data-ko="[시장 데이터 1 – 한류]">[Market Fact 1 – Hallyu]</h3><p class="small muted">Source: [ ]</p></div>
+      <div class="card"><b style="font-size:32px">00%</b><h3 data-ko="[시장 데이터 2 – 치킨 소비]">[Market Fact 2 – Chicken consumption]</h3><p class="small muted">Source: [ ]</p></div>
+      <div class="card"><b style="font-size:32px">00%</b><h3 data-ko="[시장 데이터 3 – 배달 성장]">[Market Fact 3 – Delivery growth]</h3><p class="small muted">Source: [ ]</p></div>
+    </div>
+  </div></section>
+
+  <section class="blk gray"><i class="ann">B4 · Company</i><div class="wrap">
+    <div class="ann-desc">한국 본사와 필리핀 운영 법인을 함께 보여줌. 필리핀 SEC 등록 정보는 현지 신뢰에 중요.</div>
+    <div class="grid g2">
+      <div class="card"><div class="eyebrow" data-ko="한국 본사">Korea Headquarters</div><h3>[Company Name, Korea]</h3><p class="small muted">[Address] · [Est. Year] · [CEO]</p></div>
+      <div class="card"><div class="eyebrow" data-ko="필리핀 법인">Philippines Operations</div><h3>[Company Name, PH Inc.]</h3><p class="small muted">[Address, Taguig] · SEC Reg. No. [ ]</p></div>
+    </div>
+  </div></section>
+  <div data-cta></div>
+</section>
+
+<!-- =====================================================================
+     03 · MENU
+====================================================================== -->
+<section class="page" id="page-menu" hidden>
+  <div class="banner"><i class="ann">M0 · Page Banner</i><div class="wrap">
+    <div class="crumb">Home › Menu</div>
+    <h1 data-ko="메뉴">Our Menu</h1>
+    <p class="lead" data-ko="[메뉴 소개 한 줄]">[Menu intro one-liner]</p>
+  </div></div>
+
+  <section class="blk"><i class="ann">M1 · Category Tabs + Menu Grid</i><div class="wrap">
+    <div class="ann-desc">⚠ 메뉴 상세 정보가 아직 없어 플레이스홀더로 표시. 카테고리는 예시이며 확정이 필요함. 가격은 표시하지 않음 (매장마다 다를 수 있음). 각 카드: 사진 / 영문명 + 한글명 / 설명 1~2줄 / 태그(Best Seller, 매운맛 단계).</div>
+    <div class="tabs" id="menuTabs">
+      <button class="on" data-ko="전체">All</button>
+      <button data-ko="시그니처 치킨">Signature Chicken</button>
+      <button data-ko="라이스 밀">Rice Meals</button>
+      <button data-ko="사이드·분식">Sides & K-Snacks</button>
+      <button data-ko="소스">Sauces</button>
+      <button data-ko="음료">Drinks</button>
+    </div>
+    <div class="grid g4 mt24" id="menuGrid"></div>
+  </div></section>
+
+  <section class="blk gray"><i class="ann">M2 · Signature Sauces</i><div class="wrap">
+    <div class="center"><h2 data-ko="한국 공장에서 만든 시그니처 소스">Signature Sauces, Made in Korea</h2></div>
+    <div class="grid g4 mt40 center">
+      <div><div class="ph circle" style="width:120px;height:120px;margin:0 auto"><span>SAUCE 1</span></div><h3 class="mt16">[Sauce 1]</h3><span class="tag">🌶 0/3</span></div>
+      <div><div class="ph circle" style="width:120px;height:120px;margin:0 auto"><span>SAUCE 2</span></div><h3 class="mt16">[Sauce 2]</h3><span class="tag">🌶 1/3</span></div>
+      <div><div class="ph circle" style="width:120px;height:120px;margin:0 auto"><span>SAUCE 3</span></div><h3 class="mt16">[Sauce 3]</h3><span class="tag">🌶 2/3</span></div>
+      <div><div class="ph circle" style="width:120px;height:120px;margin:0 auto"><span>SAUCE 4</span></div><h3 class="mt16">[Sauce 4]</h3><span class="tag">🌶 3/3</span></div>
+    </div>
+  </div></section>
+
+  <section class="blk"><i class="ann">M3 · For Franchise Partners</i><div class="wrap">
+    <div class="ann-desc">가맹점주 관점의 메뉴 설명: 조리 공정이 간단하다는 점, 재고 관리가 쉽다는 점 등. 소비자 사이트와의 차별 포인트.</div>
+    <div class="card grid g2" style="align-items:center">
+      <div>
+        <div class="eyebrow" data-ko="가맹점주님께">For Franchise Partners</div>
+        <h2 data-ko="누구나 쉽게, 언제나 같은 맛">Easy to Cook. Same Taste, Every Time.</h2>
+        <p class="lead" data-ko="[조리 공정 설명 – 예: 3단계 조리, 표준 레시피, 공장 소스]">[Kitchen process – e.g., 3-step cooking, standard recipe, factory sauce]</p>
+      </div>
+      <div class="flow">
+        <div class="card"><b>1</b><p class="small" data-ko="[공정 1]">[Step 1]</p></div><div class="arr">→</div>
+        <div class="card"><b>2</b><p class="small" data-ko="[공정 2]">[Step 2]</p></div><div class="arr">→</div>
+        <div class="card"><b>3</b><p class="small" data-ko="[공정 3]">[Step 3]</p></div>
+      </div>
+    </div>
+  </div></section>
+  <div data-cta></div>
+</section>
+
+<!-- =====================================================================
+     04 · KOREA PROOF
+====================================================================== -->
+<section class="page" id="page-proof" hidden>
+  <div class="banner"><i class="ann">K0 · Page Banner</i><div class="wrap">
+    <div class="crumb">Home › Korea Proof</div>
+    <h1 data-ko="한국에서 검증된 브랜드">Proven in Korea</h1>
+    <p class="lead" data-ko="한국 매장, 자체 공장, 공인 인증으로 증명합니다.">Backed by Korean stores, our own factory and certified quality.</p>
+  </div></div>
+  <div class="subnav"><div class="wrap">
+    <i class="ann" style="position:static">K-Sub · Anchor Nav</i>
+    <a href="#proof/stores" data-ko="한국 매장">Korean Stores</a>
+    <a href="#proof/factory" data-ko="공장 & R&D">Factory & R&D</a>
+    <a href="#proof/certs" data-ko="인증">Certifications</a>
+    <a href="#proof/supply" data-ko="필리핀 공급망">Supply Chain to PH</a>
+  </div></div>
+
+  <section class="blk" id="proof-stores"><i class="ann">K1 · Korean Stores</i><div class="wrap">
+    <div class="ann-desc">한국 매장 수와 분포(지도) + 대표 매장 갤러리 + 한국 점주 인터뷰. 매출 지표는 공개 가능한 범위에서만.</div>
+    <h2 data-ko="한국 매장">Korean Stores</h2>
+    <div class="grid g2 mt24">
+      <div class="ph" style="min-height:380px"><span>KOREA MAP — 지역별 매장 분포 (서울 00 / 경기 00 / 부산 00 …)</span></div>
+      <div>
+        <div class="grid g2">
+          <div class="card stat"><b>000+</b><span data-ko="전체 매장">Total Stores</span></div>
+          <div class="card stat"><b>00</b><span data-ko="시·도">Cities / Provinces</span></div>
+        </div>
+        <div class="grid g3 mt16" style="gap:8px">
+          <div class="ph" style="aspect-ratio:1"><span>STORE</span></div><div class="ph" style="aspect-ratio:1"><span>STORE</span></div><div class="ph" style="aspect-ratio:1"><span>STORE</span></div>
+          <div class="ph" style="aspect-ratio:1"><span>STORE</span></div><div class="ph" style="aspect-ratio:1"><span>STORE</span></div><div class="ph" style="aspect-ratio:1"><span>STORE</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid g2 mt24">
+      <div class="card row" style="flex-wrap:nowrap"><div class="ph circle" style="width:72px;height:72px;flex:none"><span>PHOTO</span></div><div><p data-ko="“[한국 점주 인터뷰 인용문]”">“[Korean franchisee testimonial quote]”</p><p class="small muted">— [Name], [Store], Korea</p></div></div>
+      <div class="card row" style="flex-wrap:nowrap"><div class="ph circle" style="width:72px;height:72px;flex:none"><span>PHOTO</span></div><div><p data-ko="“[한국 점주 인터뷰 인용문]”">“[Korean franchisee testimonial quote]”</p><p class="small muted">— [Name], [Store], Korea</p></div></div>
+    </div>
+  </div></section>
+
+  <section class="blk gray" id="proof-factory"><i class="ann">K2 · Factory & R&D</i><div class="wrap">
+    <h2 data-ko="한국 공장 & R&D">Korean Factory & R&D</h2>
+    <div class="grid g2 mt24" style="align-items:center">
+      <div class="ph" style="aspect-ratio:16/9;background:url('img/factory.jpg') center/cover;"><span style="background:rgba(0,0,0,0.65);color:#fff;padding:6px 12px;border-radius:4px;">LFL Own Ingredient & Sauce Factory in Korea</span></div>
+      <div class="grid g2">
+        <div class="card stat"><b>0,000㎡</b><span data-ko="공장 면적">Factory Area</span></div>
+        <div class="card stat"><b>00t</b><span data-ko="일일 생산량">Daily Capacity</span></div>
+        <div class="card stat"><b>00</b><span data-ko="R&D 인원">R&D Staff</span></div>
+        <div class="card stat"><b>00+</b><span data-ko="수출 국가">Export Countries</span></div>
+      </div>
+    </div>
+    <h3 class="mt40" data-ko="생산 공정">Production Process</h3>
+    <div class="flow mt16">
+      <div class="card"><div class="ph" style="height:80px"><span>IMG</span></div><p class="small mt8" data-ko="원료 입고·검수">Raw Material Inspection</p></div><div class="arr">→</div>
+      <div class="card"><div class="ph" style="height:80px"><span>IMG</span></div><p class="small mt8" data-ko="소스 배합">Sauce Blending</p></div><div class="arr">→</div>
+      <div class="card"><div class="ph" style="height:80px"><span>IMG</span></div><p class="small mt8" data-ko="살균·품질검사">Sterilization & QC</p></div><div class="arr">→</div>
+      <div class="card"><div class="ph" style="height:80px"><span>IMG</span></div><p class="small mt8" data-ko="포장">Packaging</p></div><div class="arr">→</div>
+      <div class="card"><div class="ph" style="height:80px"><span>IMG</span></div><p class="small mt8" data-ko="출고·수출">Shipping & Export</p></div>
+    </div>
+  </div></section>
+
+  <section class="blk" id="proof-certs"><i class="ann">K3 · Certifications</i><div class="wrap">
+    <div class="ann-desc">⚠ 인증서 원본 이미지 + 인증 번호 + 유효기간을 함께 표시 (클릭하면 확대 라이트박스). 실제 보유한 인증만 기재. Halal은 미정이므로 MVP에서 제외.</div>
+    <h2 data-ko="인증 및 품질 관리">Certifications & Quality</h2>
+    <div class="grid g4 mt24">
+      <div class="card center"><div class="ph" style="aspect-ratio:3/4;background:url('img/cert1.jpg') center/cover;"></div><h3 class="mt16">HACCP Certified</h3><p class="small muted" data-ko="식품의약품안전처 안전관리인증">Korea Food Safety Management</p></div>
+      <div class="card center"><div class="ph" style="aspect-ratio:3/4;background:url('img/cert2.jpg') center/cover;"></div><h3 class="mt16">Quality & Hygiene</h3><p class="small muted" data-ko="제조시설 품질규격 인증">Manufacturing Standard Certification</p></div>
+      <div class="card center"><div class="ph" style="aspect-ratio:3/4;background:url('img/brand_data.jpg') center/contain;background-repeat:no-repeat;background-color:#fff;"></div><h3 class="mt16">Brand Identity</h3><p class="small muted" data-ko="CHITOPIA 공식 상표 및 디자인">Official Trademark & Design</p></div>
+      <div class="card center"><div class="ph" style="aspect-ratio:3/4;background:url('img/logo.png') center/contain;background-repeat:no-repeat;background-color:#fff;"></div><h3 class="mt16">LFL Korean Roots</h3><p class="small muted" data-ko="한국 본사 직영 제조 표준">LFL Korea Direct Standards</p></div>
+    </div>
+  </div></section>
+
+  <section class="blk gray" id="proof-supply"><i class="ann">K4 · Supply Chain to PH</i><div class="wrap">
+    <div class="ann-desc">한국 공장에서 필리핀 매장까지의 공급 흐름. 가맹점주의 "원재료를 제대로 받을 수 있나?" 하는 걱정을 해소.</div>
+    <h2 data-ko="한국에서 필리핀 매장까지">From Korea to Your Store</h2>
+    <div class="flow mt24">
+      <div class="card"><b>🏭</b><h3 data-ko="한국 공장">Korean Factory</h3><p class="small muted" data-ko="생산·품질검사">Production & QC</p></div><div class="arr">→</div>
+      <div class="card"><b>🚢</b><h3 data-ko="수출">Export</h3><p class="small muted" data-ko="냉장/상온 운송">Cold / ambient shipping</p></div><div class="arr">→</div>
+      <div class="card"><b>🛃</b><h3 data-ko="수입·통관">Import & Customs</h3><p class="small muted" data-ko="필리핀 FDA 규정 준수">PH FDA compliant</p></div><div class="arr">→</div>
+      <div class="card"><b>🏬</b><h3 data-ko="현지 물류센터">PH Warehouse</h3><p class="small muted" data-ko="[위치 TBD]">[Location TBD]</p></div><div class="arr">→</div>
+      <div class="card"><b>🍗</b><h3 data-ko="가맹점">Your Store</h3><p class="small muted" data-ko="정기 배송">Scheduled delivery</p></div>
+    </div>
+  </div></section>
+  <div data-cta></div>
+</section>
+
+<!-- =====================================================================
+     05 · FRANCHISE
+====================================================================== -->
+<section class="page" id="page-franchise" hidden>
+  <div class="banner"><i class="ann">F0 · Page Banner</i><div class="wrap">
+    <div class="crumb">Home › Franchise</div>
+    <h1 data-ko="가맹 안내">Franchise with Us</h1>
+    <p class="lead" data-ko="검증된 한국 치킨 브랜드와 함께 필리핀에서 당신의 매장을 시작하세요.">Start your own store in the Philippines with a proven Korean chicken brand.</p>
+    <a href="#apply" class="btn pri mt24" data-ko="가맹 상담 신청">Apply for Franchise</a>
+  </div></div>
+  <div class="subnav"><div class="wrap">
+    <i class="ann" style="position:static">F-Sub · Anchor Nav</i>
+    <a href="#franchise/why" data-ko="가맹 장점">Why Us</a>
+    <a href="#franchise/format" data-ko="매장 형태">Store Format</a>
+    <a href="#franchise/process" data-ko="가맹 절차">Process</a>
+    <a href="#franchise/support" data-ko="교육·지원">Training & Support</a>
+    <a href="#franchise/req" data-ko="가맹 조건">Requirements</a>
+    <a href="#franchise/faq">FAQ</a>
+  </div></div>
+
+  <section class="blk" id="franchise-why"><i class="ann">F1 · Why Partner with Us</i><div class="wrap">
+    <div class="ann-desc">Home H6의 6개 장점을 확장. 각 항목에 이미지와 상세 설명(2~3문장)을 지그재그 레이아웃으로 배치.</div>
+    <h2 data-ko="가맹 장점">Why Partner with Us</h2>
+    <div class="grid g2 mt24" style="align-items:center"><div class="ph" style="aspect-ratio:16/10"><span>IMG</span></div><div><h3>01 · <span data-ko="한국 공장 직공급 소스">Factory-Direct Korean Sauce</span></h3><div class="line"></div><div class="line w80"></div><div class="line w60"></div></div></div>
+    <div class="grid g2 mt24 zig" style="align-items:center"><div><h3>02 · <span data-ko="간단한 조리 공정">Simple Kitchen Operation</span></h3><div class="line"></div><div class="line w80"></div><div class="line w60"></div></div><div class="ph" style="aspect-ratio:16/10"><span>IMG</span></div></div>
+    <div class="grid g2 mt24" style="align-items:center"><div class="ph" style="aspect-ratio:16/10"><span>IMG</span></div><div><h3>03 · <span data-ko="검증된 브랜드 파워">Proven Brand Power</span></h3><div class="line"></div><div class="line w80"></div><div class="line w60"></div></div></div>
+    <p class="small muted mt16" data-ko="… 04 ~ 06 동일한 패턴 반복">… 04 – 06 repeat same pattern</p>
+  </div></section>
+
+  <section class="blk gray" id="franchise-format"><i class="ann">F2 · Store Format (Single Store)</i><div class="wrap">
+    <div class="ann-desc">⚠ MVP에서는 투자비·가맹비·로열티를 표시하지 않음. 단일 매장 모델의 형태와 공간 요건만 소개하고, 비용은 "상담 시 안내"로 처리.</div>
+    <h2 data-ko="매장 형태">Store Format</h2>
+    <div class="grid g2 mt24" style="align-items:center">
+      <div class="grid g-21" style="gap:12px">
+        <div class="ph" style="grid-row:span 2;min-height:300px"><span>STORE INTERIOR RENDER</span></div>
+        <div class="ph"><span>KITCHEN</span></div><div class="ph"><span>COUNTER</span></div>
+      </div>
+      <div>
+        <h3 data-ko="[매장 모델명 – 예: Standard Store]">[Model Name – e.g., Standard Store]</h3>
+        <table class="pindex mt16" style="border-collapse:collapse;width:100%">
+          <tr><th data-ko="권장 면적">Recommended Size</th><td>[00 – 00 ㎡]</td></tr>
+          <tr><th data-ko="좌석">Seats</th><td>[00 – 00]</td></tr>
+          <tr><th data-ko="권장 입지">Ideal Location</th><td data-ko="[쇼핑몰, 대학가, 오피스 상권 등]">[Malls, university belts, office areas]</td></tr>
+          <tr><th data-ko="운영 방식">Service Type</th><td data-ko="매장 식사 · 포장 · 배달">Dine-in · Take-out · Delivery</td></tr>
+          <tr><th data-ko="필요 인원">Staff</th><td>[0 – 0]</td></tr>
+        </table>
+        <div class="card mt16" style="background:var(--bg)"><p class="small" data-ko="💬 투자 비용 및 계약 조건은 1:1 상담 시 자세히 안내해 드립니다.">💬 Investment and terms are shared during a 1:1 consultation.</p></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="blk" id="franchise-process"><i class="ann">F3 · Process & Timeline</i><div class="wrap">
+    <h2 data-ko="가맹 절차">Franchise Process</h2>
+    <div class="steps mt24">
+      <div class="step"><h3 data-ko="문의">Inquiry</h3><p class="small muted">Day 0</p></div>
+      <div class="step"><h3 data-ko="상담·매장 방문">Consultation</h3><p class="small muted">~ Week 1</p></div>
+      <div class="step"><h3 data-ko="입지 승인">Site Approval</h3><p class="small muted">~ Week 3</p></div>
+      <div class="step"><h3 data-ko="계약">Agreement</h3><p class="small muted">~ Week 4</p></div>
+      <div class="step"><h3 data-ko="교육·공사">Training & Build</h3><p class="small muted">~ Week 10</p></div>
+      <div class="step"><h3 data-ko="오픈">Grand Opening</h3><p class="small muted">~ Week 12</p></div>
+    </div>
+    <p class="small muted mt16" data-ko="* 기간은 예시이며 확정 필요">* Timeline is indicative (TBD)</p>
+  </div></section>
+
+  <section class="blk gray" id="franchise-support"><i class="ann">F4 · Training & Support</i><div class="wrap">
+    <h2 data-ko="교육 및 지원">Training & Support</h2>
+    <div class="grid g3 mt24">
+      <div class="card"><div class="ph" style="aspect-ratio:16/9"><span>IMG</span></div><h3 class="mt16" data-ko="오픈 전 교육">Pre-Opening Training</h3><p class="small muted" data-ko="[교육 기간·장소 – BGC 직영점 실습]">[Duration & venue – hands-on at BGC store]</p></div>
+      <div class="card"><div class="ph" style="aspect-ratio:16/9"><span>IMG</span></div><h3 class="mt16" data-ko="입지·인테리어 지원">Site & Fit-Out Support</h3><p class="small muted" data-ko="[상권 분석, 설계, 시공 관리]">[Trade-area analysis, design, construction]</p></div>
+      <div class="card"><div class="ph" style="aspect-ratio:16/9"><span>IMG</span></div><h3 class="mt16" data-ko="오픈 현장 지원">Opening Support</h3><p class="small muted" data-ko="[오픈 첫 주 본사 인력 파견]">[HQ team on-site during opening week]</p></div>
+      <div class="card"><div class="ph" style="aspect-ratio:16/9"><span>IMG</span></div><h3 class="mt16" data-ko="마케팅">Marketing</h3><p class="small muted" data-ko="[SNS, 오픈 프로모션, 브랜드 캠페인]">[Social, launch promo, brand campaigns]</p></div>
+      <div class="card"><div class="ph" style="aspect-ratio:16/9"><span>IMG</span></div><h3 class="mt16" data-ko="배달앱·POS">Delivery Apps & POS</h3><p class="small muted" data-ko="[GrabFood, foodpanda 입점 / POS 세팅]">[GrabFood, foodpanda onboarding / POS setup]</p></div>
+      <div class="card"><div class="ph" style="aspect-ratio:16/9"><span>IMG</span></div><h3 class="mt16" data-ko="지속 관리(SV)">Ongoing Supervision</h3><p class="small muted" data-ko="[정기 매장 방문, 품질 점검]">[Regular visits, quality audits]</p></div>
+    </div>
+  </div></section>
+
+  <section class="blk" id="franchise-req"><i class="ann">F5 · Requirements</i><div class="wrap">
+    <div class="ann-desc">자금 요건은 MVP에서 제외. 가맹점주 자격, 입지 조건, 필리핀 인허가 서류만 안내.</div>
+    <h2 data-ko="가맹 조건">Requirements</h2>
+    <div class="grid g3 mt24">
+      <div class="card"><h3 data-ko="👤 가맹점주 자격">👤 Ideal Partner</h3><ul class="small muted" style="margin:8px 0 0 18px"><li data-ko="매장 운영에 직접 참여">Hands-on involvement</li><li data-ko="고객 서비스 마인드">Passion for customer service</li><li data-ko="[기타 조건]">[Other]</li></ul></div>
+      <div class="card"><h3 data-ko="📍 입지 조건">📍 Location</h3><ul class="small muted" style="margin:8px 0 0 18px"><li data-ko="[권장 면적]">[Size]</li><li data-ko="[유동인구 / 상권]">[Foot traffic / trade area]</li><li data-ko="[전기·가스·배기 설비]">[Power, gas, exhaust]</li></ul></div>
+      <div class="card"><h3 data-ko="📄 필요 서류·인허가">📄 Permits & Documents</h3><ul class="small muted" style="margin:8px 0 0 18px"><li>DTI / SEC Registration</li><li>Barangay Clearance</li><li>Mayor's / Business Permit</li><li>Sanitary Permit & Health Cert.</li><li>BIR Registration</li></ul></div>
+    </div>
+  </div></section>
+
+  <section class="blk gray" id="franchise-faq"><i class="ann">F6 · FAQ (Full)</i><div class="wrap" style="max-width:820px">
+    <h2 class="center">FAQ</h2>
+    <div class="tabs mt24" style="justify-content:center"><button class="on" data-ko="전체">All</button><button data-ko="가맹 일반">General</button><button data-ko="운영">Operations</button><button data-ko="공급">Supply</button></div>
+    <div class="mt24">
+      <details><summary data-ko="F&B 경험이 없어도 가능한가요?">Do I need F&B experience?</summary><p>[Answer]</p></details>
+      <details><summary data-ko="투자 비용은 얼마인가요?">How much is the investment?</summary><p data-ko="투자 비용은 1:1 상담 시 자세히 안내해 드립니다.">Investment details are shared during a 1:1 consultation.</p></details>
+      <details><summary data-ko="외국인도 가맹점을 운영할 수 있나요?">Can foreigners own a franchise?</summary><p>[Answer – PH foreign ownership rules]</p></details>
+      <details><summary data-ko="소스와 원재료는 어떻게 공급되나요?">How are ingredients supplied?</summary><p>[Answer]</p></details>
+      <details><summary data-ko="상권 보호 범위는 어떻게 되나요?">What is the territory protection radius?</summary><p>[Answer]</p></details>
+      <details><summary data-ko="교육은 어디서, 얼마나 받나요?">Where and how long is training?</summary><p>[Answer]</p></details>
+      <details><summary data-ko="계약 기간은 얼마인가요?">How long is the franchise term?</summary><p>[Answer]</p></details>
+      <details><summary data-ko="매장 방문 상담이 가능한가요?">Can I visit a store before applying?</summary><p data-ko="네, BGC 직영점에서 상담이 가능합니다. 상담 신청 시 희망 일정을 알려주세요.">Yes — consultations are available at our BGC stores. Let us know your preferred schedule when you apply.</p></details>
+    </div>
+  </div></section>
+  <div data-cta></div>
+</section>
+
+<!-- =====================================================================
+     06 · STORE LOCATOR
+====================================================================== -->
+<section class="page" id="page-stores" hidden>
+  <div class="banner"><i class="ann">S0 · Page Banner</i><div class="wrap">
+    <div class="crumb">Home › Stores</div>
+    <h1 data-ko="매장 찾기">Find a Store</h1>
+    <p class="lead" data-ko="가까운 매장에서 한국 정통 치킨을 맛보세요.">Taste authentic Korean chicken at a store near you.</p>
+  </div></div>
+
+  <section class="blk"><i class="ann">S1 · Search + List + Map</i><div class="wrap">
+    <div class="ann-desc">현재 매장 2곳 모두 Market! Market!(BGC)에 위치: ① 몰 내부 4층 ② 몰 외부 1층(G/F). 같은 몰 안에 있으므로 카드에 층·위치 안내(입구, 주변 랜드마크)를 넣어 구분. 상세 호수는 추후 전달 예정. 지도는 Google Maps 임베드 + 마커. 매장 카드를 클릭하면 지도가 해당 위치로 이동. 매장이 늘어나면 지역 필터 활성화. 모바일에서는 리스트 위·지도 아래로 배치.</div>
+    <div class="row form" style="margin-bottom:16px">
+      <select style="width:200px"><option data-ko="전체 지역">All Areas</option><option>Metro Manila</option></select>
+      <input style="flex:1;min-width:200px" data-ko-ph="매장명 또는 지역 검색" placeholder="Search by store name or area">
+      <button class="btn pri sm" data-ko="📍 내 위치">📍 Near Me</button>
+    </div>
+    <div class="loc">
+      <div class="loc-list">
+        <div class="store on" data-pin="1">
+          <span class="tag" style="background:#fff3cd;color:#856404;border-color:#ffeeba;" data-ko="오픈 준비 중 (현재 공사 진행)">Under Construction</span>
+          <h3 class="mt8" data-ko="치토피아 마켓! 마켓! – 푸드코트 4층 (몰 내부)">CHITOPIA Market! Market! – 4F Food Court (Inside Mall)</h3>
+          <p class="small muted">Market! Market! Food Court, 4th Floor, Bonifacio Global City, Taguig</p>
+          <p class="small mt8" data-ko="🚧 현재 인테리어 공사 중이며, 오픈 일정은 확정 후 공지됩니다.">🚧 Currently under store fit-out. Opening date will be announced soon.</p>
+          <div class="row mt8"><span class="tag">Food Court Format</span><span class="tag">Dine-in / Take-out</span></div>
+        </div>
+        <div class="store" data-pin="2">
+          <span class="tag" style="background:#fff3cd;color:#856404;border-color:#ffeeba;" data-ko="오픈 준비 중 (현재 공사 진행)">Under Construction</span>
+          <h3 class="mt8" data-ko="치토피아 마켓! 마켓! – 1층 (몰 외부)">CHITOPIA Market! Market! – G/F (Outside Mall)</h3>
+          <p class="small muted">Ground Floor (Outside Mall Entrance), Market! Market!, Bonifacio Global City, Taguig</p>
+          <p class="small mt8" data-ko="🚧 현재 인테리어 공사 중이며, 오픈 일정은 확정 후 공지됩니다.">🚧 Currently under store fit-out. Opening date will be announced soon.</p>
+          <div class="row mt8"><span class="tag">Street Level</span><span class="tag">Take-out / Delivery</span></div>
+        </div>
+        <div class="store" style="cursor:default;background:var(--bg)">
+          <p class="small muted" data-ko="🚀 곧 오픈 예정인 매장이 이곳에 표시됩니다.">🚀 Upcoming stores will be listed here.</p>
+        </div>
+      </div>
+      <div class="ph" style="min-height:520px;position:relative" id="map">
+        <span>GOOGLE MAP EMBED — Market! Market!, BGC, Taguig (zoomed to mall)</span>
+        <div class="pin" style="top:35%;left:40%"><i>1</i></div>
+        <div class="pin" style="top:40%;left:46%;background:#888"><i>2</i></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="blk gray"><i class="ann">S2 · Franchise CTA</i><div class="wrap center">
+    <div class="ann-desc" style="text-align:left">매장 찾기 페이지에 들어온 사람을 가맹 문의로 연결.</div>
+    <h2 data-ko="우리 동네에 매장을 열고 싶으신가요?">Want a Store in Your Area?</h2>
+    <p class="lead" data-ko="다음 매장의 주인공이 되어 보세요.">Become our next franchise partner.</p>
+    <a href="#apply" class="btn pri mt24" data-ko="가맹 상담 신청">Apply for Franchise</a>
+  </div></section>
+</section>
+
+<!-- =====================================================================
+     07 · APPLY / CONTACT
+====================================================================== -->
+<section class="page" id="page-apply" hidden>
+  <div class="banner"><i class="ann">A0 · Page Banner</i><div class="wrap">
+    <div class="crumb">Home › Apply</div>
+    <h1 data-ko="가맹 상담 신청">Franchise Inquiry</h1>
+    <p class="lead" data-ko="아래 양식을 작성해 주시면 담당자가 영업일 기준 2일 이내에 연락드립니다.">Fill out the form and our franchise team will contact you within 2 business days.</p>
+  </div></div>
+
+  <section class="blk"><i class="ann">A1 · 2-Step Form + Contact Channels</i><div class="wrap">
+    <div class="ann-desc">2단계 폼: 1단계(필수 항목) 제출만으로도 리드 저장 → 2단계는 선택. 제출하면 감사 페이지 + 자동 회신 이메일. GA4 / Meta Pixel 전환 이벤트 설정. 예산 항목은 MVP에서 제외.</div>
+    <div class="grid g-apply" style="gap:32px">
+      <form class="card form" onsubmit="return false" style="padding:32px">
+        <div class="stepper"><span class="on" id="st1"></span><span id="st2"></span></div>
+        <div id="step1">
+          <h3 data-ko="1단계 · 기본 정보">Step 1 · Basic Information</h3>
+          <div class="grid g2 mt16" style="gap:12px">
+            <div class="f"><label data-ko="이름 *">First Name *</label><input></div>
+            <div class="f"><label data-ko="성 *">Last Name *</label><input></div>
+          </div>
+          <div class="grid g2" style="gap:12px">
+            <div class="f"><label data-ko="휴대폰 *">Mobile *</label><input placeholder="09XX XXX XXXX"></div>
+            <div class="f"><label data-ko="이메일 *">Email *</label><input placeholder="name@email.com"></div>
+          </div>
+          <div class="grid g2" style="gap:12px">
+            <div class="f"><label data-ko="주/지역 *">Province / Region *</label><select><option data-ko="선택">Select</option></select></div>
+            <div class="f"><label data-ko="도시 *">City / Municipality *</label><select><option data-ko="선택">Select</option></select></div>
+          </div>
+          <div class="f"><label data-ko="선호 연락 방법">Preferred Contact</label>
+            <div class="row small"><label><input type="radio" name="pc" style="width:auto"> Call</label><label><input type="radio" name="pc" style="width:auto"> Viber</label><label><input type="radio" name="pc" style="width:auto"> WhatsApp</label><label><input type="radio" name="pc" style="width:auto"> Email</label></div>
+          </div>
+          <label class="consent"><input type="checkbox"><span data-ko="개인정보처리방침에 동의합니다 (RA 10173). *">I agree to the Privacy Policy (RA 10173). *</span></label>
+          <button class="btn pri mt16" style="width:100%" id="toStep2" data-ko="다음 →">Next →</button>
+        </div>
+        <div id="step2" hidden>
+          <h3 data-ko="2단계 · 추가 정보 (선택)">Step 2 · Tell Us More (Optional)</h3>
+          <div class="f mt16"><label data-ko="F&B 운영 경험">F&B Experience</label><select><option data-ko="없음">None</option><option data-ko="1~3년">1–3 years</option><option data-ko="3년 이상">3+ years</option></select></div>
+          <div class="f"><label data-ko="매장 확보 여부">Location Secured?</label><select><option data-ko="예">Yes</option><option data-ko="아니오 – 찾는 중">No – still looking</option></select></div>
+          <div class="f"><label data-ko="희망 오픈 시기">Target Opening</label><select><option data-ko="3개월 이내">Within 3 months</option><option data-ko="3~6개월">3–6 months</option><option data-ko="6개월 이후">6+ months</option></select></div>
+          <div class="f"><label data-ko="알게 된 경로">How did you hear about us?</label><select><option>Facebook</option><option>Instagram</option><option>Store visit</option><option>Referral</option><option>Franchise expo</option></select></div>
+          <div class="f"><label data-ko="문의 내용">Message</label><textarea rows="4"></textarea></div>
+          <div class="row"><button class="btn" id="back1" data-ko="← 이전">← Back</button><button class="btn pri" style="flex:1" data-ko="상담 신청하기">Submit Inquiry</button></div>
+        </div>
+      </form>
+
+      <aside>
+        <div class="card">
+          <h3 data-ko="바로 연락하기">Talk to Us Directly</h3>
+          <div class="grid mt16" style="gap:8px">
+            <a class="btn" style="text-align:left">💬 Facebook Messenger</a>
+            <a class="btn" style="text-align:left">📱 Viber · [09XX]</a>
+            <a class="btn" style="text-align:left">🟢 WhatsApp · [09XX]</a>
+            <a class="btn" style="text-align:left">📞 [+63 2 XXXX XXXX]</a>
+            <a class="btn" style="text-align:left">✉ franchise@[domain].ph</a>
+          </div>
+        </div>
+        <div class="card mt16">
+          <h3 data-ko="가맹 브로슈어">Franchise Brochure</h3>
+          <div class="ph mt8" style="aspect-ratio:3/2"><span>BROCHURE COVER</span></div>
+          <div class="ann-desc mt8" style="margin-bottom:8px">이메일을 입력하면 PDF 다운로드 링크 발송 (리드 확보 장치). 브로슈어 제작 전까지는 숨김 처리 가능.</div>
+          <div class="form row mt8"><input style="flex:1" placeholder="Email"><button class="btn pri sm" data-ko="받기">Get PDF</button></div>
+        </div>
+        <div class="card mt16">
+          <h3 data-ko="사무소">Office</h3>
+          <div class="ph mt8" style="height:140px"><span>MAP</span></div>
+          <p class="small muted mt8">[Office address, Taguig] · Mon–Fri 9:00–18:00</p>
+        </div>
+      </aside>
+    </div>
+  </div></section>
+</section>
+
+<!-- =====================================================================
+     08 · PRIVACY
+====================================================================== -->
+<section class="page" id="page-privacy" hidden>
+  <div class="banner"><i class="ann">P0 · Text Page</i><div class="wrap">
+    <h1 data-ko="개인정보처리방침">Privacy Policy</h1>
+    <p class="lead">Data Privacy Act of 2012 (RA 10173)</p>
+  </div></div>
+  <section class="blk"><div class="wrap" style="max-width:820px">
+    <div class="ann-desc">법률 검토를 거친 문서로 교체 필요. 수집 항목, 이용 목적, 보관 기간, 개인정보 보호책임자(DPO) 연락처 포함.</div>
+    <h3>1. Information We Collect</h3><div class="line"></div><div class="line w80"></div>
+    <h3 class="mt24">2. Purpose of Processing</h3><div class="line"></div><div class="line w60"></div>
+    <h3 class="mt24">3. Retention</h3><div class="line"></div><div class="line w80"></div>
+    <h3 class="mt24">4. Your Rights</h3><div class="line"></div><div class="line w60"></div>
+    <h3 class="mt24">5. Data Protection Officer</h3><div class="line w40"></div>
+  </div></section>
+</section>
+
+</main>
+
+<!-- ================= CTA BAND TEMPLATE ================= -->
+<template id="ctaTpl">
+  <section class="blk" style="background:#ddd"><i class="ann">CTA · Global Band</i><div class="wrap row" style="justify-content:space-between">
+    <div><h2 data-ko="검증된 한국 치킨 브랜드의 파트너가 되세요">Become Our Franchise Partner</h2><p class="muted" data-ko="1:1 상담으로 자세한 내용을 안내해 드립니다.">Get full details in a 1:1 consultation.</p></div>
+    <div class="row"><a href="#stores" class="btn" data-ko="매장 방문하기">Visit a Store</a><a href="#apply" class="btn pri" data-ko="가맹 상담 신청">Apply Now</a></div>
+  </div></section>
+</template>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="grid g-foot" style="gap:32px">
+      <div>
+        <div class="logo" style="border:none;padding:0;"><img src="img/logo.png" alt="CHITOPIA" style="height:38px;object-fit:contain;"></div>
+        <p class="mt16">[Company Name, PH Inc.] · SEC Reg. No. [ ]<br>[Office Address], Taguig City, Metro Manila<br>Korea HQ: [Company Name, Korea]</p>
+      </div>
+      <div><h4 data-ko="브랜드">Brand</h4><ul><li><a href="#brand" data-ko="브랜드 이야기">Our Story</a></li><li><a href="#menu" data-ko="메뉴">Menu</a></li><li><a href="#proof" data-ko="한국 본사·품질">Korea Proof</a></li></ul></div>
+      <div><h4 data-ko="가맹">Franchise</h4><ul><li><a href="#franchise" data-ko="가맹 안내">Franchise Info</a></li><li><a href="#franchise/faq">FAQ</a></li><li><a href="#apply" data-ko="상담 신청">Apply</a></li></ul></div>
+      <div><h4 data-ko="고객센터">Contact</h4><ul><li><a href="#stores" data-ko="매장 찾기">Find a Store</a></li><li>franchise@[domain].ph</li><li>[+63 XXX]</li><li>FB · IG · TikTok</li></ul></div>
+    </div>
+    <div class="copy"><span>© 2026 [Brand]. All rights reserved.</span><a href="#privacy" data-ko="개인정보처리방침">Privacy Policy</a></div>
+  </div>
+</footer>
+
+<!-- ================= MOBILE STICKY BAR ================= -->
+<div class="mbar"><a>💬 Messenger</a><a data-ko="📞 전화">📞 Call</a><a href="#apply" data-ko="가맹 상담 신청">Apply Now</a></div>
+
+<script>
+// ---------- CTA band injection ----------
+document.querySelectorAll('[data-cta]').forEach(el => el.replaceWith(document.getElementById('ctaTpl').content.cloneNode(true)));
+
+// ---------- Menu Real Items Grid ----------
+const menuData = [
+  { name: 'Classic Fried Chicken', ko: '클래식 프라이드 치킨', tag: 'Signature', spice: 0, img: 'img/menu_classic_chicken.jpg', desc: '황금빛 겉바속촉 순살 치킨과 라이스 & 그레이비' },
+  { name: 'Creamy Onion Chicken', ko: '크리미 어니언 치킨', tag: 'Best Seller', spice: 0, img: 'img/menu_creamy_onion.jpg', desc: '신선한 양파 슬라이스와 특제 화이트 크리미 소스' },
+  { name: 'Soy Garlic Gangjeong', ko: '소이 갈릭 닭강정', tag: 'Popular', spice: 1, img: 'img/menu_soy_chicken.jpg', desc: '단짠 소이 소스로 코팅된 한국 정통 닭강정' },
+  { name: 'Cheese Rolling Gangjeong', ko: '치즈 굴림 강정', tag: 'Kids Favorite', spice: 0, img: 'img/menu_cheese_chicken.jpg', desc: '눈꽃 치즈 시즈닝이 듬뿍 뿌려진 달콤고소한 치킨' },
+  { name: 'Chicken & Takoyaki Combo', ko: '치킨 & 타코야키 콤보', tag: 'Combo Meal', spice: 0, img: 'img/menu_takoyaki.jpg', desc: '치킨 4조각 + 타코야키 4개 + 밥으로 구성된 실속 콤보' },
+  { name: 'Classic Rice Tteokbokki', ko: '빠사시 쌀 떡볶이', tag: 'K-Street Food', spice: 2, img: 'img/menu_tteokbokki.jpg', desc: '쫀득한 쌀떡과 한국 직송 특제 매콤달콤 소스' },
+  { name: 'Kimchi Fried Rice Bowl', ko: '돌솥 김치 볶음밥', tag: 'Rice Meal', spice: 2, img: 'img/menu_fried_rice.jpg', desc: '새콤한 김치와 고소한 밥의 조화로운 한국식 한 끼' },
+  { name: 'Cup Gangjeong & Tteokbokki', ko: '컵강정 & 컵떡볶이 세트', tag: 'Snack Set', spice: 1, img: 'img/menu_cup_combo.jpg', desc: '간편하게 길거리에서 즐기는 컵 치킨과 컵 떡볶이 세트' }
+];
+
+const grid = document.getElementById('menuGrid');
+menuData.forEach(m => {
+  grid.insertAdjacentHTML('beforeend',
+    `<div class="card">
+       <div class="ph" style="aspect-ratio:1;background:url('${m.img}') center/cover;"></div>
+       <div class="row mt16">
+         <span class="tag">${m.tag}</span>
+         <span class="tag">${'🌶 '.repeat(m.spice) || 'Mild'}</span>
+       </div>
+       <h3 class="mt8" data-ko="${m.ko}">${m.name}</h3>
+       <p class="small muted" data-ko="${m.desc}">${m.desc}</p>
+     </div>`);
+});
+document.querySelectorAll('.tabs').forEach(t => t.addEventListener('click', e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  t.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === e.target));
+}));
+
+// ---------- Router ----------
+const pages = [...document.querySelectorAll('.page')];
+const sel = document.getElementById('pageSel');
+function route() {
+  const [id, sub] = (location.hash || '#home').slice(1).split('/');
+  const page = pages.find(p => p.id === 'page-' + id) || pages.find(p => p.id === 'page-home');
+  pages.forEach(p => p.hidden = p !== page);
+  document.querySelectorAll('[data-nav]').forEach(a => a.classList.toggle('on', 'page-' + a.dataset.nav === page.id));
+  sel.value = page.id.slice(5);
+  const target = sub && document.getElementById(page.id.slice(5) + '-' + sub);
+  closeDrawer();
+  if (target) {
+    const hdr = document.querySelector('header.site');
+    const sub = page.querySelector('.subnav');
+    const off = (parseInt(getComputedStyle(hdr).top) || 0) + hdr.offsetHeight + (sub ? sub.offsetHeight : 0) + 12;
+    window.scrollTo({ top: target.getBoundingClientRect().top + scrollY - off });
+  }
+  else window.scrollTo(0, 0);
+}
+sel.addEventListener('change', () => location.hash = sel.value);
+window.addEventListener('hashchange', route);
+
+// ---------- Mobile drawer ----------
+const drawer = document.getElementById('drawer'), burger = document.getElementById('burger');
+function closeDrawer(){ drawer.classList.remove('open'); document.body.classList.remove('lock'); burger.textContent='≡'; burger.setAttribute('aria-expanded','false'); }
+burger.addEventListener('click', () => {
+  drawer.style.top = burger.closest('header').getBoundingClientRect().bottom + 'px';
+  const open = drawer.classList.toggle('open');
+  document.body.classList.toggle('lock', open);
+  burger.textContent = open ? '✕' : '≡';
+  burger.setAttribute('aria-expanded', open);
+});
+drawer.addEventListener('click', e => { if (e.target === drawer || e.target.closest('a')) closeDrawer(); });
+window.addEventListener('resize', () => { if (innerWidth > 1024) closeDrawer(); });
+
+// ---------- Language toggle ----------
+function setLang(l) {
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-ko]').forEach(el => {
+    if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+    el.innerHTML = l === 'ko' ? el.dataset.ko : el.dataset.en;
+  });
+  document.querySelectorAll('[data-ko-ph]').forEach(el => {
+    if (el.dataset.enPh === undefined) el.dataset.enPh = el.placeholder;
+    el.placeholder = l === 'ko' ? el.dataset.koPh : el.dataset.enPh;
+  });
+  document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === l));
+  localStorage.setItem('wf-lang', l);
+}
+document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+// ---------- Annotations ----------
+const annBtn = document.getElementById('annBtn');
+annBtn.addEventListener('click', () => {
+  const off = document.body.classList.toggle('no-ann');
+  annBtn.textContent = 'Annotations: ' + (off ? 'OFF' : 'ON');
+});
+
+// ---------- Form steps ----------
+document.getElementById('toStep2').onclick = () => { step1.hidden = true; step2.hidden = false; st2.classList.add('on'); };
+document.getElementById('back1').onclick = () => { step1.hidden = false; step2.hidden = true; st2.classList.remove('on'); };
+
+// ---------- Store list ----------
+document.querySelectorAll('.store[data-pin]').forEach(s => s.addEventListener('click', () => {
+  document.querySelectorAll('.store[data-pin]').forEach(x => x.classList.toggle('on', x === s));
+  document.querySelectorAll('#map .pin').forEach((p, i) => p.style.background = (i + 1 == s.dataset.pin) ? '#222' : '#888');
+}));
+
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+setLang(localStorage.getItem('wf-lang') || 'en');
+route();
+</script>
+</body>
+</html>
