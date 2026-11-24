@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHITOPIA HQ - 직원 & 매장 관리 포털</title>
+<style>
+  :root {
+    --primary: #c92a2a;
+    --primary-dark: #a61e1e;
+    --bg-dark: #1a1a1a;
+    --sidebar-bg: #212529;
+    --content-bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --text-main: #212529;
+    --text-muted: #6c757d;
+    --border: #dee2e6;
+    --success: #2b8a3e;
+    --warning: #e67700;
+    --info: #1c7ed6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Malgun Gothic', sans-serif; background: var(--content-bg); color: var(--text-main); line-height: 1.5; font-size: 14px; }
+  
+  /* 로그인 모달 */
+  .auth-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; }
+  .auth-card { background: #fff; width: 100%; max-width: 440px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-top: 5px solid var(--primary); }
+  .auth-header { padding: 30px 24px 20px; text-align: center; }
+  .auth-header img { height: 42px; margin-bottom: 12px; }
+  .auth-header h2 { font-size: 18px; color: #111; font-weight: 700; }
+  .auth-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .auth-body { padding: 0 28px 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .form-group input, .form-group select { width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; }
+  .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(201,42,42,0.15); }
+  .btn-submit { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+  .btn-submit:hover { background: var(--primary-dark); }
+  .demo-creds { margin-top: 20px; background: #fff3bf; border: 1px dashed #fab005; border-radius: 6px; padding: 12px 14px; font-size: 12px; color: #856404; line-height: 1.6; }
+  .demo-creds code { background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+  
+  /* 대시보드 레이아웃 */
+  .layout { display: flex; min-height: 100vh; }
+  aside.sidebar { width: 250px; background: var(--sidebar-bg); color: #ced4da; display: flex; flex-direction: column; flex-shrink: 0; }
+  .side-brand { padding: 20px; border-bottom: 1px solid #343a40; display: flex; align-items: center; gap: 10px; }
+  .side-brand img { height: 28px; filter: brightness(0) invert(1); }
+  .side-brand span { font-size: 12px; background: #495057; color: #fff; padding: 2px 6px; border-radius: 4px; }
+  
+  .side-user { padding: 16px 20px; border-bottom: 1px solid #343a40; display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; }
+  .user-meta h4 { font-size: 14px; color: #fff; font-weight: 600; }
+  .user-meta p { font-size: 12px; color: #adb5bd; }
+  
+  nav.side-menu { padding: 16px 0; flex: 1; }
+  .nav-group-title { padding: 8px 20px; font-size: 11px; text-transform: uppercase; color: #6c757d; font-weight: 700; letter-spacing: 1px; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 20px; color: #adb5bd; text-decoration: none; font-size: 13.5px; font-weight: 500; transition: 0.15s; border-left: 3px solid transparent; }
+  .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+  .nav-item.active { color: #fff; background: rgba(201,42,42,0.15); border-left-color: var(--primary); font-weight: 600; }
+  
+  .side-footer { padding: 16px 20px; border-top: 1px solid #343a40; }
+  .btn-logout { width: 100%; padding: 8px; background: transparent; border: 1px solid #495057; color: #adb5bd; border-radius: 4px; font-size: 12px; cursor: pointer; }
+  .btn-logout:hover { color: #fff; border-color: #ced4da; }
+  
+  /* 메인 컨텐츠 영역 */
+  main.main-content { flex: 1; display: flex; flex-direction: column; overflow-x: hidden; }
+  header.top-bar { height: 60px; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 100; }
+  .top-left { display: flex; align-items: center; gap: 14px; }
+  .btn-back-site { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--primary); font-weight: 600; text-decoration: none; padding: 6px 12px; border: 1px solid var(--primary); border-radius: 4px; transition: 0.2s; }
+  .btn-back-site:hover { background: var(--primary); color: #fff; }
+  .top-right { display: flex; align-items: center; gap: 16px; }
+  .badge-store { font-size: 12px; background: #e7f5ff; color: #1971c2; padding: 4px 10px; border-radius: 20px; font-weight: 600; }
+  
+  .content-body { padding: 28px; flex: 1; }
+  .page-title-wrap { margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .page-title-wrap h1 { font-size: 22px; color: #111; font-weight: 700; }
+  .page-title-wrap p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  
+  /* 대시보드 카드 & 통계 */
+  .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 28px; }
+  .stat-card { background: #fff; border-radius: 8px; padding: 20px; border: 1px solid var(--border); display: flex; flex-direction: column; }
+  .stat-card .label { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
+  .stat-card .val { font-size: 26px; font-weight: 800; color: #111; margin: 8px 0 4px; }
+  .stat-card .sub { font-size: 12px; color: var(--success); font-weight: 600; display: flex; align-items: center; gap: 4px; }
+  .stat-card .sub.warn { color: var(--warning); }
+  
+  /* 공통 카드 테이블 */
+  .card-box { background: #fff; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+  .card-box-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .card-box-header h3 { font-size: 16px; color: #111; font-weight: 700; }
+  .card-box-tools { display: flex; gap: 10px; }
+  .search-input { padding: 7px 12px; font-size: 13px; border: 1px solid var(--border); border-radius: 4px; width: 200px; }
+  .btn-act { padding: 7px 14px; background: var(--primary); color: #fff; border: none; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  
+  table.data-tbl { width: 100%; border-collapse: collapse; text-align: left; }
+  table.data-tbl th { background: #f8f9fa; padding: 12px 20px; font-size: 12px; font-weight: 700; color: #495057; border-bottom: 1px solid var(--border); }
+  table.data-tbl td { padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 13.5px; vertical-align: middle; }
+  table.data-tbl tr:last-child td { border-bottom: none; }
+  table.data-tbl tr:hover td { background: #fcfcfc; }
+  
+  .status-badge { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 12px; font-size: 11.5px; font-weight: 600; }
+  .status-badge.active { background: #d3f9d8; color: #2b8a3e; }
+  .status-badge.pending { background: #fff3bf; color: #e67700; }
+  .status-badge.new { background: #e7f5ff; color: #1c7ed6; }
+  .status-badge.off { background: #f1f3f5; color: #868e96; }
+
+  /* 탭 뷰 */
+  .view-tab { display: none; }
+  .view-tab.active { display: block; }
+  
+  /* 반응형 */
+  @media (max-width: 900px) {
+    aside.sidebar { position: fixed; inset: 0 auto 0 0; z-index: 200; transform: translateX(-100%); transition: 0.25s; }
+    aside.sidebar.open { transform: translateX(0); }
+    .btn-mobile-nav { display: block !important; }
+  }
+  .btn-mobile-nav { display: none; background: none; border: 1px solid var(--border); padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<!-- 1. 직원 로그인 모달 (항상 표시 / 안내용 계정 명시) -->
+<div class="auth-overlay" id="loginModal">
+  <div class="auth-card">
+    <div class="auth-header">
+      <img src="img/logo.png" alt="CHITOPIA">
+      <h2>직원 & 가맹점 관리 포털 (HQ ERP)</h2>
+      <p>CHITOPIA 필리핀 본사 및 직영 매장 전용 관리자 시스템</p>
+    </div>
+    <div class="auth-body">
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>소속 매장 / 부서</label>
+          <select id="loginBranch">
+            <option value="HQ">본사 관리부 (Headquarters)</option>
+            <option value="BGC_4F">BGC Market! Market! 4층 푸드코트점</option>
+            <option value="BGC_1F">BGC Market! Market! 1층 로드점</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>직원 아이디 (ID)</label>
+          <input type="text" id="loginId" value="admin" required placeholder="아이디를 입력하세요">
+        </div>
+        <div class="form-group">
+          <label>비밀번호 (Password)</label>
+          <input type="password" id="loginPw" value="1234" required placeholder="비밀번호를 입력하세요">
+        </div>
+        <button type="submit" class="btn-submit">포털 로그인</button>
+      </form>
+      
+      <!-- 테스트용 계정 안내 박스 -->
+      <div class="demo-creds">
+        <strong>💡 개발/검토용 테스트 로그인 정보 (상시 안내)</strong><br>
+        • 관리자 ID: <code>admin</code> / 비밀번호: <code>1234</code><br>
+        • 매니저 ID: <code>staff</code> / 비밀번호: <code>1234</code><br>
+        <span style="font-size:11px;color:#666;">* 현재 프리뷰 단계로 바로 [포털 로그인] 버튼을 누르시면 입장됩니다.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 대시보드 메인 레이아웃 -->
+<div class="layout">
+  <!-- 사이드바 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand">
+      <img src="img/logo.png" alt="CHITOPIA">
+      <span>HQ Portal</span>
+    </div>
+    <div class="side-user">
+      <div class="avatar" id="userAvatar">A</div>
+      <div class="user-meta">
+        <h4 id="userName">Admin Staff</h4>
+        <p id="userRole">총괄 관리자 (본사)</p>
+      </div>
+    </div>
+    
+    <nav class="side-menu">
+      <div class="nav-group-title">대시보드 홈</div>
+      <a href="#overview" class="nav-item active" onclick="switchTab('overview', this)">
+        <span>📊</span> 종합 현황 (Overview)
+      </a>
+      
+      <div class="nav-group-title">직원 & 근태 관리</div>
+      <a href="#employees" class="nav-item" onclick="switchTab('employees', this)">
+        <span>👥</span> 직원 목록 (Staff List)
+      </a>
+      <a href="#attendance" class="nav-item" onclick="switchTab('attendance', this)">
+        <span>⏱️</span> 출퇴근/근태 (Attendance)
+      </a>
+      
+      <div class="nav-group-title">매장 & 가맹 관리</div>
+      <a href="#stores" class="nav-item" onclick="switchTab('stores', this)">
+        <span>🏬</span> BGC 직영 매장 (Stores)
+      </a>
+      <a href="#leads" class="nav-item" onclick="switchTab('leads', this)">
+        <span>📝</span> 가맹 문의 리드 (Leads)
+      </a>
+      
+      <div class="nav-group-title">물류 & 매뉴얼</div>
+      <a href="#inventory" class="nav-item" onclick="switchTab('inventory', this)">
+        <span>📦</span> 원재료/소스 재고 (Stock)
+      </a>
+      <a href="#sop" class="nav-item" onclick="switchTab('sop', this)">
+        <span>📖</span> 주방 조리 매뉴얼 (SOP)
+      </a>
+    </nav>
+    
+    <div class="side-footer">
+      <button class="btn-logout" onclick="handleLogout()">로그아웃 (Switch Account)</button>
+    </div>
+  </aside>
+
+  <!-- 메인 바디 -->
+  <main class="main-content">
+    <header class="top-bar">
+      <div class="top-left">
+        <button class="btn-mobile-nav" onclick="toggleSidebar()">☰</button>
+        <a href="index.html" class="btn-back-site">← 공식 홈페이지 보기</a>
+      </div>
+      <div class="top-right">
+        <span class="badge-store" id="topStoreBadge">🏢 본사 관제 센터</span>
+        <span style="font-size:12px;color:var(--text-muted);" id="currentDate">2026.11.24 (화)</span>
+      </div>
+    </header>
+
+    <div class="content-body">
+
+      <!-- ================= TAB 1: 종합 현황 (OVERVIEW) ================= -->
+      <section id="tab-overview" class="view-tab active">
+        <div class="page-title-wrap">
+          <div>
+            <h1>CHITOPIA 필리핀 직원 & 매장 종합 관제</h1>
+            <p>BGC 직영점 공사 현황, 직원 근태 및 가맹 상담 접수 데이터를 실시간 모니터링합니다.</p>
+          </div>
+        </div>
+
+        <div class="grid-stats">
+          <div class="stat-card">
+            <span class="label">총 등록 직원 수</span>
+            <span class="val">14명</span>
+            <span class="sub">본사 4명 / 현장 매니저·크루 10명</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">오늘 출근 인원</span>
+            <span class="val">11명</span>
+            <span class="sub">정상 출근율 100%</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">신규 가맹 문의 (누적)</span>
+            <span class="val">27건</span>
+            <span class="sub">+5건 (이번 주 신규 접수)</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">BGC 2개점 오픈 D-Day</span>
+            <span class="val" style="color:var(--primary);">D-18</span>
+            <span class="sub warn">인테리어 공사 75% 공정률</span>
+          </div>
+        </div>
+
+        <!-- 매장 공사 및 운영 요약 -->
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>📍 BGC Market! Market! 2개 매장 진행 현황</h3>
+            <span style="font-size:12.5px;color:var(--text-muted);">오픈 예정: 2026년 12월 중순 순차 오픈</span>
+          </div>
+          <table class="data-tbl">
+            <thead>
+              <tr>
+                <th>매장명</th>
+                <th>구분</th>
+                <th>위치</th>
+                <th>담당 매니저</th>
+                <th>현재 상태</th>
+                <th>배정 크루</th>
+                <th>공정률</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>치토피아 BGC 푸드코트점</b></td>
+                <td>몰 내부 4층</td>
+                <td>Market! Market! 4F Food Court</td>
+                <td>Maria Santos</td>
+                <td><span class="status-badge pending">주방 집기 설치 중</span></td>
+                <td>6명 (조리 4, 홀/카운터 2)</td>
+                <td><b>80%</b></td>
+              </tr>
+              <tr>
+                <td><b>치토피아 BGC 로드점</b></td>
+                <td>몰 외부 1층</td>
+                <td>G/F Outside Mall Entrance</td>
+                <td>John Dela Cruz</td>
+                <td><span class="status-badge pending">전면 간판 및 배기 덕트 공사</span></td>
+                <td>4명 (조리 2, 포장 2)</td>
+                <td><b>70%</b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 최근 가맹 상담 신청 리드 -->
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>📝 최근 접수된 홈페이지 가맹 문의 (Latest Leads)</h3>
+            <a href="#leads" onclick="switchTab('leads', document.querySelectorAll('.nav-item')[4])" style="font-size:13px;color:var(--primary);text-decoration:none;font-weight:600;">전체 리드 보기 →</a>
+          </div>
+          <table class="data-tbl">
+            <thead>
+              <tr>
+                <th>접수일시</th>
+                <th>신청자명</th>
+                <th>희망 지역</th>
+                <th>연락처</th>
+                <th>선호 채널</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026-11-23 18:24</td>
+                <td><b>Roberto Gomez</b></td>
+                <td>Quezon City (몰 푸드코트)</td>
+                <td>0917-882-XXXX</td>
+                <td>Viber</td>
+                <td><span class="status-badge new">신규 접수 (상담 대기)</span></td>
+              </tr>
+              <tr>
+                <td>2026-11-22 14:10</td>
+                <td><b>Kristine Reyes</b></td>
+                <td>Makati City (오피스 상권)</td>
+                <td>0922-311-XXXX</td>
+                <td>WhatsApp</td>
+                <td><span class="status-badge active">1차 전화 상담 완료</span></td>
+              </tr>
+              <tr>
+                <td>2026-11-20 11:05</td>
+                <td><b>Mark Anthony</b></td>
+                <td>Pasig City (로드 매장)</td>
+                <td>0919-543-XXXX</td>
+                <td>Phone Call</td>
+                <td><span class="status-badge pending">BGC 매장 시식 미팅 예약</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 2: 직원 목록 (EMPLOYEES) ================= -->
+      <section id="tab-employees" class="view-tab">
+        <div class="page-title-wrap">
+          <div>
+            <h1>직원 및 현장 크루 관리</h1>
+            <p>본사 관리자 및 BGC 1·2호점 근무 직원의 직급, 연락처, 배정 현황을 관리합니다.</p>
+          </div>
+          <button class="btn-act" onclick="alert('신규 직원 등록 팝업 (실무 연동 준비 중)')">+ 신규 직원 등록</button>
+        </div>
+
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>직원 목록 (총 14명)</h3>
+            <div class="card-box-tools">
+              <input type="text" class="search-input" placeholder="이름 또는 직책 검색...">
+            </div>
+          </div>
+          <table class="data-tbl">
+            <thead>
+              <tr>
+                <th>사번</th>
+                <th>이름</th>
+                <th>소속 매장/부서</th>
+                <th>직책</th>
+                <th>연락처</th>
+                <th>입사일</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>EMP-001</td>
+                <td><b>이연우 (Lee Yeon-woo)</b></td>
+                <td>본사 (HQ)</td>
+                <td>한국 총괄 디렉터</td>
+                <td>0917-100-XXXX</td>
+                <td>2026-08-01</td>
+                <td><span class="status-badge active">재직중</span></td>
+              </tr>
+              <tr>
+                <td>EMP-002</td>
+                <td><b>Maria Santos</b></td>
+                <td>BGC 4층 푸드코트점</td>
+                <td>점장 (Store Manager)</td>
+                <td>0918-223-XXXX</td>
+                <td>2026-10-15</td>
+                <td><span class="status-badge active">재직중 (오픈 준비)</span></td>
+              </tr>
+              <tr>
+                <td>EMP-003</td>
+                <td><b>John Dela Cruz</b></td>
+                <td>BGC 1층 로드점</td>
+                <td>점장 (Store Manager)</td>
+                <td>0919-334-XXXX</td>
+                <td>2026-10-15</td>
+                <td><span class="status-badge active">재직중 (오픈 준비)</span></td>
+              </tr>
+              <tr>
+                <td>EMP-004</td>
+                <td><b>Angelo Ramirez</b></td>
+                <td>BGC 4층 푸드코트점</td>
+                <td>수석 조리사 (Head Cook)</td>
+                <td>0920-445-XXXX</td>
+                <td>2026-11-01</td>
+                <td><span class="status-badge active">교육 완료</span></td>
+              </tr>
+              <tr>
+                <td>EMP-005</td>
+                <td><b>Bea Alonzo</b></td>
+                <td>BGC 4층 푸드코트점</td>
+                <td>키친 크루 (Kitchen Crew)</td>
+                <td>0921-556-XXXX</td>
+                <td>2026-11-10</td>
+                <td><span class="status-badge pending">본사 레시피 교육중</span></td>
+              </tr>
+              <tr>
+                <td>EMP-006</td>
+                <td><b>Christian Cruz</b></td>
+                <td>BGC 1층 로드점</td>
+                <td>키친 크루 (Kitchen Crew)</td>
+                <td>0922-667-XXXX</td>
+                <td>2026-11-10</td>
+                <td><span class="status-badge pending">본사 레시피 교육중</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 3: 출퇴근/근태 (ATTENDANCE) ================= -->
+      <section id="tab-attendance" class="view-tab">
+        <div class="page-title-wrap">
+          <div>
+            <h1>근태 및 출퇴근 관리</h1>
+            <p>매장별 실시간 출근 현황, 오픈 전 교육 이수 시간 및 근무 스케줄을 확인합니다.</p>
+          </div>
+        </div>
+
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>오늘 출퇴근 기록 (Today's Timecard)</h3>
+            <span style="font-size:12px;color:var(--text-muted);">실시간 POS / 지문인식 연동 규격</span>
+          </div>
+          <table class="data-tbl">
+            <thead>
+              <tr>
+                <th>이름</th>
+                <th>근무지</th>
+                <th>출근 시간</th>
+                <th>퇴근 시간</th>
+                <th>근무 형태</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Maria Santos</td>
+                <td>BGC 4층 푸드코트</td>
+                <td>08:52 AM</td>
+                <td>--:--</td>
+                <td>오전 오픈조 (Full-time)</td>
+                <td><span class="status-badge active">근무중</span></td>
+              </tr>
+              <tr>
+                <td>John Dela Cruz</td>
+                <td>BGC 1층 로드점</td>
+                <td>08:45 AM</td>
+                <td>--:--</td>
+                <td>공사 감리조 (Full-time)</td>
+                <td><span class="status-badge active">근무중</span></td>
+              </tr>
+              <tr>
+                <td>Angelo Ramirez</td>
+                <td>BGC 본사 교육장</td>
+                <td>09:00 AM</td>
+                <td>--:--</td>
+                <td>치킨 튀김 실습 교육</td>
+                <td><span class="status-badge active">교육중</span></td>
+              </tr>
+              <tr>
+                <td>Bea Alonzo</td>
+                <td>BGC 본사 교육장</td>
+                <td>09:05 AM</td>
+                <td>--:--</td>
+                <td>소스 배합/코팅 교육</td>
+                <td><span class="status-badge active">교육중</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 4: 매장 관리 (STORES) ================= -->
+      <section id="tab-stores" class="view-tab">
+        <div class="page-title-wrap">
+          <div>
+            <h1>BGC 직영 매장 현황</h1>
+            <p>Market! Market! 4층 푸드코트점과 1층 로드점의 시설 및 오픈 준비 현황입니다.</p>
+          </div>
+        </div>
+
+        <div class="grid-stats">
+          <div class="stat-card">
+            <span class="label">BGC 4층 푸드코트</span>
+            <span class="val">Food Court</span>
+            <span class="sub">쇼핑몰 내부 고객 유입 극대화 모델</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">BGC 1층 로드점</span>
+            <span class="val">Street Dine-in</span>
+            <span class="sub">야간 보행자 & 배달 픽업 전용 모델</span>
+          </div>
+        </div>
+
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>매장별 설비 및 점검 체크리스트</h3>
+          </div>
+          <table class="data-tbl">
+            <thead>
+              <tr>
+                <th>점검 항목</th>
+                <th>4층 푸드코트점</th>
+                <th>1층 로드점</th>
+                <th>비고</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>튀김기 & 배기 후드</b></td>
+                <td><span class="status-badge active">설치 완료</span></td>
+                <td><span class="status-badge pending">배기 덕트 시공중</span></td>
+                <td>한국산 압력/오픈 튀김기 배치</td>
+              </tr>
+              <tr>
+                <td><b>POS 및 영수증 프린터</b></td>
+                <td><span class="status-badge active">BIR 인증 세팅 완료</span></td>
+                <td><span class="status-badge active">BIR 인증 세팅 완료</span></td>
+                <td>필리핀 세무 규격 단말기</td>
+              </tr>
+              <tr>
+                <td><b>GrabFood / foodpanda 태블릿</b></td>
+                <td><span class="status-badge pending">입점 심사 대기</span></td>
+                <td><span class="status-badge pending">입점 심사 대기</span></td>
+                <td>오픈 7일 전 최종 승인 예정</td>
+              </tr>
+              <tr>
+                <td><b>위생 허가 (Sanitary Permit)</b></td>
+                <td><span class="status-badge active">승인 완료</span></td>
+                <td><span class="status-badge active">승인 완료</span></td>
+                <td>Taguig LGU 보건증 취득 전원 완료</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 5: 가맹 문의 리드 (LEADS) ================= -->
+      <section id="tab-leads" class="view-tab">
+        <div class="page-title-wrap">
+          <div>
+            <h1>가맹점주 모집 신청 리드 (CRM)</h1>
+            <p>공식 웹사이트를 통해 접수된 예비 점주 및 지역 파트너 상담 신청서 목록입니다.</p>
+          </div>
+          <button class="btn-act" onclick="alert('엑셀(CSV) 다운로드 준비 완료')">📥 엑셀(CSV) 다운로드</button>
+        </div>
+
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>상담 신청 리드 관리</h3>
+            <div class="card-box-tools">
+              <input type="text" class="search-input" placeholder="이름, 지역 검색...">
+            </div>
+          </div>
+          <table class="data-tbl">
+            <thead>
+              <tr>
+                <th>접수일</th>
+                <th>성명</th>
+                <th>연락처</th>
+                <th>이메일</th>
+                <th>희망 오픈 지역</th>
+                <th>점포 확보</th>
+                <th>F&B 경험</th>
+                <th>진행 상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2026-11-23</td>
+                <td><b>Roberto Gomez</b></td>
+                <td>0917-882-XXXX</td>
+                <td>r.gomez@gmail.com</td>
+                <td>Quezon City (몰 푸드코트)</td>
+                <td>후보지 검토중</td>
+                <td>1~3년</td>
+                <td><span class="status-badge new">상담 대기</span></td>
+              </tr>
+              <tr>
+                <td>2026-11-22</td>
+                <td><b>Kristine Reyes</b></td>
+                <td>0922-311-XXXX</td>
+                <td>reyes.k@yahoo.com</td>
+                <td>Makati City (오피스)</td>
+                <td>점포 보유 (임대차 협의)</td>
+                <td>3년 이상</td>
+                <td><span class="status-badge active">1차 전화 완료</span></td>
+              </tr>
+              <tr>
+                <td>2026-11-20</td>
+                <td><b>Mark Anthony</b></td>
+                <td>0919-543-XXXX</td>
+                <td>anthony_m@gmail.com</td>
+                <td>Pasig City (로드점)</td>
+                <td>상권 물색중</td>
+                <td>없음 (초보)</td>
+                <td><span class="status-badge pending">매장 방문 약속</span></td>
+              </tr>
+              <tr>
+                <td>2026-11-18</td>
+                <td><b>David Tan</b></td>
+                <td>0917-555-XXXX</td>
+                <td>dtan_invest@gmail.com</td>
+                <td>Cebu / Davao (지역 총판)</td>
+                <td>다수 보유</td>
+                <td>10년 이상</td>
+                <td><span class="status-badge active">본사 미팅 완료</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 6: 재고 관리 (INVENTORY) ================= -->
+      <section id="tab-inventory" class="view-tab">
+        <div class="page-title-wrap">
+          <div>
+            <h1>한국 직송 원재료 및 소스 재고 관리</h1>
+            <p>한국 LFL 자체 공장에서 직송된 시그니처 소스, 파우더 및 패키징 현지 창고 재고 현황입니다.</p>
+          </div>
+        </div>
+
+        <div class="card-box">
+          <div class="card-box-header">
+            <h3>주요 한국 직송 식자재 재고 (PH Warehouse)</h3>
+          </div>
+          <table class="data-tbl">
+            <thead>
+              <tr>
+                <th>품목 코드</th>
+                <th>품목명</th>
+                <th>규격</th>
+                <th>현재 재고</th>
+                <th>적정 재고</th>
+                <th>제조원</th>
+                <th>상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>SRC-01</td>
+                <td><b>소이 갈릭 시그니처 소스</b></td>
+                <td>10kg / Box</td>
+                <td>120 박스</td>
+                <td>100 박스</td>
+                <td>LFL 한국 공장</td>
+                <td><span class="status-badge active">양호</span></td>
+              </tr>
+              <tr>
+                <td>SRC-02</td>
+                <td><b>크리미 어니언 화이트 소스</b></td>
+                <td>5kg / Pouch</td>
+                <td>85 파우치</td>
+                <td>80 파우치</td>
+                <td>LFL 한국 공장</td>
+                <td><span class="status-badge active">양호</span></td>
+              </tr>
+              <tr>
+                <td>PWD-01</td>
+                <td><b>겉바속촉 닭강정 전용 믹스</b></td>
+                <td>20kg / Bag</td>
+                <td>240 포대</td>
+                <td>200 포대</td>
+                <td>LFL 한국 공장</td>
+                <td><span class="status-badge active">양호</span></td>
+              </tr>
+              <tr>
+                <td>TKK-01</td>
+                <td><b>빠사시 쌀 떡볶이 전용 떡</b></td>
+                <td>1kg x 10 / Box</td>
+                <td>40 박스</td>
+                <td>50 박스</td>
+                <td>LFL 협력 제조사</td>
+                <td><span class="status-badge pending">추가 발주 필요</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= TAB 7: 주방 조리 SOP ================= -->
+      <section id="tab-sop" class="view-tab">
+        <div class="page-title-wrap">
+          <div>
+            <h1>주방 조리 표준 매뉴얼 (Kitchen SOP)</h1>
+            <p>"전문 주방장 없이 3분 조리 완성" 표준 레시피 가이드</p>
+          </div>
+        </div>
+
+        <div class="grid-stats">
+          <div class="stat-card">
+            <span class="label">Step 1. 튀김</span>
+            <span class="val" style="font-size:20px;">175℃ / 4분 30초</span>
+            <span class="sub">LFL 크리스피 파우더 균일 코팅</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">Step 2. 기름빼기</span>
+            <span class="val" style="font-size:20px;">30초 래킹</span>
+            <span class="sub">바삭함 유지 필수 공정</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">Step 3. 소스 버무리기</span>
+            <span class="val" style="font-size:20px;">원팩 소스 코팅</span>
+            <span class="sub">웍 또는 전용 볼에서 15초 글레이징</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  // 로그인 인증 처리 (데모 상시 오픈)
+  function handleLogin(e) {
+    e.preventDefault();
+    const branch = document.getElementById('loginBranch').value;
+    const id = document.getElementById('loginId').value;
+    
+    document.getElementById('loginModal').style.display = 'none';
+    
+    // 지점별 헤더 뱃지 변경
+    const storeMap = {
+      'HQ': '🏢 본사 관제 센터',
+      'BGC_4F': '🍗 BGC 4F 푸드코트점',
+      'BGC_1F': '🍗 BGC 1F 로드점'
+    };
+    document.getElementById('topStoreBadge').textContent = storeMap[branch] || 'CHITOPIA 매장';
+    document.getElementById('userName').textContent = id === 'admin' ? 'HQ Admin' : 'Store Staff';
+  }
+
+  function handleLogout() {
+    document.getElementById('loginModal').style.display = 'flex';
+  }
+
+  // 탭 전환
+  function switchTab(tabId, el) {
+    document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    
+    const target = document.getElementById('tab-' + tabId);
+    if(target) target.classList.add('active');
+    if(el) el.classList.add('active');
+    
+    if(window.innerWidth <= 900) {
+      document.getElementById('sidebar').classList.remove('open');
+    }
+  }
+
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  // 오늘 날짜 표시
+  const now = new Date();
+  const days = ['일','월','화','수','목','금','토'];
+  document.getElementById('currentDate').textContent = `${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()} (${days[now.getDay()]})`;
+</script>
+</body>
+</html>
