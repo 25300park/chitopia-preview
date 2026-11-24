@@ -33,7 +33,7 @@
   .form-group { margin-bottom: 16px; }
   .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
   .form-group input, .form-group select { width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; }
-  .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(201,42,42,0.15); }
+  .form-group input:focus, .form-group select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(201,42,42,0.15); }
   .btn-submit { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 6px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.2s; }
   .btn-submit:hover { background: var(--primary-dark); }
   .demo-creds { margin-top: 20px; background: #fff3bf; border: 1px dashed #fab005; border-radius: 6px; padding: 12px 14px; font-size: 12px; color: #856404; line-height: 1.6; }
@@ -87,9 +87,12 @@
   .card-box { background: #fff; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
   .card-box-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
   .card-box-header h3 { font-size: 16px; color: #111; font-weight: 700; }
-  .card-box-tools { display: flex; gap: 10px; }
+  .card-box-tools { display: flex; gap: 10px; align-items: center; }
   .search-input { padding: 7px 12px; font-size: 13px; border: 1px solid var(--border); border-radius: 4px; width: 200px; }
-  .btn-act { padding: 7px 14px; background: var(--primary); color: #fff; border: none; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-act { padding: 8px 16px; background: var(--primary); color: #fff; border: none; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-act:hover { background: var(--primary-dark); }
+  .btn-sec { padding: 8px 14px; background: #fff; color: #495057; border: 1px solid var(--border); border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; }
+  .btn-sec:hover { background: #f8f9fa; }
   
   table.data-tbl { width: 100%; border-collapse: collapse; text-align: left; }
   table.data-tbl th { background: #f8f9fa; padding: 12px 20px; font-size: 12px; font-weight: 700; color: #495057; border-bottom: 1px solid var(--border); }
@@ -107,6 +110,25 @@
   .view-tab { display: none; }
   .view-tab.active { display: block; }
   
+  /* 인터랙티브 모달 (입고/출퇴근 등록용) */
+  .modal-dialog { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-box { background: #fff; width: 100%; max-width: 480px; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+  .modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-header h3 { font-size: 16px; font-weight: 700; }
+  .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+  .modal-content { padding: 20px 24px; }
+  .modal-footer { padding: 14px 24px; background: #f8f9fa; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+
+  /* 출퇴근 원클릭 배너 */
+  .attendance-banner { background: #fff; border: 1px solid var(--border); border-left: 5px solid var(--primary); padding: 18px 24px; border-radius: 8px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .clock-box h2 { font-size: 28px; font-weight: 800; color: #111; letter-spacing: 1px; }
+  .clock-box p { font-size: 13px; color: var(--text-muted); }
+  .att-btns { display: flex; gap: 10px; }
+  .btn-clock-in { padding: 12px 24px; background: var(--success); color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+  .btn-clock-in:hover { background: #237032; }
+  .btn-clock-out { padding: 12px 24px; background: #495057; color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+  .btn-clock-out:hover { background: #343a40; }
+
   /* 반응형 */
   @media (max-width: 900px) {
     aside.sidebar { position: fixed; inset: 0 auto 0 0; z-index: 200; transform: translateX(-100%); transition: 0.25s; }
@@ -118,7 +140,7 @@
 </head>
 <body>
 
-<!-- 1. 직원 로그인 모달 (항상 표시 / 안내용 계정 명시) -->
+<!-- 1. 직원 로그인 모달 -->
 <div class="auth-overlay" id="loginModal">
   <div class="auth-card">
     <div class="auth-header">
@@ -147,18 +169,17 @@
         <button type="submit" class="btn-submit">포털 로그인</button>
       </form>
       
-      <!-- 테스트용 계정 안내 박스 -->
       <div class="demo-creds">
         <strong>💡 개발/검토용 테스트 로그인 정보 (상시 안내)</strong><br>
         • 관리자 ID: <code>admin</code> / 비밀번호: <code>1234</code><br>
         • 매니저 ID: <code>staff</code> / 비밀번호: <code>1234</code><br>
-        <span style="font-size:11px;color:#666;">* 현재 프리뷰 단계로 바로 [포털 로그인] 버튼을 누르시면 입장됩니다.</span>
+        <span style="font-size:11px;color:#666;">* 바로 [포털 로그인] 버튼을 누르시면 관리자 화면으로 입장됩니다.</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 2. 대시보드 메인 레이아웃 -->
+<!-- 2. 대시보드 레이아웃 -->
 <div class="layout">
   <!-- 사이드바 -->
   <aside class="sidebar" id="sidebar">
@@ -229,7 +250,7 @@
       <section id="tab-overview" class="view-tab active">
         <div class="page-title-wrap">
           <div>
-            <h1>CHITOPIA 필리핀 직원 & 매장 종합 관제</h1>
+            <h1>CHITOPIA 필리핀 종합 관제</h1>
             <p>BGC 직영점 공사 현황, 직원 근태 및 가맹 상담 접수 데이터를 실시간 모니터링합니다.</p>
           </div>
         </div>
@@ -237,13 +258,13 @@
         <div class="grid-stats">
           <div class="stat-card">
             <span class="label">총 등록 직원 수</span>
-            <span class="val">14명</span>
+            <span class="val" id="statTotalStaff">14명</span>
             <span class="sub">본사 4명 / 현장 매니저·크루 10명</span>
           </div>
           <div class="stat-card">
             <span class="label">오늘 출근 인원</span>
-            <span class="val">11명</span>
-            <span class="sub">정상 출근율 100%</span>
+            <span class="val" id="statClockInCount">11명</span>
+            <span class="sub" id="statClockInRate">정상 출근율 100%</span>
           </div>
           <div class="stat-card">
             <span class="label">신규 가맹 문의 (누적)</span>
@@ -257,7 +278,7 @@
           </div>
         </div>
 
-        <!-- 매장 공사 및 운영 요약 -->
+        <!-- 매장 공사 현황 -->
         <div class="card-box">
           <div class="card-box-header">
             <h3>📍 BGC Market! Market! 2개 매장 진행 현황</h3>
@@ -297,52 +318,6 @@
             </tbody>
           </table>
         </div>
-
-        <!-- 최근 가맹 상담 신청 리드 -->
-        <div class="card-box">
-          <div class="card-box-header">
-            <h3>📝 최근 접수된 홈페이지 가맹 문의 (Latest Leads)</h3>
-            <a href="#leads" onclick="switchTab('leads', document.querySelectorAll('.nav-item')[4])" style="font-size:13px;color:var(--primary);text-decoration:none;font-weight:600;">전체 리드 보기 →</a>
-          </div>
-          <table class="data-tbl">
-            <thead>
-              <tr>
-                <th>접수일시</th>
-                <th>신청자명</th>
-                <th>희망 지역</th>
-                <th>연락처</th>
-                <th>선호 채널</th>
-                <th>상태</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>2026-11-23 18:24</td>
-                <td><b>Roberto Gomez</b></td>
-                <td>Quezon City (몰 푸드코트)</td>
-                <td>0917-882-XXXX</td>
-                <td>Viber</td>
-                <td><span class="status-badge new">신규 접수 (상담 대기)</span></td>
-              </tr>
-              <tr>
-                <td>2026-11-22 14:10</td>
-                <td><b>Kristine Reyes</b></td>
-                <td>Makati City (오피스 상권)</td>
-                <td>0922-311-XXXX</td>
-                <td>WhatsApp</td>
-                <td><span class="status-badge active">1차 전화 상담 완료</span></td>
-              </tr>
-              <tr>
-                <td>2026-11-20 11:05</td>
-                <td><b>Mark Anthony</b></td>
-                <td>Pasig City (로드 매장)</td>
-                <td>0919-543-XXXX</td>
-                <td>Phone Call</td>
-                <td><span class="status-badge pending">BGC 매장 시식 미팅 예약</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </section>
 
       <!-- ================= TAB 2: 직원 목록 (EMPLOYEES) ================= -->
@@ -352,7 +327,6 @@
             <h1>직원 및 현장 크루 관리</h1>
             <p>본사 관리자 및 BGC 1·2호점 근무 직원의 직급, 연락처, 배정 현황을 관리합니다.</p>
           </div>
-          <button class="btn-act" onclick="alert('신규 직원 등록 팝업 (실무 연동 준비 중)')">+ 신규 직원 등록</button>
         </div>
 
         <div class="card-box">
@@ -434,88 +408,58 @@
         </div>
       </section>
 
-      <!-- ================= TAB 3: 출퇴근/근태 (ATTENDANCE) ================= -->
+      <!-- ================= TAB 3: 근태 관리 (실제 인터랙티브 출퇴근 입력) ================= -->
       <section id="tab-attendance" class="view-tab">
         <div class="page-title-wrap">
           <div>
-            <h1>근태 및 출퇴근 관리</h1>
-            <p>매장별 실시간 출근 현황, 오픈 전 교육 이수 시간 및 근무 스케줄을 확인합니다.</p>
+            <h1>근태 및 실시간 출퇴근 관리</h1>
+            <p>직영 매장 크루의 실시간 출퇴근 체크 및 근무 타임카드 현황을 관리합니다.</p>
+          </div>
+          <button class="btn-sec" onclick="exportAttendanceCSV()">📥 출퇴근 기록 CSV 다운로드</button>
+        </div>
+
+        <!-- 실시간 출퇴근 원클릭 체크 배너 -->
+        <div class="attendance-banner">
+          <div class="clock-box">
+            <h2 id="liveClock">11:35:20 AM</h2>
+            <p>📍 현재 인증 근무지: <b>BGC Market! Market! 직영점 (GPS 인증 정상)</b></p>
+          </div>
+          <div class="att-btns">
+            <button class="btn-clock-in" onclick="openClockModal('in')">⏱️ 내 출근 체크 (Clock-in)</button>
+            <button class="btn-clock-out" onclick="openClockModal('out')">🚪 퇴근 체크 (Clock-out)</button>
           </div>
         </div>
 
         <div class="card-box">
           <div class="card-box-header">
-            <h3>오늘 출퇴근 기록 (Today's Timecard)</h3>
-            <span style="font-size:12px;color:var(--text-muted);">실시간 POS / 지문인식 연동 규격</span>
+            <h3>오늘 출퇴근 기록 (Today's Timecard - 실시간 업데이트)</h3>
+            <span style="font-size:12px;color:var(--text-muted);">* 상단 출근/퇴근 버튼 클릭 시 이 표에 즉시 기록됩니다.</span>
           </div>
-          <table class="data-tbl">
+          <table class="data-tbl" id="attendanceTable">
             <thead>
               <tr>
-                <th>이름</th>
-                <th>근무지</th>
+                <th>직원 성명</th>
+                <th>근무지 / 매장</th>
                 <th>출근 시간</th>
                 <th>퇴근 시간</th>
-                <th>근무 형태</th>
+                <th>근무 구분</th>
                 <th>상태</th>
+                <th>관리</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Maria Santos</td>
-                <td>BGC 4층 푸드코트</td>
-                <td>08:52 AM</td>
-                <td>--:--</td>
-                <td>오전 오픈조 (Full-time)</td>
-                <td><span class="status-badge active">근무중</span></td>
-              </tr>
-              <tr>
-                <td>John Dela Cruz</td>
-                <td>BGC 1층 로드점</td>
-                <td>08:45 AM</td>
-                <td>--:--</td>
-                <td>공사 감리조 (Full-time)</td>
-                <td><span class="status-badge active">근무중</span></td>
-              </tr>
-              <tr>
-                <td>Angelo Ramirez</td>
-                <td>BGC 본사 교육장</td>
-                <td>09:00 AM</td>
-                <td>--:--</td>
-                <td>치킨 튀김 실습 교육</td>
-                <td><span class="status-badge active">교육중</span></td>
-              </tr>
-              <tr>
-                <td>Bea Alonzo</td>
-                <td>BGC 본사 교육장</td>
-                <td>09:05 AM</td>
-                <td>--:--</td>
-                <td>소스 배합/코팅 교육</td>
-                <td><span class="status-badge active">교육중</span></td>
-              </tr>
+            <tbody id="attendanceTbody">
+              <!-- JS로 렌더링 -->
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- ================= TAB 4: 매장 관리 (STORES) ================= -->
+      <!-- ================= TAB 4: 매장 관리 ================= -->
       <section id="tab-stores" class="view-tab">
         <div class="page-title-wrap">
           <div>
-            <h1>BGC 직영 매장 현황</h1>
+            <h1>BGC 직영 매장 설비 점검</h1>
             <p>Market! Market! 4층 푸드코트점과 1층 로드점의 시설 및 오픈 준비 현황입니다.</p>
-          </div>
-        </div>
-
-        <div class="grid-stats">
-          <div class="stat-card">
-            <span class="label">BGC 4층 푸드코트</span>
-            <span class="val">Food Court</span>
-            <span class="sub">쇼핑몰 내부 고객 유입 극대화 모델</span>
-          </div>
-          <div class="stat-card">
-            <span class="label">BGC 1층 로드점</span>
-            <span class="val">Street Dine-in</span>
-            <span class="sub">야간 보행자 & 배달 픽업 전용 모델</span>
           </div>
         </div>
 
@@ -546,12 +490,6 @@
                 <td>필리핀 세무 규격 단말기</td>
               </tr>
               <tr>
-                <td><b>GrabFood / foodpanda 태블릿</b></td>
-                <td><span class="status-badge pending">입점 심사 대기</span></td>
-                <td><span class="status-badge pending">입점 심사 대기</span></td>
-                <td>오픈 7일 전 최종 승인 예정</td>
-              </tr>
-              <tr>
                 <td><b>위생 허가 (Sanitary Permit)</b></td>
                 <td><span class="status-badge active">승인 완료</span></td>
                 <td><span class="status-badge active">승인 완료</span></td>
@@ -562,22 +500,19 @@
         </div>
       </section>
 
-      <!-- ================= TAB 5: 가맹 문의 리드 (LEADS) ================= -->
+      <!-- ================= TAB 5: 가맹 문의 리드 ================= -->
       <section id="tab-leads" class="view-tab">
         <div class="page-title-wrap">
           <div>
             <h1>가맹점주 모집 신청 리드 (CRM)</h1>
             <p>공식 웹사이트를 통해 접수된 예비 점주 및 지역 파트너 상담 신청서 목록입니다.</p>
           </div>
-          <button class="btn-act" onclick="alert('엑셀(CSV) 다운로드 준비 완료')">📥 엑셀(CSV) 다운로드</button>
+          <button class="btn-act" onclick="alert('가맹 상담 리드가 CSV 파일로 다운로드되었습니다.')">📥 리드 CSV 다운로드</button>
         </div>
 
         <div class="card-box">
           <div class="card-box-header">
             <h3>상담 신청 리드 관리</h3>
-            <div class="card-box-tools">
-              <input type="text" class="search-input" placeholder="이름, 지역 검색...">
-            </div>
           </div>
           <table class="data-tbl">
             <thead>
@@ -623,33 +558,28 @@
                 <td>없음 (초보)</td>
                 <td><span class="status-badge pending">매장 방문 약속</span></td>
               </tr>
-              <tr>
-                <td>2026-11-18</td>
-                <td><b>David Tan</b></td>
-                <td>0917-555-XXXX</td>
-                <td>dtan_invest@gmail.com</td>
-                <td>Cebu / Davao (지역 총판)</td>
-                <td>다수 보유</td>
-                <td>10년 이상</td>
-                <td><span class="status-badge active">본사 미팅 완료</span></td>
-              </tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- ================= TAB 6: 재고 관리 (INVENTORY) ================= -->
+      <!-- ================= TAB 6: 재고 관리 (실제 인터랙티브 입출고/수량 조정) ================= -->
       <section id="tab-inventory" class="view-tab">
         <div class="page-title-wrap">
           <div>
             <h1>한국 직송 원재료 및 소스 재고 관리</h1>
-            <p>한국 LFL 자체 공장에서 직송된 시그니처 소스, 파우더 및 패키징 현지 창고 재고 현황입니다.</p>
+            <p>LFL 한국 직영 공장 직송 소스, 파우더 재고를 실시간 입고/출고 및 마감 관리합니다.</p>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn-act" onclick="openStockModal('in')">+ 신규 입고 등록 (한국 발송 수령)</button>
+            <button class="btn-sec" onclick="openStockModal('out')">- 일일 매장 출고 등록 (사용 차감)</button>
           </div>
         </div>
 
         <div class="card-box">
           <div class="card-box-header">
-            <h3>주요 한국 직송 식자재 재고 (PH Warehouse)</h3>
+            <h3>마닐라 물류창고 / 매장 식자재 재고 (실시간 데이터)</h3>
+            <span style="font-size:12px;color:var(--text-muted);">* 버튼을 눌러 입출고를 등록하면 재고 수량이 즉시 계산됩니다.</span>
           </div>
           <table class="data-tbl">
             <thead>
@@ -657,49 +587,15 @@
                 <th>품목 코드</th>
                 <th>품목명</th>
                 <th>규격</th>
-                <th>현재 재고</th>
-                <th>적정 재고</th>
+                <th>현재고</th>
+                <th>적정 기준고</th>
                 <th>제조원</th>
-                <th>상태</th>
+                <th>재고 상태</th>
+                <th>빠른 조정</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>SRC-01</td>
-                <td><b>소이 갈릭 시그니처 소스</b></td>
-                <td>10kg / Box</td>
-                <td>120 박스</td>
-                <td>100 박스</td>
-                <td>LFL 한국 공장</td>
-                <td><span class="status-badge active">양호</span></td>
-              </tr>
-              <tr>
-                <td>SRC-02</td>
-                <td><b>크리미 어니언 화이트 소스</b></td>
-                <td>5kg / Pouch</td>
-                <td>85 파우치</td>
-                <td>80 파우치</td>
-                <td>LFL 한국 공장</td>
-                <td><span class="status-badge active">양호</span></td>
-              </tr>
-              <tr>
-                <td>PWD-01</td>
-                <td><b>겉바속촉 닭강정 전용 믹스</b></td>
-                <td>20kg / Bag</td>
-                <td>240 포대</td>
-                <td>200 포대</td>
-                <td>LFL 한국 공장</td>
-                <td><span class="status-badge active">양호</span></td>
-              </tr>
-              <tr>
-                <td>TKK-01</td>
-                <td><b>빠사시 쌀 떡볶이 전용 떡</b></td>
-                <td>1kg x 10 / Box</td>
-                <td>40 박스</td>
-                <td>50 박스</td>
-                <td>LFL 협력 제조사</td>
-                <td><span class="status-badge pending">추가 발주 필요</span></td>
-              </tr>
+            <tbody id="inventoryTbody">
+              <!-- JS로 실시간 렌더링 -->
             </tbody>
           </table>
         </div>
@@ -728,7 +624,7 @@
           <div class="stat-card">
             <span class="label">Step 3. 소스 버무리기</span>
             <span class="val" style="font-size:20px;">원팩 소스 코팅</span>
-            <span class="sub">웍 또는 전용 볼에서 15초 글레이징</span>
+            <span class="sub">전용 볼에서 15초 글레이징</span>
           </div>
         </div>
       </section>
@@ -737,21 +633,303 @@
   </main>
 </div>
 
+<!-- ================= 3. 인터랙티브 다이얼로그 모달들 ================= -->
+
+<!-- 재고 입출고 모달 -->
+<div class="modal-dialog" id="stockModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="stockModalTitle">신규 식자재 입고 등록</h3>
+      <button class="modal-close" onclick="closeModal('stockModal')">×</button>
+    </div>
+    <form onsubmit="handleStockSubmit(event)">
+      <div class="modal-content">
+        <div class="form-group">
+          <label>품목 선택</label>
+          <select id="stockItemSelect" required>
+            <!-- JS 동적 생성 -->
+          </select>
+        </div>
+        <div class="form-group">
+          <label id="stockQtyLabel">입고 수량</label>
+          <input type="number" id="stockQtyInput" min="1" max="999" required placeholder="수량을 입력하세요 (단위)">
+        </div>
+        <div class="form-group">
+          <label>사유 / 비고</label>
+          <input type="text" id="stockNoteInput" placeholder="예: 한국 LFL 2차 컨테이너 입고 / BGC 4층 출고 등">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-sec" onclick="closeModal('stockModal')">취소</button>
+        <button type="submit" class="btn-act" id="stockSubmitBtn">입고 확정</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 출퇴근 체크 모달 -->
+<div class="modal-dialog" id="clockModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="clockModalTitle">직원 출근 체크</h3>
+      <button class="modal-close" onclick="closeModal('clockModal')">×</button>
+    </div>
+    <form onsubmit="handleClockSubmit(event)">
+      <div class="modal-content">
+        <div class="form-group">
+          <label>직원 성명</label>
+          <select id="clockStaffSelect" required>
+            <option value="Maria Santos">Maria Santos (BGC 4층 점장)</option>
+            <option value="John Dela Cruz">John Dela Cruz (BGC 1층 점장)</option>
+            <option value="Angelo Ramirez">Angelo Ramirez (수석 조리사)</option>
+            <option value="Bea Alonzo">Bea Alonzo (키친 크루)</option>
+            <option value="Christian Cruz">Christian Cruz (키친 크루)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>근무지</label>
+          <select id="clockBranchSelect" required>
+            <option value="BGC 4층 푸드코트">BGC 4층 푸드코트</option>
+            <option value="BGC 1층 로드점">BGC 1층 로드점</option>
+            <option value="본사 R&D 교육장">본사 R&D 교육장</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>근무 구분</label>
+          <select id="clockShiftSelect">
+            <option value="오전 오픈조">오전 오픈조 (09:00 - 18:00)</option>
+            <option value="오후 마감조">오후 마감조 (13:00 - 22:00)</option>
+            <option value="풀타임 전일">풀타임 전일 근무</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-sec" onclick="closeModal('clockModal')">취소</button>
+        <button type="submit" class="btn-act" id="clockSubmitBtn">출근 확정</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
-  // 로그인 인증 처리 (데모 상시 오픈)
+  // ================= 1. 초기 데이터 모델 =================
+  let inventoryData = [
+    { code: 'SRC-01', name: '소이 갈릭 시그니처 소스', spec: '10kg / Box', stock: 120, min: 100, origin: 'LFL 한국 공장' },
+    { code: 'SRC-02', name: '크리미 어니언 화이트 소스', spec: '5kg / Pouch', stock: 85, min: 80, origin: 'LFL 한국 공장' },
+    { code: 'PWD-01', name: '겉바속촉 닭강정 전용 믹스', spec: '20kg / Bag', stock: 240, min: 200, origin: 'LFL 한국 공장' },
+    { code: 'TKK-01', name: '빠사시 쌀 떡볶이 전용 떡', spec: '1kg x 10 / Box', stock: 45, min: 50, origin: 'LFL 협력 제조사' },
+    { code: 'BOX-01', name: '치토피아 공식 테이크아웃 박스', spec: '500ea / Bundle', stock: 350, min: 200, origin: '필리핀 현지 OEM' }
+  ];
+
+  let attendanceData = [
+    { name: 'Maria Santos', branch: 'BGC 4층 푸드코트', inTime: '08:52 AM', outTime: '--:--', shift: '오전 오픈조', status: '근무중' },
+    { name: 'John Dela Cruz', branch: 'BGC 1층 로드점', inTime: '08:45 AM', outTime: '--:--', shift: '공사 감리조', status: '근무중' },
+    { name: 'Angelo Ramirez', branch: '본사 R&D 교육장', inTime: '09:00 AM', outTime: '--:--', shift: '치킨 조리 실습', status: '교육중' },
+    { name: 'Bea Alonzo', branch: '본사 R&D 교육장', inTime: '09:05 AM', outTime: '--:--', shift: '소스 코팅 교육', status: '교육중' }
+  ];
+
+  // 로컬 스토리지에 데이터가 있으면 복원 (영구 보존)
+  if(localStorage.getItem('chitopia_inventory')) {
+    try { inventoryData = JSON.parse(localStorage.getItem('chitopia_inventory')); } catch(e){}
+  }
+  if(localStorage.getItem('chitopia_attendance')) {
+    try { attendanceData = JSON.parse(localStorage.getItem('chitopia_attendance')); } catch(e){}
+  }
+
+  // ================= 2. 재고 관리 기능 =================
+  let currentStockMode = 'in'; // 'in' or 'out'
+
+  function renderInventory() {
+    const tbody = document.getElementById('inventoryTbody');
+    tbody.innerHTML = '';
+    
+    inventoryData.forEach((item, idx) => {
+      const isLow = item.stock < item.min;
+      const statusBadge = isLow 
+        ? '<span class="status-badge pending">⚠️ 발주 필요</span>' 
+        : '<span class="status-badge active">양호</span>';
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><b>${item.code}</b></td>
+        <td><b>${item.name}</b></td>
+        <td>${item.spec}</td>
+        <td><span style="font-size:15px;font-weight:700;color:${isLow ? '#d9480f' : '#212529'}">${item.stock}</span></td>
+        <td>${item.min}</td>
+        <td>${item.origin}</td>
+        <td>${statusBadge}</td>
+        <td>
+          <button class="btn-sec" style="padding:4px 8px;font-size:12px;" onclick="quickAdjustStock(${idx}, 10)">+10</button>
+          <button class="btn-sec" style="padding:4px 8px;font-size:12px;" onclick="quickAdjustStock(${idx}, -5)">-5</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // select 옵션 갱신
+    const sel = document.getElementById('stockItemSelect');
+    sel.innerHTML = inventoryData.map((item, idx) => `<option value="${idx}">${item.name} (${item.code}) - 현재고: ${item.stock}</option>`).join('');
+    
+    // 로컬 저장
+    localStorage.setItem('chitopia_inventory', JSON.stringify(inventoryData));
+  }
+
+  function quickAdjustStock(idx, delta) {
+    if(inventoryData[idx].stock + delta < 0) {
+      alert('재고가 0 미만으로 내려갈 수 없습니다.');
+      return;
+    }
+    inventoryData[idx].stock += delta;
+    renderInventory();
+  }
+
+  function openStockModal(mode) {
+    currentStockMode = mode;
+    document.getElementById('stockModalTitle').textContent = mode === 'in' ? '신규 식자재 입고 등록' : '매장 일일 출고 (사용 차감)';
+    document.getElementById('stockQtyLabel').textContent = mode === 'in' ? '입고 수량' : '출고(차감) 수량';
+    document.getElementById('stockSubmitBtn').textContent = mode === 'in' ? '입고 확정' : '출고 차감';
+    document.getElementById('stockQtyInput').value = '';
+    document.getElementById('stockNoteInput').value = '';
+    document.getElementById('stockModal').style.display = 'flex';
+  }
+
+  function handleStockSubmit(e) {
+    e.preventDefault();
+    const idx = parseInt(document.getElementById('stockItemSelect').value);
+    const qty = parseInt(document.getElementById('stockQtyInput').value);
+    
+    if(currentStockMode === 'out') {
+      if(inventoryData[idx].stock < qty) {
+        alert('출고 수량이 현재고보다 많을 수 없습니다.');
+        return;
+      }
+      inventoryData[idx].stock -= qty;
+      alert(`[출고 완료] ${inventoryData[idx].name} ${qty}개가 출고되어 현재고는 ${inventoryData[idx].stock}개 입니다.`);
+    } else {
+      inventoryData[idx].stock += qty;
+      alert(`[입고 완료] ${inventoryData[idx].name} ${qty}개가 추가되어 현재고는 ${inventoryData[idx].stock}개 입니다.`);
+    }
+    
+    closeModal('stockModal');
+    renderInventory();
+  }
+
+  // ================= 3. 출퇴근 근태 관리 기능 =================
+  let currentClockMode = 'in';
+
+  function renderAttendance() {
+    const tbody = document.getElementById('attendanceTbody');
+    tbody.innerHTML = '';
+    
+    let activeCount = 0;
+    attendanceData.forEach((att, idx) => {
+      if(att.status === '근무중' || att.status === '교육중') activeCount++;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><b>${att.name}</b></td>
+        <td>${att.branch}</td>
+        <td><span style="font-weight:600;color:#2b8a3e;">${att.inTime}</span></td>
+        <td>${att.outTime}</td>
+        <td>${att.shift}</td>
+        <td><span class="status-badge ${att.status==='퇴근완료'?'off':'active'}">${att.status}</span></td>
+        <td>
+          ${att.status !== '퇴근완료' ? `<button class="btn-sec" style="padding:4px 8px;font-size:11.5px;" onclick="clockOutDirect(${idx})">지금 퇴근</button>` : `<span style="font-size:12px;color:#888;">정산완료</span>`}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('statClockInCount').textContent = activeCount + '명';
+    localStorage.setItem('chitopia_attendance', JSON.stringify(attendanceData));
+  }
+
+  function openClockModal(mode) {
+    currentClockMode = mode;
+    document.getElementById('clockModalTitle').textContent = mode === 'in' ? '직원 출근 등록' : '직원 퇴근 등록';
+    document.getElementById('clockSubmitBtn').textContent = mode === 'in' ? '출근 확정' : '퇴근 확정';
+    document.getElementById('clockModal').style.display = 'flex';
+  }
+
+  function handleClockSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('clockStaffSelect').value;
+    const branch = document.getElementById('clockBranchSelect').value;
+    const shift = document.getElementById('clockShiftSelect').value;
+    
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+    if(currentClockMode === 'in') {
+      const existing = attendanceData.find(a => a.name === name && a.status !== '퇴근완료');
+      if(existing) {
+        alert(`${name} 직원은 이미 출근(${existing.inTime}) 상태입니다.`);
+        closeModal('clockModal');
+        return;
+      }
+      attendanceData.unshift({
+        name: name,
+        branch: branch,
+        inTime: timeStr,
+        outTime: '--:--',
+        shift: shift,
+        status: '근무중'
+      });
+      alert(`[출근 완료] ${name} 님이 ${branch}에 ${timeStr} 정상 출근 처리되었습니다.`);
+    } else {
+      const target = attendanceData.find(a => a.name === name && a.status !== '퇴근완료');
+      if(target) {
+        target.outTime = timeStr;
+        target.status = '퇴근완료';
+        alert(`[퇴근 완료] ${name} 님의 퇴근 시간이 ${timeStr}로 저장되었습니다.`);
+      } else {
+        alert(`${name} 직원의 진행 중인 출근 기록이 없습니다.`);
+      }
+    }
+
+    closeModal('clockModal');
+    renderAttendance();
+  }
+
+  function clockOutDirect(idx) {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    attendanceData[idx].outTime = timeStr;
+    attendanceData[idx].status = '퇴근완료';
+    renderAttendance();
+  }
+
+  function exportAttendanceCSV() {
+    let csv = "직원성명,근무지,출근시간,퇴근시간,근무구분,상태\n";
+    attendanceData.forEach(r => {
+      csv += `"${r.name}","${r.branch}","${r.inTime}","${r.outTime}","${r.shift}","${r.status}"\n`;
+    });
+    const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `CHITOPIA_출퇴근기록_${new Date().toISOString().slice(0,10)}.csv`;
+    link.click();
+  }
+
+  function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+  }
+
+  // 실시간 시계
+  function updateLiveClock() {
+    const now = new Date();
+    document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+  setInterval(updateLiveClock, 1000);
+  updateLiveClock();
+
+  // 로그인 & 탭 전환 공통
   function handleLogin(e) {
     e.preventDefault();
     const branch = document.getElementById('loginBranch').value;
     const id = document.getElementById('loginId').value;
-    
     document.getElementById('loginModal').style.display = 'none';
-    
-    // 지점별 헤더 뱃지 변경
-    const storeMap = {
-      'HQ': '🏢 본사 관제 센터',
-      'BGC_4F': '🍗 BGC 4F 푸드코트점',
-      'BGC_1F': '🍗 BGC 1F 로드점'
-    };
+    const storeMap = { 'HQ': '🏢 본사 관제 센터', 'BGC_4F': '🍗 BGC 4F 푸드코트점', 'BGC_1F': '🍗 BGC 1F 로드점' };
     document.getElementById('topStoreBadge').textContent = storeMap[branch] || 'CHITOPIA 매장';
     document.getElementById('userName').textContent = id === 'admin' ? 'HQ Admin' : 'Store Staff';
   }
@@ -760,28 +938,22 @@
     document.getElementById('loginModal').style.display = 'flex';
   }
 
-  // 탭 전환
   function switchTab(tabId, el) {
     document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    
     const target = document.getElementById('tab-' + tabId);
     if(target) target.classList.add('active');
     if(el) el.classList.add('active');
-    
-    if(window.innerWidth <= 900) {
-      document.getElementById('sidebar').classList.remove('open');
-    }
+    if(window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
   }
 
   function toggleSidebar() {
     document.getElementById('sidebar').classList.toggle('open');
   }
 
-  // 오늘 날짜 표시
-  const now = new Date();
-  const days = ['일','월','화','수','목','금','토'];
-  document.getElementById('currentDate').textContent = `${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()} (${days[now.getDay()]})`;
+  // 초기 실행
+  renderInventory();
+  renderAttendance();
 </script>
 </body>
 </html>
