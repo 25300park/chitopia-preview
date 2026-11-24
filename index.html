@@ -245,6 +245,34 @@
   }
 
   /* ================= PARALLAX HERO STORY (H1) ================= */
+
+  /* Video Parallax & Realism Enhancement */
+  .px-video-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: contrast(1.12) saturate(1.15) brightness(0.92);
+    transform: scale(1.03);
+    will-change: transform;
+  }
+  .px-cinema-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(12,13,14,0.4) 0%, rgba(12,13,14,0.1) 40%, rgba(12,13,14,0.7) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .px-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 35%, rgba(0,0,0,0.75) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
   .parallax-hero-wrap { position: relative; height: 320vh; background: #0c0d0e; color: #fff; }
   .parallax-sticky { position: sticky; top: 112px; height: calc(100vh - 112px); overflow: hidden; display: flex; align-items: center; justify-content: center; }
   
@@ -375,17 +403,18 @@
 <section class="page" id="page-home" hidden>
 
   <!-- H1 HERO -->
-  <!-- ================= H1 PARALLAX SCROLLING HERO STORY ================= -->
+  <!-- ================= H1 SCROLL-DRIVEN VIDEO PARALLAX HERO ================= -->
   <section class="parallax-hero-wrap" id="parallaxHero">
     <div class="parallax-sticky">
-      <!-- 배경 3단계 레이어 (기름에 튀겨짐 -> 겉바속촉 완성 -> 플레이팅) -->
-      <div class="px-bg-layer px-bg-1" id="pxBg1"></div>
-      <div class="px-bg-layer px-bg-2" id="pxBg2"></div>
-      <div class="px-bg-layer px-bg-3" id="pxBg3"></div>
-      <div class="px-overlay-dim"></div>
+      <!-- Scroll-Driven Video Layer -->
+      <video id="pxVideo" class="px-video-layer" src="img/chicken_process.mp4" playsinline muted preload="auto"></video>
+      
+      <!-- 사실적 질감을 극대화하는 시네마틱 톤 & 비네팅 오버레이 -->
+      <div class="px-cinema-overlay"></div>
+      <div class="px-vignette"></div>
 
       <div class="px-content-stage">
-        <!-- 1단계: 튀김 조리 (Sizzle & Golden Fry) -->
+        <!-- 1단계: 튀김 조리 (0% ~ 35%) -->
         <div class="px-step-card active" id="pxCard1">
           <span class="px-badge" data-ko="Step 1 · 175℃ 황금빛 튀김">Step 1 · Sizzle & Crisp</span>
           <h1 data-ko="175℃ 깨끗한 기름 속,<br>바삭함이 폭발하는 순간.">Fried to Golden Perfection.<br>Crispy Outside, Juicy Inside.</h1>
@@ -396,7 +425,7 @@
           </div>
         </div>
 
-        <!-- 2단계: 겉바속촉 한 입 (The Bite) -->
+        <!-- 2단계: 황금빛 닭강정 완성 (35% ~ 70%) -->
         <div class="px-step-card hidden" id="pxCard2">
           <span class="px-badge" style="background:#e67700;" data-ko="Step 2 · 한국에서 검증된 겉바속촉">Step 2 · The Ultimate Crunch</span>
           <h1 data-ko="한국에서 검증된 닭강정,<br>이제 필리핀에서 만납니다.">Proven in Korea.<br>Now in the Philippines.</h1>
@@ -407,7 +436,7 @@
           </div>
         </div>
 
-        <!-- 3단계: 정갈한 플레이팅 & 첫 매장 (Plated for BGC) -->
+        <!-- 3단계: 접시 플레이팅 & BGC 출격 (70% ~ 100%) -->
         <div class="px-step-card hidden" id="pxCard3">
           <span class="px-badge" style="background:#2b8a3e;" data-ko="Step 3 · BGC Market! Market! 오픈">Step 3 · Ready to Serve</span>
           <h1 data-ko="BGC Market! Market!에서<br>치토피아의 전설이 시작됩니다.">From Korea to Your Plate.<br>Opening Soon in BGC.</h1>
@@ -1211,14 +1240,12 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 setLang(localStorage.getItem('wf-lang') || 'en');
 route();
 
-// ================= LIGHTWEIGHT JS PARALLAX SCROLL LOGIC =================
+
+// ================= SMOOTH SCROLL-DRIVEN VIDEO SCRUBBER =================
 function initParallaxHero() {
   const hero = document.getElementById('parallaxHero');
-  if (!hero) return;
-
-  const bg1 = document.getElementById('pxBg1');
-  const bg2 = document.getElementById('pxBg2');
-  const bg3 = document.getElementById('pxBg3');
+  const video = document.getElementById('pxVideo');
+  if (!hero || !video) return;
 
   const card1 = document.getElementById('pxCard1');
   const card2 = document.getElementById('pxCard2');
@@ -1228,66 +1255,66 @@ function initParallaxHero() {
   const dot2 = document.getElementById('dot2');
   const dot3 = document.getElementById('dot3');
 
-  function onScroll() {
+  let targetTime = 0;
+  let isTicking = false;
+
+  // 비디오 메타데이터 로드
+  video.addEventListener('loadedmetadata', function() {
+    updateVideoProgress();
+  });
+
+  function updateVideoProgress() {
     const rect = hero.getBoundingClientRect();
     const heroHeight = hero.offsetHeight - window.innerHeight;
     if (heroHeight <= 0) return;
 
-    // 진행률 0.0 ~ 1.0 계산
     let progress = -rect.top / heroHeight;
     progress = Math.max(0, Math.min(1, progress));
 
-    // 미세 배경 움직임 (Subtle translate parallax)
-    const bgTranslate = (progress * 40).toFixed(1);
-    if (bg1) bg1.style.transform = `scale(1.05) translateY(-${bgTranslate}px)`;
-    if (bg2) bg2.style.transform = `scale(1.05) translateY(-${(bgTranslate * 0.8).toFixed(1)}px)`;
-    if (bg3) bg3.style.transform = `scale(1.05) translateY(-${(bgTranslate * 0.6).toFixed(1)}px)`;
+    if (video.duration) {
+      targetTime = progress * video.duration;
+      // 부드러운 프레임 보간
+      if (Math.abs(video.currentTime - targetTime) > 0.04) {
+        video.currentTime = targetTime;
+      }
+    }
 
-    // 3단계 구간 분기 (0~0.33: 튀김 / 0.33~0.66: 바삭한단면 / 0.66~1.0: 플레이팅)
-    if (progress < 0.33) {
-      // Step 1 활성화
-      bg1.style.opacity = '1';
-      bg2.style.opacity = '0';
-      bg3.style.opacity = '0';
-
-      card1.className = 'px-step-card active';
-      card2.className = 'px-step-card hidden';
-      card3.className = 'px-step-card hidden';
-
-      dot1.className = 'px-dot-wrap active';
-      dot2.className = 'px-dot-wrap';
-      dot3.className = 'px-dot-wrap';
-    } else if (progress < 0.68) {
-      // Step 2 활성화
-      bg1.style.opacity = '0';
-      bg2.style.opacity = '1';
-      bg3.style.opacity = '0';
-
-      card1.className = 'px-step-card hidden';
-      card2.className = 'px-step-card active';
-      card3.className = 'px-step-card hidden';
-
-      dot1.className = 'px-dot-wrap';
-      dot2.className = 'px-dot-wrap active';
-      dot3.className = 'px-dot-wrap';
+    // 3단계 카드 및 인디케이터 전환
+    if (progress < 0.35) {
+      if (card1) card1.className = 'px-step-card active';
+      if (card2) card2.className = 'px-step-card hidden';
+      if (card3) card3.className = 'px-step-card hidden';
+      if (dot1) dot1.className = 'px-dot-wrap active';
+      if (dot2) dot2.className = 'px-dot-wrap';
+      if (dot3) dot3.className = 'px-dot-wrap';
+    } else if (progress < 0.72) {
+      if (card1) card1.className = 'px-step-card hidden';
+      if (card2) card2.className = 'px-step-card active';
+      if (card3) card3.className = 'px-step-card hidden';
+      if (dot1) dot1.className = 'px-dot-wrap';
+      if (dot2) dot2.className = 'px-dot-wrap active';
+      if (dot3) dot3.className = 'px-dot-wrap';
     } else {
-      // Step 3 활성화 (접시 플레이팅) -> 스크롤 끝에 도달하면 자연스럽게 H2 Key numbers & H3 메뉴로 스무스하게 이어짐
-      bg1.style.opacity = '0';
-      bg2.style.opacity = '0';
-      bg3.style.opacity = '1';
+      if (card1) card1.className = 'px-step-card hidden';
+      if (card2) card2.className = 'px-step-card hidden';
+      if (card3) card3.className = 'px-step-card active';
+      if (dot1) dot1.className = 'px-dot-wrap';
+      if (dot2) dot2.className = 'px-dot-wrap';
+      if (dot3) dot3.className = 'px-dot-wrap active';
+    }
 
-      card1.className = 'px-step-card hidden';
-      card2.className = 'px-step-card hidden';
-      card3.className = 'px-step-card active';
+    isTicking = false;
+  }
 
-      dot1.className = 'px-dot-wrap';
-      dot2.className = 'px-dot-wrap';
-      dot3.className = 'px-dot-wrap active';
+  function onScroll() {
+    if (!isTicking) {
+      requestAnimationFrame(updateVideoProgress);
+      isTicking = true;
     }
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  updateVideoProgress();
 }
 
 window.scrollToPx = function(stepIndex) {
@@ -1295,7 +1322,7 @@ window.scrollToPx = function(stepIndex) {
   if (!hero) return;
   const heroTop = hero.getBoundingClientRect().top + window.scrollY;
   const heroHeight = hero.offsetHeight - window.innerHeight;
-  const offsets = [0, 0.45, 0.85];
+  const offsets = [0, 0.45, 0.88];
   window.scrollTo({
     top: heroTop + (heroHeight * offsets[stepIndex]),
     behavior: 'smooth'
@@ -1303,7 +1330,7 @@ window.scrollToPx = function(stepIndex) {
 };
 
 document.addEventListener('DOMContentLoaded', initParallaxHero);
-setTimeout(initParallaxHero, 100);
+setTimeout(initParallaxHero, 150);
 
 </script>
 </body>
