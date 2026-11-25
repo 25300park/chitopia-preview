@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chitopia Franchise – Wireframe v0.3</title>
 <style>
-  :root{
-    --ink:#222; --mid:#666; --soft:#999; --line:#cfcfcf; --bg:#f4f4f4; --box:#e6e6e6; --white:#fff;
-    --ann:#2f6fed; --ann-bg:#eaf1ff;
-  }
+
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,"Segoe UI","Malgun Gothic",Roboto,Arial,sans-serif;color:var(--ink);background:var(--white);line-height:1.5;font-size:15px}
   a{color:inherit;text-decoration:none}
@@ -306,6 +303,251 @@
     .px-step-card h1 { font-size: 24px; }
     .px-step-card p { font-size: 14px; margin-bottom: 18px; }
     .px-indicator { display: none; }
+  }
+
+
+  :root{
+    --ink:#1a1917; --dark:#1f1d1a; --mid:#59544d; --soft:#8c857b; --line:#e8e3dc; --bg:#fbf8f5; --box:#f0ebe4; --white:#fff;
+    --primary:#e8590c; --primary-dark:#d9480f; --primary-light:#fff4e6; --primary-badge:#ffe8cc;
+    --ann:#2f6fed; --ann-bg:#eaf1ff;
+    --radius-sm:8px; --radius-md:14px; --radius-lg:20px; --radius-xl:26px;
+    --shadow-sm:0 2px 8px rgba(26,25,23,0.04);
+    --shadow-md:0 6px 20px rgba(26,25,23,0.07);
+    --shadow-lg:0 14px 38px rgba(26,25,23,0.12);
+  }
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,"Segoe UI","Malgun Gothic",Roboto,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+
+  /* ================= EMBER & GRILL INSPIRED DESIGN SYSTEM ================= */
+  .eg-wrap { max-width: 1200px; margin: 0 auto; padding: 24px 20px 48px; }
+
+  /* Mobile Top App Header */
+  .eg-top-bar { display: none; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--white); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 88; }
+  .eg-top-brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 18px; color: var(--ink); }
+  .eg-top-brand img { height: 28px; object-fit: contain; }
+  .eg-top-actions { display: flex; align-items: center; gap: 10px; }
+  .eg-icon-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--bg); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer; font-size: 15px; color: var(--ink); }
+  .eg-badge-count { position: absolute; top: -3px; right: -3px; background: var(--primary); color: #fff; font-size: 10px; font-weight: 800; width: 17px; height: 17px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--white); }
+
+  /* Search & Filter Bar */
+  .eg-search-row { display: flex; gap: 10px; margin: 16px 0 24px; }
+  .eg-search-input-wrap { flex: 1; position: relative; display: flex; align-items: center; background: var(--white); border: 1px solid var(--line); border-radius: 16px; padding: 0 16px; height: 48px; box-shadow: var(--shadow-sm); }
+  .eg-search-input-wrap span { color: var(--soft); margin-right: 10px; font-size: 16px; }
+  .eg-search-input-wrap input { border: 0; outline: none; background: transparent; width: 100%; font-size: 14.5px; color: var(--ink); }
+  .eg-filter-btn { width: 48px; height: 48px; border-radius: 16px; background: var(--white); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: var(--shadow-sm); font-size: 17px; color: var(--ink); }
+
+  /* Hero Promo Banner (Ember & Grill Dark Round Card) */
+  .eg-hero-card {
+    background: linear-gradient(135deg, #1f1d1a 0%, #11100f 100%);
+    color: #fff;
+    border-radius: var(--radius-xl);
+    padding: 38px 44px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 290px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .eg-hero-card::before {
+    content: '';
+    position: absolute;
+    right: -5%;
+    top: -25%;
+    width: 55%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(232,89,12,0.3) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .eg-hero-content { position: relative; z-index: 2; max-width: 540px; }
+  .eg-hero-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(232,89,12,0.25); color: #ffa94d; border: 1px solid rgba(232,89,12,0.45); padding: 5px 13px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; }
+  .eg-hero-content h1 { font-size: 38px; line-height: 1.2; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  .eg-hero-content h1 span { color: #ffa94d; }
+  .eg-hero-content p { font-size: 15.5px; line-height: 1.55; color: #cfc8be; margin-bottom: 24px; }
+  .eg-hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  .eg-btn-orange { background: var(--primary); color: #fff; border: 0; padding: 13px 26px; border-radius: 30px; font-weight: 700; font-size: 14.5px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 14px rgba(232,89,12,0.4); text-decoration: none; }
+  .eg-btn-orange:hover { background: var(--primary-dark); transform: translateY(-1px); }
+  .eg-btn-ghost { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); padding: 13px 22px; border-radius: 30px; font-weight: 700; font-size: 14.5px; cursor: pointer; transition: 0.2s; text-decoration: none; }
+  .eg-btn-ghost:hover { background: rgba(255,255,255,0.22); }
+  .eg-hero-media { position: relative; z-index: 2; width: 340px; height: 260px; display: flex; align-items: center; justify-content: center; }
+  .eg-hero-media img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)); border-radius: 14px; }
+
+  /* Category Scroll Filter */
+  .eg-cat-section { margin-bottom: 36px; }
+  .eg-cat-scroll { display: flex; gap: 18px; overflow-x: auto; padding: 4px 4px 14px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .eg-cat-scroll::-webkit-scrollbar { display: none; }
+  .eg-cat-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0; background: none; border: 0; outline: none; }
+  .eg-cat-circle { width: 66px; height: 66px; border-radius: 50%; background: var(--white); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 26px; box-shadow: var(--shadow-sm); transition: 0.25s cubic-bezier(0.16,1,0.3,1); }
+  .eg-cat-name { font-size: 13px; font-weight: 700; color: var(--mid); transition: 0.2s; white-space: nowrap; }
+  .eg-cat-item:hover .eg-cat-circle, .eg-cat-item.active .eg-cat-circle { background: var(--primary); border-color: var(--primary); transform: translateY(-4px); box-shadow: 0 8px 20px rgba(232,89,12,0.35); }
+  .eg-cat-item:hover .eg-cat-circle span, .eg-cat-item.active .eg-cat-circle span { filter: brightness(1.2); }
+  .eg-cat-item.active .eg-cat-name { color: var(--primary); font-weight: 800; }
+
+  /* Section Header */
+  .eg-sec-hdr { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; }
+  .eg-sec-hdr h2 { font-size: 25px; font-weight: 800; color: var(--ink); margin: 0; }
+  .eg-sec-hdr a { font-size: 13.5px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 4px; }
+
+  /* Menu Grid & Card (1:1 Ember & Grill Inspired) */
+  .eg-menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 44px; }
+  .eg-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+  }
+  .eg-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: rgba(232,89,12,0.25); }
+  .eg-card-badge { position: absolute; top: 14px; left: 14px; z-index: 2; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; padding: 4px 9px; border-radius: 8px; }
+  .eg-badge-best { background: #ffe8cc; color: #d9480f; }
+  .eg-badge-hot { background: #ffe3e3; color: #c92a2a; }
+  .eg-badge-new { background: #e6fcf5; color: #0ca678; }
+  .eg-badge-combo { background: #f3f0ff; color: #6741d9; }
+
+  .eg-card-img-wrap { width: 100%; aspect-ratio: 1.15; border-radius: var(--radius-md); overflow: hidden; position: relative; margin-bottom: 12px; background: #faf8f5; }
+  .eg-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+  .eg-card:hover .eg-card-img-wrap img { transform: scale(1.06); }
+
+  .eg-card-info { flex: 1; display: flex; flex-direction: column; }
+  .eg-card-title { font-size: 16.5px; font-weight: 800; color: var(--ink); margin-bottom: 4px; line-height: 1.3; }
+  .eg-card-desc { font-size: 12.5px; color: var(--mid); margin-bottom: 10px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .eg-card-rating { display: flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 700; color: #f59f00; margin-bottom: 12px; }
+  .eg-card-rating span { color: var(--soft); font-weight: 400; font-size: 11.5px; }
+
+  .eg-card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 6px; }
+  .eg-card-price { font-size: 19px; font-weight: 800; color: var(--ink); }
+  .eg-card-price small { font-size: 13px; font-weight: 600; color: var(--soft); margin-right: 2px; }
+  .eg-add-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; border: 0; font-size: 19px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(232,89,12,0.3); }
+  .eg-add-btn:hover { background: var(--primary-dark); transform: scale(1.08); }
+
+  /* Meal of the Day Promo Banner */
+  .eg-deal-banner {
+    background: linear-gradient(135deg, #24221f 0%, #151413 100%);
+    color: #fff;
+    border-radius: var(--radius-xl);
+    padding: 28px 36px;
+    margin-bottom: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .eg-deal-left { position: relative; z-index: 2; max-width: 480px; }
+  .eg-deal-sub { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #ffa94d; text-transform: uppercase; margin-bottom: 6px; }
+  .eg-deal-title { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+  .eg-deal-desc { font-size: 13.5px; color: #cfc8be; margin-bottom: 16px; }
+  .eg-deal-center { display: flex; align-items: center; justify-content: center; }
+  .eg-save-badge { width: 74px; height: 74px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; line-height: 1.1; box-shadow: 0 6px 16px rgba(232,89,12,0.4); }
+  .eg-save-badge b { font-size: 17px; }
+  .eg-deal-media { width: 200px; height: 130px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; }
+  .eg-deal-media img { max-width: 100%; max-height: 100%; object-fit: cover; filter: drop-shadow(0 10px 18px rgba(0,0,0,0.5)); border-radius: 12px; }
+
+  /* Our Stores in BGC (매장 소개 섹션) */
+  .eg-stores-section { margin-bottom: 56px; }
+  .eg-stores-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .eg-store-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid rgba(0,0,0,0.06); overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; }
+  .eg-store-img-wrap { width: 100%; height: 230px; position: relative; background: #e9ecef; }
+  .eg-store-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .eg-store-status { position: absolute; top: 16px; left: 16px; background: rgba(0,0,0,0.75); color: #ffd43b; font-size: 11.5px; font-weight: 800; padding: 4px 12px; border-radius: 20px; backdrop-filter: blur(4px); }
+  .eg-store-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+  .eg-store-tag { font-size: 11px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .eg-store-title { font-size: 20px; font-weight: 800; color: var(--ink); margin-bottom: 10px; }
+  .eg-store-meta { font-size: 13.5px; color: var(--mid); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .eg-store-actions { margin-top: auto; padding-top: 18px; display: flex; gap: 10px; }
+
+  /* Brand Taste Secret (간결한 3대 비법) */
+  .eg-secret-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 56px; }
+  .eg-secret-card { background: var(--white); border-radius: var(--radius-lg); padding: 28px 24px; border: 1px solid rgba(0,0,0,0.06); box-shadow: var(--shadow-sm); text-align: center; }
+  .eg-secret-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--primary-light); color: var(--primary); font-size: 26px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .eg-secret-title { font-size: 17px; font-weight: 800; margin-bottom: 8px; }
+  .eg-secret-desc { font-size: 13px; color: var(--mid); line-height: 1.5; }
+
+  /* Franchise Partnership (하단 배치된 가맹 문의) */
+  .eg-franchise-box {
+    background: #ffffff;
+    border-radius: var(--radius-xl);
+    border: 2px solid var(--primary-badge);
+    padding: 40px;
+    margin-bottom: 48px;
+    box-shadow: var(--shadow-md);
+  }
+  .eg-franchise-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .eg-subpage-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .eg-sub-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--line); border-radius: 20px; padding: 8px 16px; font-size: 12.5px; font-weight: 700; color: var(--ink); text-decoration: none; transition: 0.2s; }
+  .eg-sub-chip:hover { background: var(--white); border-color: var(--primary); color: var(--primary); }
+
+  /* Mobile Bottom App Navigation Bar (Ember & Grill Style 5 Tabs) */
+  .eg-mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: var(--white);
+    border-top: 1px solid var(--line);
+    z-index: 99;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+    padding: 0 10px;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .eg-nav-tabs { display: flex; height: 100%; align-items: center; justify-content: space-around; }
+  .eg-nav-tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--soft); font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; flex: 1; height: 100%; }
+  .eg-nav-tab svg, .eg-nav-tab span.icon { font-size: 20px; }
+  .eg-nav-tab.active { color: var(--primary); font-weight: 800; }
+  .eg-nav-tab-highlight { position: relative; top: -14px; }
+  .eg-nav-tab-highlight .eg-nav-circle { width: 52px; height: 52px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 6px 16px rgba(232,89,12,0.4); border: 3px solid var(--white); }
+  .eg-nav-tab-highlight span.label { font-size: 10px; font-weight: 800; color: var(--primary); margin-top: 2px; }
+
+  /* Quick View Modal */
+  .eg-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 20px; }
+  .eg-modal-overlay.open { display: flex; }
+  .eg-modal { background: var(--white); border-radius: var(--radius-xl); max-width: 480px; width: 100%; overflow: hidden; box-shadow: var(--shadow-lg); animation: popIn 0.25s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .eg-modal-img { width: 100%; height: 220px; object-fit: cover; }
+  .eg-modal-body { padding: 24px; }
+  .eg-modal-close { position: absolute; top: 14px; right: 14px; background: rgba(0,0,0,0.6); color: #fff; border: 0; border-radius: 50%; width: 32px; height: 32px; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+  /* Responsive Rules */
+  @media (max-width: 1024px) {
+    .eg-menu-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .eg-hero-card { flex-direction: column; text-align: center; padding: 32px 24px; }
+    .eg-hero-content { max-width: 100%; }
+    .eg-hero-btns { justify-content: center; }
+    .eg-hero-media { width: 260px; height: 180px; margin-top: 16px; }
+    .eg-deal-banner { flex-direction: column; text-align: center; gap: 16px; padding: 24px; }
+    .eg-franchise-inner { grid-template-columns: 1fr; gap: 24px; }
+  }
+  @media (max-width: 768px) {
+    body { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+    .eg-top-bar { display: flex; }
+    .eg-mobile-nav { display: block; }
+    .mbar { display: none !important; }
+    .eg-menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .eg-stores-grid { grid-template-columns: 1fr; }
+    .eg-secret-grid { grid-template-columns: 1fr; }
+    .eg-card { padding: 12px; border-radius: 16px; }
+    .eg-card-title { font-size: 14.5px; }
+    .eg-card-price { font-size: 16.5px; }
+    .eg-add-btn { width: 32px; height: 32px; font-size: 16px; }
+    .eg-hero-content h1 { font-size: 26px; }
+    .eg-top-brand { font-size: 17px; }
+    .eg-franchise-box { padding: 24px 18px; }
+  }
+  @media (max-width: 480px) {
+    .eg-menu-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .eg-card-desc { display: none; }
   }
 
 </style>
@@ -1332,6 +1574,144 @@ window.scrollToPx = function(stepIndex) {
 document.addEventListener('DOMContentLoaded', initParallaxHero);
 setTimeout(initParallaxHero, 150);
 
+
+// ================= EMBER & GRILL INTERACTIVITY =================
+window.selectCategory = function(cat, btn) {
+  document.querySelectorAll('.eg-cat-item').forEach(b => b.classList.toggle('active', b === btn));
+  const cards = document.querySelectorAll('#egHomeMenuGrid .eg-card');
+  cards.forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
+window.filterMenuCards = function() {
+  const query = document.getElementById('egSearchInput').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('#egHomeMenuGrid .eg-card');
+  cards.forEach(card => {
+    const title = card.querySelector('.eg-card-title').textContent.toLowerCase();
+    const desc = card.querySelector('.eg-card-desc').textContent.toLowerCase();
+    if (!query || title.includes(query) || desc.includes(query)) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+};
+
+window.resetMenuFilter = function() {
+  const input = document.getElementById('egSearchInput');
+  if (input) input.value = '';
+  selectCategory('all', document.querySelector('.eg-cat-item[data-cat="all"]'));
+};
+
+window.openQuickView = function(title, price, desc, img, rating, reviews) {
+  document.getElementById('egModalImg').src = img;
+  document.getElementById('egModalTitle').textContent = title;
+  document.getElementById('egModalPrice').textContent = price;
+  document.getElementById('egModalRating').innerHTML = `★ ${rating} <span style="color:var(--soft);font-weight:400">(${reviews} customer reviews)</span>`;
+  document.getElementById('egModalDesc').textContent = desc;
+  document.getElementById('egQuickModal').classList.add('open');
+};
+
+window.closeQuickView = function(e) {
+  document.getElementById('egQuickModal').classList.remove('open');
+};
+
+window.showVideoModal = function() {
+  const modal = document.getElementById('egVideoModal');
+  const vid = document.getElementById('egModalVideo');
+  if (modal) modal.classList.add('open');
+  if (vid) vid.play();
+};
+
+window.closeVideoModal = function(e) {
+  const modal = document.getElementById('egVideoModal');
+  const vid = document.getElementById('egModalVideo');
+  if (modal) modal.classList.remove('open');
+  if (vid) vid.pause();
+};
+
+window.setNavActive = function(tabName) {
+  document.querySelectorAll('.eg-nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tabName);
+  });
+};
+
+window.submitHomeFranchise = function(e) {
+  e.preventDefault();
+  alert(document.documentElement.lang === 'ko' ? '가맹 상담 신청이 성공적으로 접수되었습니다! 담당자가 2 영업일 이내에 연락드립니다.' : 'Franchise inquiry submitted successfully! Our team will contact you within 2 business days.');
+  e.target.reset();
+};
+
+// Update active state in router
+const origRoute = window.route;
+window.addEventListener('hashchange', () => {
+  const hash = (location.hash || '#home').slice(1).split('/')[0];
+  setNavActive(hash);
+});
+
 </script>
+
+<!-- ================= EMBER & GRILL STYLE MOBILE BOTTOM NAVIGATION ================= -->
+<div class="eg-mobile-nav" id="egMobileNav">
+  <div class="eg-nav-tabs">
+    <a href="#home" class="eg-nav-tab active" data-tab="home" onclick="setNavActive('home')">
+      <span class="icon">🏠</span>
+      <span class="label" data-ko="홈">Home</span>
+    </a>
+    <a href="#menu" class="eg-nav-tab" data-tab="menu" onclick="setNavActive('menu')">
+      <span class="icon">🍗</span>
+      <span class="label" data-ko="메뉴">Menu</span>
+    </a>
+    <a href="#apply" class="eg-nav-tab eg-nav-tab-highlight" data-tab="apply" onclick="setNavActive('apply')">
+      <div class="eg-nav-circle">💼</div>
+      <span class="label" data-ko="가맹신청">Franchise</span>
+    </a>
+    <a href="#stores" class="eg-nav-tab" data-tab="stores" onclick="setNavActive('stores')">
+      <span class="icon">📍</span>
+      <span class="label" data-ko="매장">Stores</span>
+    </a>
+    <a href="#proof" class="eg-nav-tab" data-tab="proof" onclick="setNavActive('proof')">
+      <span class="icon">🏭</span>
+      <span class="label" data-ko="본사·공장">Proof</span>
+    </a>
+  </div>
+</div>
+
+<!-- ================= QUICK VIEW MODAL ================= -->
+<div class="eg-modal-overlay" id="egQuickModal" onclick="closeQuickView(event)">
+  <div class="eg-modal" onclick="event.stopPropagation()">
+    <button class="eg-modal-close" onclick="closeQuickView(event)">✕</button>
+    <img id="egModalImg" class="eg-modal-img" src="" alt="Menu item">
+    <div class="eg-modal-body">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <h3 id="egModalTitle" style="font-size:20px;font-weight:800;margin:0"></h3>
+        <div id="egModalPrice" style="font-size:22px;font-weight:800;color:var(--primary)"></div>
+      </div>
+      <div id="egModalRating" style="color:#f59f00;font-size:13px;font-weight:700;margin-bottom:14px"></div>
+      <p id="egModalDesc" style="color:var(--mid);font-size:14px;line-height:1.6;margin-bottom:20px"></p>
+      <div style="display:flex;gap:10px">
+        <a href="#stores" class="eg-btn-orange" style="flex:1;justify-content:center;border-radius:12px;" onclick="closeQuickView(event)" data-ko="매장에서 주문하기">Available at BGC Stores</a>
+        <a href="#apply" class="btn" style="border-radius:12px;font-size:13px;" onclick="closeQuickView(event)" data-ko="가맹 문의">Franchise</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= VIDEO POPUP MODAL ================= -->
+<div class="eg-modal-overlay" id="egVideoModal" onclick="closeVideoModal(event)">
+  <div class="eg-modal" style="max-width:640px;background:#000;" onclick="event.stopPropagation()">
+    <button class="eg-modal-close" onclick="closeVideoModal(event)">✕</button>
+    <div style="padding:16px;text-align:center;">
+      <h4 style="color:#ffa94d;margin-bottom:8px;">175℃ Sizzle & Crunch Process</h4>
+      <video id="egModalVideo" src="img/chicken_process.mp4" controls playsinline style="width:100%;border-radius:12px;max-height:60vh;"></video>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
