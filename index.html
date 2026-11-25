@@ -560,8 +560,8 @@
     <b>WIREFRAME v0.3</b>
     <span>Page:</span>
     <select id="pageSel" aria-label="Page selector">
+      <option value="home" selected>01 · Home (Consumer & Stores Showcase)</option>
       <option value="sitemap">00 · Page Index (Sitemap)</option>
-      <option value="home">01 · Home</option>
       <option value="brand">02 · Brand</option>
       <option value="menu">03 · Menu</option>
       <option value="proof">04 · Korea Proof</option>
@@ -614,7 +614,7 @@
 <!-- =====================================================================
      00 · PAGE INDEX (review only)
 ====================================================================== -->
-<section class="page" id="page-sitemap">
+<section class="page" id="page-sitemap" hidden>
   <div class="wrap" style="padding:48px 24px">
     <h2>Page Index — MVP (권장 순서)</h2>
     <p class="muted small">이 페이지는 검토용이며 실제 사이트에는 포함되지 않습니다. 각 페이지 이름을 클릭하면 해당 와이어프레임으로 이동합니다.</p>
@@ -642,280 +642,387 @@
 <!-- =====================================================================
      01 · HOME
 ====================================================================== -->
-<section class="page" id="page-home" hidden>
+<!-- =====================================================================
+     01 · HOME (CONSUMER-CENTRIC MENU & STORES SHOWCASE)
+====================================================================== -->
+<section class="page" id="page-home">
 
-  <!-- H1 HERO -->
-  <!-- ================= H1 SCROLL-DRIVEN VIDEO PARALLAX HERO ================= -->
-  <section class="parallax-hero-wrap" id="parallaxHero">
-    <div class="parallax-sticky">
-      <!-- Scroll-Driven Video Layer -->
-      <video id="pxVideo" class="px-video-layer" src="img/chicken_process.mp4" playsinline muted preload="auto"></video>
+  <!-- Mobile Top App Header (Visible on Mobile) -->
+  <div class="eg-top-bar">
+    <div class="eg-top-brand">
+      <img src="img/logo.png" alt="CHITOPIA">
+      <span>CHITOPIA</span>
+    </div>
+    <div class="eg-top-actions">
+      <a href="#stores" class="eg-icon-btn" title="Stores">📍</a>
+      <a href="#apply" class="eg-icon-btn" title="Franchise">
+        💼<span class="eg-badge-count">1</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="eg-wrap">
+
+    <!-- Search & Filter Bar -->
+    <div class="eg-search-row">
+      <div class="eg-search-input-wrap">
+        <span>🔍</span>
+        <input type="text" id="egSearchInput" placeholder="Search your favorite Korean meal..." data-ko-ph="좋아하는 치토피아 메뉴를 검색하세요..." onkeyup="filterMenuCards()">
+      </div>
+      <button class="eg-filter-btn" title="Filter" onclick="resetMenuFilter()">⚡</button>
+    </div>
+
+    <!-- Hero Promo Banner (Ember & Grill Dark Round Card) -->
+    <div class="eg-hero-card">
+      <div class="eg-hero-content">
+        <span class="eg-hero-tag" data-ko="🔥 갓 튀긴 겉바속촉 · BGC 상륙">🔥 Hot & Fresh · BGC Opening Soon</span>
+        <h1 data-ko="175℃ 황금빛 튀김,<br><span>진짜 한국식 겉바속촉.</span>">Flame-Glazed &<br><span>Double-Fried Perfection</span></h1>
+        <p data-ko="한국 본사 LFL 직영 공장의 특제 파우더와 비법 소스로 완성된 정통 K-치킨의 맛. 이제 필리핀 BGC Market! Market!에서 직접 경험하세요.">100% authentic Korean crispy chicken. Crafted with LFL Korea's proprietary recipe and factory-direct signature sauces.</p>
+        <div class="eg-hero-btns">
+          <a href="#menu" class="eg-btn-orange" data-ko="메뉴 전체보기 →">Explore Menu →</a>
+          <a href="#stores" class="eg-btn-ghost" data-ko="BGC 매장 위치">BGC Stores</a>
+          <button type="button" onclick="showVideoModal()" class="eg-btn-ghost" style="border-color:rgba(255,169,77,0.5);color:#ffa94d" data-ko="▶ 175℃ 튀김 영상">▶ 175℃ Video</button>
+        </div>
+      </div>
+      <div class="eg-hero-media">
+        <img src="img/chicken_fry_float.jpg" alt="CHITOPIA Golden Fried Chicken">
+      </div>
+    </div>
+
+    <!-- Category Round Icon Filter -->
+    <div class="eg-cat-section">
+      <div class="eg-cat-scroll" id="egCatScroll">
+        <button type="button" class="eg-cat-item active" data-cat="all" onclick="selectCategory('all', this)">
+          <div class="eg-cat-circle"><span>🍽️</span></div>
+          <span class="eg-cat-name" data-ko="전체 메뉴">All Menu</span>
+        </button>
+        <button type="button" class="eg-cat-item" data-cat="chicken" onclick="selectCategory('chicken', this)">
+          <div class="eg-cat-circle"><span>🍗</span></div>
+          <span class="eg-cat-name" data-ko="크리스피 치킨">Crispy Chicken</span>
+        </button>
+        <button type="button" class="eg-cat-item" data-cat="gangjeong" onclick="selectCategory('gangjeong', this)">
+          <div class="eg-cat-circle"><span>🍯</span></div>
+          <span class="eg-cat-name" data-ko="시그니처 강정">K-Gangjeong</span>
+        </button>
+        <button type="button" class="eg-cat-item" data-cat="combo" onclick="selectCategory('combo', this)">
+          <div class="eg-cat-circle"><span>🍢</span></div>
+          <span class="eg-cat-name" data-ko="스트리트 콤보">Street Combos</span>
+        </button>
+        <button type="button" class="eg-cat-item" data-cat="rice" onclick="selectCategory('rice', this)">
+          <div class="eg-cat-circle"><span>🍚</span></div>
+          <span class="eg-cat-name" data-ko="라이스 & 컵밥">Rice Bowls</span>
+        </button>
+        <button type="button" class="eg-cat-item" data-cat="drinks" onclick="selectCategory('drinks', this)">
+          <div class="eg-cat-circle"><span>🥤</span></div>
+          <span class="eg-cat-name" data-ko="음료 & 소스">Drinks & Sides</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Popular Picks Section Header -->
+    <div class="eg-sec-hdr">
+      <div>
+        <div class="eyebrow" style="color:var(--primary);margin-bottom:4px" data-ko="인기 메뉴">Most Loved</div>
+        <h2 data-ko="치토피아 인기 시그니처">Popular Picks</h2>
+      </div>
+      <a href="#menu" data-ko="전체 메뉴 보기 →">View All →</a>
+    </div>
+
+    <!-- Menu Grid (Ember & Grill Style Cards) -->
+    <div class="eg-menu-grid" id="egHomeMenuGrid">
       
-      <!-- 사실적 질감을 극대화하는 시네마틱 톤 & 비네팅 오버레이 -->
-      <div class="px-cinema-overlay"></div>
-      <div class="px-vignette"></div>
-
-      <div class="px-content-stage">
-        <!-- 1단계: 튀김 조리 (0% ~ 35%) -->
-        <div class="px-step-card active" id="pxCard1">
-          <span class="px-badge" data-ko="Step 1 · 175℃ 황금빛 튀김">Step 1 · Sizzle & Crisp</span>
-          <h1 data-ko="175℃ 깨끗한 기름 속,<br>바삭함이 폭발하는 순간.">Fried to Golden Perfection.<br>Crispy Outside, Juicy Inside.</h1>
-          <p data-ko="한국 본사 LFL 직영 공장의 특제 크리스피 파우더로 튀겨내어, 한 번 맛보면 잊을 수 없는 극상의 바삭함을 만듭니다.">Crafted with LFL Korea's proprietary coating mix, delivering the iconic crunch and tenderness loved across Korea.</p>
-          <div class="row">
-            <a href="#apply" class="btn pri" data-ko="가맹 상담 신청">Apply for Franchise</a>
-            <a href="#franchise" class="btn" style="color:#fff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.1);" data-ko="가맹 안내 보기">Explore Franchise</a>
-          </div>
+      <!-- Card 1 -->
+      <div class="eg-card" data-cat="chicken" onclick="openQuickView('Classic Fried Chicken', '₱199', '황금빛 겉바속촉 순살 치킨과 고소한 시그니처 그레이비 소스', 'img/menu_classic_chicken.jpg', '4.9', '12.8k+')">
+        <span class="eg-card-badge eg-badge-best">BESTSELLER</span>
+        <div class="eg-card-img-wrap">
+          <img src="img/menu_classic_chicken.jpg" alt="Classic Fried Chicken">
         </div>
-
-        <!-- 2단계: 황금빛 닭강정 완성 (35% ~ 70%) -->
-        <div class="px-step-card hidden" id="pxCard2">
-          <span class="px-badge" style="background:#e67700;" data-ko="Step 2 · 한국에서 검증된 겉바속촉">Step 2 · The Ultimate Crunch</span>
-          <h1 data-ko="한국에서 검증된 닭강정,<br>이제 필리핀에서 만납니다.">Proven in Korea.<br>Now in the Philippines.</h1>
-          <p data-ko="바삭한 튀김옷 속 꽉 찬 촉촉한 육즙. 한국 100여 개 매장에서 매일 완판 신화를 쓴 시그니처 닭강정의 맛을 그대로 전수합니다.">Steaming hot, tender chicken beneath an irresistible crispy shell. A time-tested signature menu ready to capture Filipino tastebuds.</p>
-          <div class="row">
-            <a href="#menu" class="btn pri" data-ko="시그니처 메뉴 보기">View Signature Menu</a>
-            <a href="#proof" class="btn" style="color:#fff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.1);" data-ko="한국 본사 실적 보기">Korean Proof</a>
-          </div>
-        </div>
-
-        <!-- 3단계: 접시 플레이팅 & BGC 출격 (70% ~ 100%) -->
-        <div class="px-step-card hidden" id="pxCard3">
-          <span class="px-badge" style="background:#2b8a3e;" data-ko="Step 3 · BGC Market! Market! 오픈">Step 3 · Ready to Serve</span>
-          <h1 data-ko="BGC Market! Market!에서<br>치토피아의 전설이 시작됩니다.">From Korea to Your Plate.<br>Opening Soon in BGC.</h1>
-          <p data-ko="몰 내부 4층 푸드코트와 1층 로드점 2개 매장 동시 출격! 한국 공장 직송 소스와 표준화된 조리 시스템으로 당신의 성공 창업을 완성합니다.">Two premier locations at Market! Market! BGC. Standardized recipes, factory-direct sauces, and turn-key franchise support.</p>
-          <div class="row">
-            <a href="#stores" class="btn pri" data-ko="BGC 매장 위치 확인">BGC Stores</a>
-            <a href="#apply" class="btn" style="color:#fff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.1);" data-ko="지금 가맹 상담 신청">Apply Now</a>
+        <div class="eg-card-info">
+          <div class="eg-card-title" data-ko="클래식 프라이드 치킨">Classic Fried Chicken</div>
+          <div class="eg-card-desc" data-ko="황금빛 겉바속촉 순살 치킨과 고소한 그레이비 소스">Golden boneless chicken with ultra crisp skin & savory gravy</div>
+          <div class="eg-card-rating">★ 4.9 <span>(12.8k+)</span></div>
+          <div class="eg-card-bottom">
+            <div class="eg-card-price"><small>₱</small>199</div>
+            <button class="eg-add-btn" title="View details" onclick="event.stopPropagation(); openQuickView('Classic Fried Chicken', '₱199', '황금빛 겉바속촉 순살 치킨과 고소한 시그니처 그레이비 소스', 'img/menu_classic_chicken.jpg', '4.9', '12.8k+')">+</button>
           </div>
         </div>
       </div>
 
-      <!-- 우측 스크롤 인디케이터 -->
-      <div class="px-indicator">
-        <div class="px-dot-wrap active" id="dot1" onclick="scrollToPx(0)">
-          <div class="px-dot"></div><span class="px-dot-label">01 Fry</span>
+      <!-- Card 2 -->
+      <div class="eg-card" data-cat="chicken" onclick="openQuickView('Creamy Onion Chicken', '₱249', '신선한 양파 슬라이스와 부드러운 화이트 크림 소스의 조화', 'img/menu_creamy_onion.jpg', '4.8', '9.5k+')">
+        <span class="eg-card-badge eg-badge-hot">HOT DEAL</span>
+        <div class="eg-card-img-wrap">
+          <img src="img/menu_creamy_onion.jpg" alt="Creamy Onion Chicken">
         </div>
-        <div class="px-dot-wrap" id="dot2" onclick="scrollToPx(1)">
-          <div class="px-dot"></div><span class="px-dot-label">02 Crunch</span>
+        <div class="eg-card-info">
+          <div class="eg-card-title" data-ko="크리미 어니언 치킨">Creamy Onion Chicken</div>
+          <div class="eg-card-desc" data-ko="신선한 양파 슬라이스와 특제 화이트 크리미 소스">Crispy chicken topped with fresh onion slices & velvety white sauce</div>
+          <div class="eg-card-rating">★ 4.8 <span>(9.5k+)</span></div>
+          <div class="eg-card-bottom">
+            <div class="eg-card-price"><small>₱</small>249</div>
+            <button class="eg-add-btn" title="View details" onclick="event.stopPropagation(); openQuickView('Creamy Onion Chicken', '₱249', '신선한 양파 슬라이스와 부드러운 화이트 크림 소스의 조화', 'img/menu_creamy_onion.jpg', '4.8', '9.5k+')">+</button>
+          </div>
         </div>
-        <div class="px-dot-wrap" id="dot3" onclick="scrollToPx(2)">
-          <div class="px-dot"></div><span class="px-dot-label">03 Plating</span>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="eg-card" data-cat="gangjeong" onclick="openQuickView('Soy Garlic Gangjeong', '₱229', '단짠 소이 소스로 코팅된 한국 정통 프리미엄 닭강정', 'img/menu_soy_chicken.jpg', '4.9', '14.2k+')">
+        <span class="eg-card-badge eg-badge-best">BESTSELLER</span>
+        <div class="eg-card-img-wrap">
+          <img src="img/menu_soy_chicken.jpg" alt="Soy Garlic Gangjeong">
         </div>
+        <div class="eg-card-info">
+          <div class="eg-card-title" data-ko="소이 갈릭 닭강정">Soy Garlic Gangjeong</div>
+          <div class="eg-card-desc" data-ko="단짠 소이 소스로 코팅된 한국 정통 닭강정">Glazed with authentic savory soy garlic sauce and toasted sesame</div>
+          <div class="eg-card-rating">★ 4.9 <span>(14.2k+)</span></div>
+          <div class="eg-card-bottom">
+            <div class="eg-card-price"><small>₱</small>229</div>
+            <button class="eg-add-btn" title="View details" onclick="event.stopPropagation(); openQuickView('Soy Garlic Gangjeong', '₱229', '단짠 소이 소스로 코팅된 한국 정통 프리미엄 닭강정', 'img/menu_soy_chicken.jpg', '4.9', '14.2k+')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="eg-card" data-cat="gangjeong" onclick="openQuickView('Cheese Snowing Gangjeong', '₱239', '눈꽃 치즈 시즈닝이 듬뿍 뿌려진 달콤고소한 치킨', 'img/menu_cheese_chicken.jpg', '4.7', '7.1k+')">
+        <span class="eg-card-badge eg-badge-new">NEW</span>
+        <div class="eg-card-img-wrap">
+          <img src="img/menu_cheese_chicken.jpg" alt="Cheese Snowing Gangjeong">
+        </div>
+        <div class="eg-card-info">
+          <div class="eg-card-title" data-ko="치즈 스노윙 강정">Cheese Snowing Gangjeong</div>
+          <div class="eg-card-desc" data-ko="눈꽃 치즈 시즈닝이 듬뿍 뿌려진 달콤고소한 치킨">Dusted generously with sweet and savory melted snow cheese powder</div>
+          <div class="eg-card-rating">★ 4.7 <span>(7.1k+)</span></div>
+          <div class="eg-card-bottom">
+            <div class="eg-card-price"><small>₱</small>239</div>
+            <button class="eg-add-btn" title="View details" onclick="event.stopPropagation(); openQuickView('Cheese Snowing Gangjeong', '₱239', '눈꽃 치즈 시즈닝이 듬뿍 뿌려진 달콤고소한 치킨', 'img/menu_cheese_chicken.jpg', '4.7', '7.1k+')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="eg-card" data-cat="combo" onclick="openQuickView('Chicken & Takoyaki Combo', '₱289', '바삭한 치킨과 고소한 타코야키 4알의 실속 콤보', 'img/menu_takoyaki.jpg', '4.8', '8.3k+')">
+        <span class="eg-card-badge eg-badge-combo">K-COMBO</span>
+        <div class="eg-card-img-wrap">
+          <img src="img/menu_takoyaki.jpg" alt="Chicken & Takoyaki Combo">
+        </div>
+        <div class="eg-card-info">
+          <div class="eg-card-title" data-ko="치킨 & 타코야키 콤보">Chicken & Takoyaki Combo</div>
+          <div class="eg-card-desc" data-ko="바삭한 치킨과 고소한 타코야키의 환상 조합">Crispy chicken bites + savory takoyaki balls + steamed rice</div>
+          <div class="eg-card-rating">★ 4.8 <span>(8.3k+)</span></div>
+          <div class="eg-card-bottom">
+            <div class="eg-card-price"><small>₱</small>289</div>
+            <button class="eg-add-btn" title="View details" onclick="event.stopPropagation(); openQuickView('Chicken & Takoyaki Combo', '₱289', '바삭한 치킨과 고소한 타코야키 4알의 실속 콤보', 'img/menu_takoyaki.jpg', '4.8', '8.3k+')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="eg-card" data-cat="combo" onclick="openQuickView('Cup Gangjeong & Tteokbokki', '₱189', '간편하게 즐기는 컵치킨과 컵떡볶이 인기 세트', 'img/menu_cup_combo.jpg', '4.9', '15.6k+')">
+        <span class="eg-card-badge eg-badge-best">SNACK SET</span>
+        <div class="eg-card-img-wrap">
+          <img src="img/menu_cup_combo.jpg" alt="Cup Gangjeong & Tteokbokki">
+        </div>
+        <div class="eg-card-info">
+          <div class="eg-card-title" data-ko="컵강정 & 떡볶이 세트">Cup Gangjeong & Tteok</div>
+          <div class="eg-card-desc" data-ko="간편하게 길거리에서 즐기는 컵 치킨과 컵 떡볶이 세트">On-the-go snack set: crispy cup chicken + chewy spicy tteokbokki</div>
+          <div class="eg-card-rating">★ 4.9 <span>(15.6k+)</span></div>
+          <div class="eg-card-bottom">
+            <div class="eg-card-price"><small>₱</small>189</div>
+            <button class="eg-add-btn" title="View details" onclick="event.stopPropagation(); openQuickView('Cup Gangjeong & Tteokbokki', '₱189', '간편하게 즐기는 컵치킨과 컵떡볶이 인기 세트', 'img/menu_cup_combo.jpg', '4.9', '15.6k+')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="eg-card" data-cat="combo" onclick="openQuickView('Classic Rice Tteokbokki', '₱169', '쫀득한 쌀떡과 한국 직송 특제 매콤달콤 소스', 'img/menu_tteokbokki.jpg', '4.9', '11.0k+')">
+        <span class="eg-card-badge eg-badge-hot">K-STREET</span>
+        <div class="eg-card-img-wrap">
+          <img src="img/menu_tteokbokki.jpg" alt="Classic Rice Tteokbokki">
+        </div>
+        <div class="eg-card-info">
+          <div class="eg-card-title" data-ko="빠사시 쌀 떡볶이">Classic Rice Tteokbokki</div>
+          <div class="eg-card-desc" data-ko="쫀득한 쌀떡과 한국 직송 특제 매콤달콤 소스">Chewy Korean rice cakes simmering in sweet and spicy red glaze</div>
+          <div class="eg-card-rating">★ 4.9 <span>(11.0k+)</span></div>
+          <div class="eg-card-bottom">
+            <div class="eg-card-price"><small>₱</small>169</div>
+            <button class="eg-add-btn" title="View details" onclick="event.stopPropagation(); openQuickView('Classic Rice Tteokbokki', '₱169', '쫀득한 쌀떡과 한국 직송 특제 매콤달콤 소스', 'img/menu_tteokbokki.jpg', '4.9', '11.0k+')">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="eg-card" data-cat="rice" onclick="openQuickView('Kimchi Fried Rice Bowl', '₱179', '새콤한 김치와 고소한 밥의 조화로운 한국식 한 끼', 'img/menu_fried_rice.jpg', '4.6', '6.4k+')">
+        <span class="eg-card-badge eg-badge-new">RICE MEAL</span>
+        <div class="eg-card-img-wrap">
+          <img src="img/menu_fried_rice.jpg" alt="Kimchi Fried Rice Bowl">
+        </div>
+        <div class="eg-card-info">
+          <div class="eg-card-title" data-ko="김치 볶음밥 볼">Kimchi Fried Rice Bowl</div>
+          <div class="eg-card-desc" data-ko="새콤한 김치와 고소한 밥의 조화로운 한국식 한 끼">Wok-fired Korean rice with aged kimchi, sesame, and fried egg</div>
+          <div class="eg-card-rating">★ 4.6 <span>(6.4k+)</span></div>
+          <div class="eg-card-bottom">
+            <div class="eg-card-price"><small>₱</small>179</div>
+            <button class="eg-add-btn" title="View details" onclick="event.stopPropagation(); openQuickView('Kimchi Fried Rice Bowl', '₱179', '새콤한 김치와 고소한 밥의 조화로운 한국식 한 끼', 'img/menu_fried_rice.jpg', '4.6', '6.4k+')">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Meal of the Day Promo Banner (Ember & Grill Style) -->
+    <div class="eg-deal-banner">
+      <div class="eg-deal-left">
+        <div class="eg-deal-sub" data-ko="오늘의 특가 세트">Meal of the Day</div>
+        <div class="eg-deal-title" data-ko="K-치킨 + 떡볶이 + 탄산음료 콤보">Chicken + Tteokbokki + Drink</div>
+        <div class="eg-deal-desc" data-ko="치토피아 베스트셀러를 한 번에 즐기는 시그니처 콤보. BGC 오픈 기념 한정 특가.">Signature crispy chicken, spicy rice cakes, and refreshing drink. Limited BGC launch special.</div>
+        <a href="#menu" class="eg-btn-orange" style="background:#ffa94d;color:#1a1917;font-weight:800;" data-ko="₱329에 주문하기 →">₱329 Only →</a>
+      </div>
+      <div class="eg-deal-center">
+        <div class="eg-save-badge">
+          <span>SAVE</span>
+          <b>20%</b>
+        </div>
+      </div>
+      <div class="eg-deal-media">
+        <img src="img/chicken_plated.jpg" alt="Meal of the Day Deal">
       </div>
     </div>
-  </section>
 
-  <!-- H2 KEY NUMBERS -->
-  <section class="blk">
-    <i class="ann">H2 · Key Numbers</i>
-    <div class="wrap">
-      <div class="ann-desc">숫자 카운트업 애니메이션. 실제 수치는 확정 후 입력. 첫 화면 바로 아래에서 신뢰를 확보하는 섹션.</div>
-      <div class="grid g4 center">
-        <div class="stat"><b>000+</b><span data-ko="한국 매장 수">Stores in Korea</span></div>
-        <div class="stat"><b>00</b><span data-ko="업력 (년)">Years of Experience</span></div>
-        <div class="stat"><b>00t</b><span data-ko="일일 소스 생산량">Daily Sauce Production</span></div>
-        <div class="stat"><b>0</b><span data-ko="식품 안전 인증">Food Safety Certifications</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- H3 SIGNATURE MENU -->
-  <section class="blk gray">
-    <i class="ann">H3 · Signature Menu</i>
-    <div class="wrap">
-      <div class="ann-desc">시그니처 메뉴 4개. 메뉴 상세가 아직 없어 플레이스홀더로 표시. 카드를 클릭하면 Menu 페이지로 이동.</div>
-      <div class="center">
-        <div class="eyebrow" data-ko="시그니처 메뉴">Signature Menu</div>
-        <h2 data-ko="한 번 맛보면 다시 찾게 되는 맛">One Bite, and They Come Back</h2>
-      </div>
-      <div class="grid g4 mt40">
-        <div class="card">
-          <div class="ph" style="aspect-ratio:1;background:url('img/menu_classic_chicken.jpg') center/cover;"></div>
-          <div class="row mt16"><span class="tag">Signature</span></div>
-          <h3 class="mt8" data-ko="클래식 프라이드 치킨">Classic Fried Chicken</h3>
-          <p class="small muted" data-ko="바삭한 튀김옷의 황금빛 순살 치킨 & 그레이비">Golden boneless chicken with crisp coating & gravy</p>
-        </div>
-        <div class="card">
-          <div class="ph" style="aspect-ratio:1;background:url('img/menu_creamy_onion.jpg') center/cover;"></div>
-          <div class="row mt16"><span class="tag">Best Seller</span></div>
-          <h3 class="mt8" data-ko="크리미 어니언 치킨">Creamy Onion Chicken</h3>
-          <p class="small muted" data-ko="신선한 양파 슬라이스와 부드러운 화이트 크림 소스">Crispy chicken topped with fresh sliced onions & white cream sauce</p>
-        </div>
-        <div class="card">
-          <div class="ph" style="aspect-ratio:1;background:url('img/menu_takoyaki.jpg') center/cover;"></div>
-          <div class="row mt16"><span class="tag">K-Street Combo</span></div>
-          <h3 class="mt8" data-ko="치킨 & 타코야키 콤보">Chicken & Takoyaki Combo</h3>
-          <p class="small muted" data-ko="바삭한 치킨과 고소한 타코야키의 환상 조합">Crispy chicken bites and savory takoyaki in one meal</p>
-        </div>
-        <div class="card">
-          <div class="ph" style="aspect-ratio:1;background:url('img/menu_tteokbokki.jpg') center/cover;"></div>
-          <div class="row mt16"><span class="tag">K-Food</span></div>
-          <h3 class="mt8" data-ko="빠사시 쌀 떡볶이">Classic Rice Tteokbokki</h3>
-          <p class="small muted" data-ko="특제 소스로 맛을 낸 쫄깃한 쌀떡볶이">Chewy Korean rice cakes with special signature sauce</p>
-        </div>
-      </div>
-      <div class="center mt24"><a href="#menu" class="btn" data-ko="전체 메뉴 보기 →">See Full Menu →</a></div>
-    </div>
-  </section>
-
-  <!-- H4 PROVEN IN KOREA -->
-  <section class="blk">
-    <i class="ann">H4 · Proven in Korea</i>
-    <div class="wrap">
-      <div class="ann-desc">한국 매장 사진 갤러리(큰 사진 1 + 작은 사진 3). 실제 매장 사진 사용 권장 (스톡 이미지 X).</div>
-      <div class="grid g2" style="align-items:center">
+    <!-- Our Stores in BGC (매장 소개 섹션 - 사진 & 위치 중심) -->
+    <div class="eg-stores-section">
+      <div class="eg-sec-hdr">
         <div>
-          <div class="eyebrow" data-ko="한국에서 검증">Proven in Korea</div>
-          <h2 data-ko="한국 전역에서 사랑받는 브랜드">Loved Across Korea</h2>
-          <p class="lead" data-ko="[한국 매장 운영 성과 요약 – 매장 수, 대표 상권, 고객 반응 등 2~3문장]">[Summary of Korean store performance – number of stores, key locations, customer love – 2–3 sentences]</p>
-          <a href="#proof" class="btn mt24" data-ko="한국 매장 더 보기 →">See Korean Stores →</a>
+          <div class="eyebrow" style="color:var(--primary);margin-bottom:4px" data-ko="필리핀 매장 안내">BGC Locations</div>
+          <h2 data-ko="BGC Market! Market! 2개 매장 동시 출격">Visit Our Stores</h2>
         </div>
-        <div class="grid g-21" style="gap:12px">
-          <div class="ph" style="grid-row:span 3;min-height:320px;background:url('img/store_kr1.jpg') center/cover;"><span style="background:rgba(0,0,0,0.6);color:#fff;border-radius:3px;">Korea Store #1</span></div>
-          <div class="ph" style="background:url('img/store_kr2.jpg') center/cover;"><span style="background:rgba(0,0,0,0.6);color:#fff;border-radius:3px;">Store #2</span></div>
-          <div class="ph" style="background:url('img/store_kr3.jpg') center/cover;"><span style="background:rgba(0,0,0,0.6);color:#fff;border-radius:3px;">Store #3</span></div>
-          <div class="ph" style="background:url('img/store_kr4.jpg') center/cover;"><span style="background:rgba(0,0,0,0.6);color:#fff;border-radius:3px;">Store #4</span></div>
-        </div>
+        <a href="#stores" data-ko="매장 상세 & 지도 →">Store Map & Details →</a>
       </div>
-    </div>
-  </section>
 
-  <!-- H5 FACTORY & CERTS -->
-  <section class="blk gray">
-    <i class="ann">H5 · Korean Factory & Certifications</i>
-    <div class="wrap">
-      <div class="ann-desc">공장 소개 영상(30~60초) + 인증 로고 띠. 로고를 클릭하면 Korea Proof › Certifications 섹션으로 이동.</div>
-      <div class="grid g2" style="align-items:center">
-        <div class="ph" style="aspect-ratio:16/9;background:url('img/factory.jpg') center/cover;"><span style="background:rgba(0,0,0,0.65);color:#fff;padding:6px 12px;border-radius:4px;">LFL Own Ingredient & Sauce Factory in Korea</span></div>
-        <div>
-          <div class="eyebrow" data-ko="한국 공장">Made in Korea</div>
-          <h2 data-ko="한국 자체 공장에서 만드는 일관된 맛">Consistent Taste from Our Own Korean Factory</h2>
-          <p class="lead" data-ko="[공장 소개 – 위치, 규모, 생산 공정, 위생 관리 2~3문장]">[Factory intro – location, scale, process, hygiene – 2–3 sentences]</p>
-          <a href="#proof/factory" class="btn mt24" data-ko="공장 둘러보기 →">Tour the Factory →</a>
-        </div>
-      </div>
-      <div class="grid g5 mt40">
-        <div class="ph" style="height:80px"><span>CERT LOGO 1<br>(HACCP)</span></div>
-        <div class="ph" style="height:80px"><span>CERT LOGO 2<br>(ISO 22000)</span></div>
-        <div class="ph" style="height:80px"><span>CERT LOGO 3</span></div>
-        <div class="ph" style="height:80px"><span>CERT LOGO 4</span></div>
-        <div class="ph" style="height:80px"><span>CERT LOGO 5</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- H6 WHY PARTNER -->
-  <section class="blk">
-    <i class="ann">H6 · Why Partner with Us</i>
-    <div class="wrap">
-      <div class="ann-desc">가맹점주 관점의 장점 6개 (아이콘 + 제목 + 1줄 설명). 투자비·수익 관련 내용은 MVP에서 제외.</div>
-      <div class="center">
-        <div class="eyebrow" data-ko="가맹 장점">Why Partner with Us</div>
-        <h2 data-ko="성공하는 가맹점을 위한 6가지 이유">6 Reasons Our Partners Succeed</h2>
-      </div>
-      <div class="grid g3 mt40">
-        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="한국 공장 직공급 소스">Factory-Direct Korean Sauce</h3><p class="muted small" data-ko="한국 공장에서 만든 소스를 직접 공급해 어느 매장이든 같은 맛.">Same taste in every store, supplied directly from Korea.</p></div>
-        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="간단한 조리 공정">Simple Kitchen Operation</h3><p class="muted small" data-ko="표준화된 레시피로 숙련 셰프 없이도 운영 가능.">Standardized recipes — no expert chef required.</p></div>
-        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="체계적인 교육">Complete Training</h3><p class="muted small" data-ko="조리, 서비스, 매장 관리까지 오픈 전 교육.">Cooking, service and store management training before opening.</p></div>
-        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="오픈 지원">Grand Opening Support</h3><p class="muted small" data-ko="입지 검토부터 인테리어, 오픈 운영까지 현장 지원.">On-site support from site review to opening day.</p></div>
-        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="마케팅·배달앱 지원">Marketing & Delivery Apps</h3><p class="muted small" data-ko="SNS 마케팅과 GrabFood·foodpanda 입점 지원.">Social media marketing and GrabFood / foodpanda onboarding.</p></div>
-        <div class="card"><div class="ph circle" style="width:56px;height:56px"><span>ICON</span></div><h3 class="mt16" data-ko="상권 보호">Territory Protection</h3><p class="muted small" data-ko="가맹점 상권을 보호하는 출점 정책.">Store-opening policy that protects your trade area.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- H7 NOW IN PH -->
-  <section class="blk gray">
-    <i class="ann">H7 · Now in the Philippines</i>
-    <div class="wrap">
-      <div class="ann-desc">현재 운영 중인 필리핀 매장 2곳 미리보기 → Store Locator로 연결. 현지에서 실제로 운영 중이라는 것을 보여줘 신뢰를 높임.</div>
-      <div class="grid g2" style="align-items:center">
-        <div>
-          <div class="eyebrow" data-ko="필리핀 매장">Now in the Philippines</div>
-          <h2 data-ko="BGC에서 먼저 만나보세요">Visit Us in BGC</h2>
-          <p class="lead" data-ko="가맹 상담 전에 직영 매장에서 맛과 운영 방식을 직접 경험해 보세요.">Taste the food and see how we operate at our stores before you apply.</p>
-          <a href="#stores" class="btn mt24" data-ko="매장 찾기 →">Find a Store →</a>
-        </div>
-        <div class="grid g2">
-          <div class="card"><div class="ph" style="aspect-ratio:4/3"><span>STORE 1 PHOTO</span></div><h3 class="mt16" data-ko="마켓! 마켓! – 몰 내부 4층">Market! Market! – 4F Inside Mall</h3><p class="small muted">BGC, Taguig · [Unit No. TBD]</p></div>
-          <div class="card"><div class="ph" style="aspect-ratio:4/3"><span>STORE 2 PHOTO</span></div><h3 class="mt16" data-ko="마켓! 마켓! – 몰 외부 1층">Market! Market! – G/F Outside Mall</h3><p class="small muted">BGC, Taguig · [Unit No. TBD]</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- H8 PROCESS -->
-  <section class="blk">
-    <i class="ann">H8 · Franchise Process</i>
-    <div class="wrap">
-      <div class="center">
-        <div class="eyebrow" data-ko="가맹 절차">How to Start</div>
-        <h2 data-ko="6단계로 시작하는 가맹 절차">Your Franchise Journey in 6 Steps</h2>
-      </div>
-      <div class="steps mt40">
-        <div class="step"><h3 data-ko="문의">Inquiry</h3><p class="small muted" data-ko="온라인 상담 신청">Submit online form</p></div>
-        <div class="step"><h3 data-ko="상담">Consultation</h3><p class="small muted" data-ko="1:1 미팅 및 매장 방문">1:1 meeting & store visit</p></div>
-        <div class="step"><h3 data-ko="입지 승인">Site Approval</h3><p class="small muted" data-ko="후보지 상권 분석">Location assessment</p></div>
-        <div class="step"><h3 data-ko="계약">Agreement</h3><p class="small muted" data-ko="가맹 계약 체결">Sign franchise agreement</p></div>
-        <div class="step"><h3 data-ko="교육·공사">Training & Build</h3><p class="small muted" data-ko="교육과 인테리어 공사 동시 진행">Training & store fit-out</p></div>
-        <div class="step"><h3 data-ko="오픈">Grand Opening</h3><p class="small muted" data-ko="오픈 현장 지원">On-site opening support</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- H9 FAQ -->
-  <section class="blk gray">
-    <i class="ann">H9 · FAQ (Top 5)</i>
-    <div class="wrap" style="max-width:820px">
-      <div class="center"><h2 data-ko="자주 묻는 질문">Frequently Asked Questions</h2></div>
-      <div class="mt24">
-        <details><summary data-ko="F&B 경험이 없어도 가맹점을 운영할 수 있나요?">Can I run a store without F&B experience?</summary><p data-ko="[답변 – 교육 프로그램 안내]">[Answer – training program]</p></details>
-        <details><summary data-ko="원재료와 소스는 어떻게 공급되나요?">How are sauces and ingredients supplied?</summary><p data-ko="[답변 – 한국 공장 → 필리핀 공급 구조]">[Answer – Korea factory → PH supply]</p></details>
-        <div class="ann-desc" style="margin:8px 0">투자비 관련 질문은 MVP에서 "상담 시 안내"로 처리.</div>
-        <details><summary data-ko="투자 비용은 얼마인가요?">How much is the investment?</summary><p data-ko="투자 비용은 매장 입지와 규모에 따라 달라 1:1 상담 시 자세히 안내해 드립니다.">Investment varies by location and size. Details are provided during a 1:1 consultation.</p></details>
-        <details><summary data-ko="오픈까지 얼마나 걸리나요?">How long does it take to open?</summary><p data-ko="[답변 – 예: 계약 후 약 00일]">[Answer – e.g., approx. 00 days after agreement]</p></details>
-        <details><summary data-ko="원하는 지역에 매장을 열 수 있나요?">Can I open in my preferred area?</summary><p data-ko="[답변 – 입지 승인 절차]">[Answer – site approval process]</p></details>
-      </div>
-      <div class="center mt24"><a href="#franchise/faq" class="btn" data-ko="FAQ 전체 보기 →">View All FAQ →</a></div>
-    </div>
-  </section>
-
-  <!-- H10 QUICK INQUIRY -->
-  <section class="blk" style="background:#ddd">
-    <i class="ann">H10 · Quick Inquiry (Final CTA)</i>
-    <div class="wrap">
-      <div class="ann-desc">간단 문의 폼(입력 항목 5개). 제출하면 Apply 페이지의 2단계 폼으로 이어지거나 감사 메시지 표시. 이메일 알림 + Google Sheets/CRM 연동.</div>
-      <div class="grid g2" style="align-items:center">
-        <div>
-          <h2 data-ko="지금 가맹 상담을 신청하세요">Start Your Franchise Journey Today</h2>
-          <p class="lead" data-ko="담당자가 영업일 기준 2일 이내에 연락드립니다.">Our franchise team will contact you within 2 business days.</p>
-          <div class="row mt24">
-            <a class="btn sm" data-ko="💬 메신저">💬 Messenger</a>
-            <a class="btn sm" data-ko="📱 바이버">📱 Viber</a>
-            <a class="btn sm" data-ko="📞 전화">📞 Call</a>
+      <div class="eg-stores-grid">
+        <!-- Store 1: 4F Food Court -->
+        <div class="eg-store-card">
+          <div class="eg-store-img-wrap">
+            <img src="img/menu_cup_combo.jpg" alt="CHITOPIA 4F Food Court">
+            <span class="eg-store-status" data-ko="🚧 오픈 준비 중 (공사 진행)">Opening Soon · Under Construction</span>
+          </div>
+          <div class="eg-store-body">
+            <span class="eg-store-tag">Express K-Food</span>
+            <div class="eg-store-title" data-ko="마켓! 마켓! 몰 내부 4층 푸드코트">Market! Market! 4F Food Court</div>
+            <div class="eg-store-meta">📍 4th Level Food Court, Market! Market!, BGC, Taguig</div>
+            <div class="eg-store-meta">⏰ Mon–Sun 10:00 AM – 9:00 PM</div>
+            <div class="eg-store-meta" style="color:var(--soft)" data-ko="💡 빠른 픽업, 컵강정, 떡볶이, 쇼핑객 중심의 익스프레스 매장">💡 Fast grab-and-go cup chicken, tteokbokki combos for mall shoppers</div>
+            <div class="eg-store-actions">
+              <a href="#stores" class="btn sm pri" data-ko="매장 위치 확인">View Location</a>
+              <a href="#menu" class="btn sm" data-ko="푸드코트 메뉴">Explore Menu</a>
+            </div>
           </div>
         </div>
-        <form class="card form" onsubmit="return false">
-          <div class="grid g2" style="gap:12px">
-            <div class="f"><label data-ko="이름 *">Full Name *</label><input data-ko-ph="홍길동" placeholder="Juan Dela Cruz"></div>
-            <div class="f"><label data-ko="휴대폰 *">Mobile *</label><input placeholder="09XX XXX XXXX"></div>
+
+        <!-- Store 2: 1F Ground Level -->
+        <div class="eg-store-card">
+          <div class="eg-store-img-wrap">
+            <img src="img/store_kr1.jpg" alt="CHITOPIA Ground Floor Roadshop">
+            <span class="eg-store-status" data-ko="🚧 오픈 준비 중 (인테리어 시공)">Opening Soon · Under Construction</span>
           </div>
-          <div class="f"><label data-ko="이메일 *">Email *</label><input placeholder="name@email.com"></div>
-          <div class="grid g2" style="gap:12px">
-            <div class="f"><label data-ko="희망 지역 *">Preferred City *</label><select><option data-ko="선택">Select</option></select></div>
-            <div class="f"><label data-ko="매장 확보 여부">Location Secured?</label><select><option data-ko="예">Yes</option><option data-ko="아니오">No</option></select></div>
+          <div class="eg-store-body">
+            <span class="eg-store-tag" style="color:#2b8a3e;">Casual Dining & Chimaek</span>
+            <div class="eg-store-title" data-ko="마켓! 마켓! 1층 로드샵 (몰 외부)">Market! Market! G/F Outside Mall</div>
+            <div class="eg-store-meta">📍 Ground Floor (Facing Fiesta Market), Market! Market!, BGC</div>
+            <div class="eg-store-meta">⏰ Mon–Sun 11:00 AM – 11:00 PM (Late Night Chimaek)</div>
+            <div class="eg-store-meta" style="color:var(--soft)" data-ko="💡 테이블 다이닝, 시원한 생맥주와 치킨, 저녁 모임 특화 매장">💡 Full dine-in seating, fresh draft beer & fried chicken for evening social gatherings</div>
+            <div class="eg-store-actions">
+              <a href="#stores" class="btn sm pri" data-ko="매장 위치 확인">View Location</a>
+              <a href="#apply" class="btn sm" data-ko="로드샵 가맹 문의">Franchise Inquiry</a>
+            </div>
           </div>
-          <label class="consent"><input type="checkbox"><span data-ko="개인정보처리방침에 동의합니다 (필리핀 개인정보보호법 RA 10173). *">I agree to the Privacy Policy (Data Privacy Act of 2012, RA 10173). *</span></label>
-          <button class="btn pri mt16" style="width:100%" data-ko="상담 신청하기">Submit Inquiry</button>
-        </form>
+        </div>
       </div>
     </div>
-  </section>
+
+    <!-- Brand Taste Secrets (3대 맛의 비밀) -->
+    <div class="eg-sec-hdr" style="justify-content:center;text-align:center;margin-bottom:28px">
+      <div>
+        <div class="eyebrow" style="color:var(--primary);margin-bottom:4px" data-ko="차별화된 맛의 비결">Authentic Taste</div>
+        <h2 data-ko="치토피아가 사랑받는 3가지 이유">Why CHITOPIA?</h2>
+      </div>
+    </div>
+    <div class="eg-secret-grid">
+      <div class="eg-secret-card">
+        <div class="eg-secret-icon">🏭</div>
+        <div class="eg-secret-title" data-ko="100% 한국 본사 직송 소스">Factory-Direct Sauce</div>
+        <div class="eg-secret-desc" data-ko="한국 본사 LFL 직영 공장에서 HACCP/ISO 인증을 거쳐 생산된 특제 소스와 파우더를 필리핀 매장으로 직송합니다.">Produced in LFL Korea's certified factory, delivering identical rich authentic Korean flavors to every dish.</div>
+      </div>
+      <div class="eg-secret-card">
+        <div class="eg-secret-icon">🔥</div>
+        <div class="eg-secret-title" data-ko="175℃ 황금빛 2중 튀김">175℃ Double-Frying</div>
+        <div class="eg-secret-desc" data-ko="정확한 온도 제어와 표준화된 조리 타이밍으로 시간이 지나도 눅눅해지지 않는 극상의 바삭함을 유지합니다.">Precise temperature and standardized fry timings keep the crust amazingly crispy even hours later.</div>
+      </div>
+      <div class="eg-secret-card">
+        <div class="eg-secret-icon">🇰🇷</div>
+        <div class="eg-secret-title" data-ko="한국 100여 개 매장 검증">Proven in 100+ Stores</div>
+        <div class="eg-secret-desc" data-ko="한국 전역 100개 이상의 가맹점에서 검증된 맛과 시스템. 필리핀 현지 고객들의 입맛을 단숨에 사로잡습니다.">Tested and approved across 100+ Korean franchise stores with overwhelming customer loyalty.</div>
+      </div>
+    </div>
+
+    <!-- Franchise Partnership Section (하단 배치된 가맹 문의) -->
+    <div class="eg-franchise-box" id="homeFranchiseBox">
+      <div class="eg-franchise-inner">
+        <div>
+          <span class="eg-hero-tag" style="background:var(--primary-light);color:var(--primary);border-color:var(--primary-badge)" data-ko="파트너십 · 가맹 문의">Franchise Partnership</span>
+          <h2 style="font-size:28px;margin-bottom:12px;" data-ko="치토피아와 함께<br>필리핀 K-Food 시장을 선도하세요">Grow with CHITOPIA<br>in the Philippines</h2>
+          <p style="color:var(--mid);font-size:14.5px;line-height:1.6;margin-bottom:18px;" data-ko="BGC Market! Market! 1호점 론칭과 함께 공식 가맹점주를 모십니다. 표준화된 레시피, 한국 공장 직송 공급망, 체계적인 본사 교육으로 성공적인 창업을 함께합니다.">Join our proven Korean chicken franchise network. Standardized kitchen operations, direct raw-material supply, and dedicated field training.</p>
+          
+          <div style="font-weight:700;font-size:13px;color:var(--soft);margin-bottom:8px" data-ko="한국 본사 및 품질 검증 서브페이지:">Explore Korean HQ & Proof Subpages:</div>
+          <div class="eg-subpage-chips">
+            <a href="#proof" class="eg-sub-chip" data-ko="🏢 한국 본사·실적 보기">🏢 Korea HQ & Stores</a>
+            <a href="#proof/factory" class="eg-sub-chip" data-ko="🏭 직영 소스 공장">🏭 Sauce Factory & R&D</a>
+            <a href="#proof/certs" class="eg-sub-chip" data-ko="🏅 식품안전 인증서">🏅 Certifications (HACCP)</a>
+            <a href="#franchise" class="eg-sub-chip" data-ko="📋 가맹 절차 안내">📋 Franchise Guide</a>
+          </div>
+        </div>
+
+        <div>
+          <!-- Quick 2-Step Application Form -->
+          <form class="card form" style="background:#fff;border-radius:18px;padding:24px;box-shadow:var(--shadow-sm);" onsubmit="submitHomeFranchise(event)">
+            <h3 style="margin-bottom:14px;font-size:18px" data-ko="가맹 상담 간편 신청">Quick Franchise Inquiry</h3>
+            <div class="grid g2" style="gap:10px">
+              <div class="f"><label data-ko="이름 *">Full Name *</label><input required data-ko-ph="이름 입력" placeholder="Juan Dela Cruz"></div>
+              <div class="f"><label data-ko="휴대폰 번호 *">Mobile *</label><input required placeholder="09XX XXX XXXX"></div>
+            </div>
+            <div class="f"><label data-ko="이메일 *">Email *</label><input type="email" required placeholder="name@email.com"></div>
+            <div class="grid g2" style="gap:10px">
+              <div class="f"><label data-ko="희망 지역 *">Preferred City *</label>
+                <select required>
+                  <option value="">Select City</option>
+                  <option value="BGC/Taguig">BGC / Taguig</option>
+                  <option value="Makati">Makati</option>
+                  <option value="Pasig/Ortigas">Pasig / Ortigas</option>
+                  <option value="Quezon City">Quezon City</option>
+                  <option value="Other">Other Region</option>
+                </select>
+              </div>
+              <div class="f"><label data-ko="점포 보유 여부">Location Secured?</label>
+                <select>
+                  <option data-ko="검토 중">Exploring Locations</option>
+                  <option data-ko="점포 확보됨">Location Secured</option>
+                </select>
+              </div>
+            </div>
+            <label class="consent" style="margin-top:6px;font-size:12px;">
+              <input type="checkbox" required checked>
+              <span data-ko="개인정보처리방침에 동의합니다 (필리핀 RA 10173).">I agree to the Privacy Policy (Data Privacy Act RA 10173).</span>
+            </label>
+            <button type="submit" class="eg-btn-orange" style="width:100%;justify-content:center;margin-top:16px;border-radius:12px;" data-ko="가맹 상담 신청서 제출">Submit Inquiry</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </section>
 
-<!-- =====================================================================
-     02 · BRAND
-====================================================================== -->
+
 <section class="page" id="page-brand" hidden>
   <div class="banner"><i class="ann">B0 · Page Banner</i><div class="wrap">
     <div class="crumb">Home › Brand</div>
