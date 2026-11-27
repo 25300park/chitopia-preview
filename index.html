@@ -718,7 +718,7 @@
     <!-- ================= SECTION 1: FULL-BLEED AUTOPLAY VIDEO HERO ================= -->
   <section class="hero-video-section" id="heroVideoSection">
     <!-- Autoplay Muted Loop Playsinline Video with Poster -->
-    <video id="heroVideo" class="hero-video-bg" src="video/video.mp4" poster="img/frames/ezgif-frame-001.jpg" autoplay muted loop playsinline preload="auto"></video>
+    <video id="heroVideo" class="hero-video-bg" src="video/video.mp4" poster="img/frames/ezgif-frame-001.jpg" autoplay muted playsinline preload="auto"></video>
     
     <!-- Subtle Depth Vignette & Cinema Gradient -->
     <div class="hero-video-overlay"></div>
@@ -1814,15 +1814,16 @@ window.addEventListener('hashchange', () => {
 });
 
 
-// ================= HERO VIDEO AUTOPLAY CONTROLLER =================
+// ================= HERO VIDEO SINGLE PLAY & FREEZE CONTROLLER =================
 document.addEventListener('DOMContentLoaded', () => {
   const vid = document.getElementById('heroVideo');
   if (vid) {
+    vid.loop = false;
     vid.muted = true;
+
     const playPromise = vid.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
-        // Fallback for strict browser policies
         const onFirstInteract = () => {
           vid.play();
           document.removeEventListener('click', onFirstInteract);
@@ -1832,6 +1833,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('touchstart', onFirstInteract);
       });
     }
+
+    // Freeze cleanly on last frame when playback ends (반복 재생 없이 마지막 프레임 정지)
+    vid.addEventListener('ended', () => {
+      vid.pause();
+      if (vid.duration) {
+        vid.currentTime = Math.max(0, vid.duration - 0.05);
+      }
+    });
   }
 });
 
