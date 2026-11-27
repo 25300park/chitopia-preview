@@ -550,6 +550,202 @@
     .eg-card-desc { display: none; }
   }
 
+
+  /* ================= SECTION 1: 101-FRAME CANVAS PARALLAX HERO ================= */
+  .px-canvas-hero {
+    position: relative;
+    height: 300vh;
+    background: #0d0c0b;
+    color: #fff;
+    margin-bottom: 30px;
+  }
+  .px-canvas-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #pxHeroCanvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    filter: contrast(1.08) saturate(1.12);
+  }
+  .px-cinema-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(13,12,11,0.55) 0%, rgba(13,12,11,0.15) 45%, rgba(13,12,11,0.75) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .px-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 35%, rgba(0,0,0,0.78) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .px-content-stage {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+  }
+  .px-step-card {
+    background: rgba(22, 20, 18, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 20px;
+    padding: 38px 42px;
+    max-width: 580px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.65);
+    position: absolute;
+    transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1), transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    will-change: transform, opacity;
+    pointer-events: auto;
+  }
+  .px-step-card.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(28px) scale(0.97);
+  }
+  .px-step-card.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+  .px-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--primary);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  .px-step-card h1 {
+    font-size: 34px;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    color: #fff;
+    font-weight: 800;
+  }
+  .px-step-card p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #d6d0c7;
+    margin-bottom: 24px;
+  }
+
+  /* Right-side Scroll Indicator */
+  .px-indicator {
+    position: absolute;
+    right: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 4;
+  }
+  .px-dot-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.35);
+    padding: 6px 12px 6px 8px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    transition: 0.3s;
+  }
+  .px-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    transition: 0.3s;
+  }
+  .px-dot-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.3s;
+  }
+  .px-dot-wrap.active .px-dot {
+    background: var(--primary);
+    transform: scale(1.35);
+  }
+  .px-dot-wrap.active .px-dot-label {
+    color: #fff;
+    font-weight: 800;
+  }
+
+  /* Scroll Down Indicator Hint */
+  .px-scroll-hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255,255,255,0.7);
+    font-size: 10.5px;
+    letter-spacing: 2px;
+    font-weight: 700;
+    cursor: pointer;
+    animation: bounceDown 2s infinite ease-in-out;
+  }
+  .px-scroll-arrow {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  @keyframes bounceDown {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40% { transform: translateX(-50%) translateY(-8px); }
+    60% { transform: translateX(-50%) translateY(-4px); }
+  }
+
+  @media (max-width: 900px) {
+    .px-step-card {
+      padding: 24px 20px;
+      max-width: calc(100% - 32px);
+      left: 16px;
+      right: 16px;
+      margin: 0 auto;
+      border-radius: 16px;
+    }
+    .px-step-card h1 { font-size: 24px; }
+    .px-step-card p { font-size: 13.5px; margin-bottom: 18px; }
+    .px-indicator { display: none; }
+  }
+
 </style>
 </head>
 <body>
@@ -646,6 +842,74 @@
      01 · HOME (CONSUMER-CENTRIC MENU & STORES SHOWCASE)
 ====================================================================== -->
 <section class="page" id="page-home">
+
+  <!-- ================= SECTION 1: 101-FRAME HIGH-PERFORMANCE SCROLL PARALLAX ================= -->
+  <section class="px-canvas-hero" id="parallaxHero">
+    <div class="px-canvas-sticky">
+      <!-- 60FPS Hardware Accelerated Canvas -->
+      <canvas id="pxHeroCanvas"></canvas>
+      
+      <!-- 사실적 질감을 극대화하는 시네마틱 톤 & 비네팅 오버레이 -->
+      <div class="px-cinema-overlay"></div>
+      <div class="px-vignette"></div>
+
+      <!-- 3-Stage Story Overlay Cards -->
+      <div class="px-content-stage">
+        <!-- 1단계: 튀김 조리 (0% ~ 35%) -->
+        <div class="px-step-card active" id="pxCard1">
+          <span class="px-badge" data-ko="Step 1 · 175℃ 황금빛 튀김">Step 1 · Sizzle & Crisp</span>
+          <h1 data-ko="175℃ 깨끗한 기름 속,<br>바삭함이 폭발하는 순간.">Fried to Golden Perfection.<br>Crispy Outside, Juicy Inside.</h1>
+          <p data-ko="한국 본사 LFL 직영 공장의 특제 크리스피 파우더로 튀겨내어, 한 번 맛보면 잊을 수 없는 극상의 바삭함을 만듭니다.">Crafted with LFL Korea's proprietary coating mix, delivering the iconic crunch and tenderness loved across Korea.</p>
+          <div class="row">
+            <a href="#menu" class="btn pri" style="background:var(--primary);border-color:var(--primary);" data-ko="시그니처 메뉴 보기">Explore Menu</a>
+            <a href="#stores" class="btn" style="color:#fff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.12);" data-ko="BGC 매장 위치">BGC Stores</a>
+          </div>
+        </div>
+
+        <!-- 2단계: 황금빛 닭강정 완성 (35% ~ 70%) -->
+        <div class="px-step-card hidden" id="pxCard2">
+          <span class="px-badge" style="background:#e8590c;" data-ko="Step 2 · 한국에서 검증된 겉바속촉">Step 2 · The Ultimate Crunch</span>
+          <h1 data-ko="한국에서 검증된 닭강정,<br>이제 필리핀에서 만납니다.">Proven in Korea.<br>Now in the Philippines.</h1>
+          <p data-ko="바삭한 튀김옷 속 꽉 찬 촉촉한 육즙. 한국 100여 개 매장에서 매일 완판 신화를 쓴 시그니처 닭강정의 맛을 그대로 전수합니다.">Steaming hot, tender chicken beneath an irresistible crispy shell. A time-tested signature menu ready to capture Filipino tastebuds.</p>
+          <div class="row">
+            <a href="#menu" class="btn pri" style="background:var(--primary);border-color:var(--primary);" data-ko="메뉴 전체보기">View Menu</a>
+            <a href="#proof" class="btn" style="color:#fff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.12);" data-ko="한국 본사 실적 보기">Korean Proof</a>
+          </div>
+        </div>
+
+        <!-- 3단계: 접시 플레이팅 & BGC 출격 (70% ~ 100%) -->
+        <div class="px-step-card hidden" id="pxCard3">
+          <span class="px-badge" style="background:#2b8a3e;" data-ko="Step 3 · BGC Market! Market! 오픈">Step 3 · Ready to Serve</span>
+          <h1 data-ko="BGC Market! Market!에서<br>치토피아의 전설이 시작됩니다.">From Korea to Your Plate.<br>Opening Soon in BGC.</h1>
+          <p data-ko="몰 내부 4층 푸드코트와 1층 로드점 2개 매장 동시 출격! 한국 공장 직송 소스와 표준화된 조리 시스템으로 완성되는 K-치킨의 정수.">Two premier locations at Market! Market! BGC. Standardized recipes, factory-direct sauces, and authentic Korean street flavors.</p>
+          <div class="row">
+            <a href="#stores" class="btn pri" style="background:var(--primary);border-color:var(--primary);" data-ko="BGC 매장 위치 확인">BGC Stores</a>
+            <a href="#homeFranchiseBox" class="btn" style="color:#fff;border-color:rgba(255,255,255,0.4);background:rgba(255,255,255,0.12);" data-ko="가맹 문의">Franchise Inquiry</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측 스크롤 인디케이터 -->
+      <div class="px-indicator">
+        <div class="px-dot-wrap active" id="dot1" onclick="scrollToPx(0)">
+          <div class="px-dot"></div><span class="px-dot-label">01 Fry</span>
+        </div>
+        <div class="px-dot-wrap" id="dot2" onclick="scrollToPx(1)">
+          <div class="px-dot"></div><span class="px-dot-label">02 Crunch</span>
+        </div>
+        <div class="px-dot-wrap" id="dot3" onclick="scrollToPx(2)">
+          <div class="px-dot"></div><span class="px-dot-label">03 Plating</span>
+        </div>
+      </div>
+
+      <!-- 스크롤 다운 가이드 힌트 -->
+      <div class="px-scroll-hint" onclick="scrollToPx(1)">
+        <span data-ko="스크롤하여 조리 과정 보기">SCROLL TO FRY</span>
+        <div class="px-scroll-arrow">↓</div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- Mobile Top App Header (Visible on Mobile) -->
   <div class="eg-top-bar">
@@ -1760,6 +2024,154 @@ window.addEventListener('hashchange', () => {
   const hash = (location.hash || '#home').slice(1).split('/')[0];
   setNavActive(hash);
 });
+
+
+// ================= 101-FRAME CANVAS SEQUENCE ENGINE =================
+const FRAME_COUNT = 101;
+const frameImages = [];
+let loadedCount = 0;
+let currentFrame = 1;
+let isCanvasReady = false;
+
+const canvas = document.getElementById('pxHeroCanvas');
+const ctx = canvas ? canvas.getContext('2d') : null;
+
+// Preload 101 frames
+for (let i = 1; i <= FRAME_COUNT; i++) {
+  const img = new Image();
+  const num = String(i).padStart(3, '0');
+  img.src = `img/frames/ezgif-frame-${num}.jpg`;
+  img.onload = () => {
+    loadedCount++;
+    if (i === 1) {
+      isCanvasReady = true;
+      resizeCanvasCover();
+      drawFrame(1);
+    }
+  };
+  frameImages.push(img);
+}
+
+function drawFrame(frameIndex) {
+  if (!ctx || !canvas) return;
+  const img = frameImages[frameIndex - 1];
+  if (!img || !img.complete) return;
+
+  const cWidth = canvas.width;
+  const cHeight = canvas.height;
+  const iWidth = img.naturalWidth || img.width;
+  const iHeight = img.naturalHeight || img.height;
+
+  if (!iWidth || !iHeight) return;
+
+  // Object-fit: cover implementation in 2D canvas
+  const hRatio = cWidth / iWidth;
+  const vRatio = cHeight / iHeight;
+  const ratio = Math.max(hRatio, vRatio);
+
+  const renderW = iWidth * ratio;
+  const renderH = iHeight * ratio;
+  const shiftX = (cWidth - renderW) / 2;
+  const shiftY = (cHeight - renderH) / 2;
+
+  ctx.clearRect(0, 0, cWidth, cHeight);
+  ctx.drawImage(img, 0, 0, iWidth, iHeight, shiftX, shiftY, renderW, renderH);
+  currentFrame = frameIndex;
+}
+
+function resizeCanvasCover() {
+  if (!canvas) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = (rect.width || window.innerWidth) * dpr;
+  canvas.height = (rect.height || window.innerHeight) * dpr;
+  drawFrame(currentFrame);
+}
+
+window.addEventListener('resize', resizeCanvasCover);
+
+// Scroll-driven Scrubber with requestAnimationFrame
+let ticking = false;
+function onScrollParallax() {
+  if (!ticking) {
+    requestAnimationFrame(updateParallax);
+    ticking = true;
+  }
+}
+
+function updateParallax() {
+  const hero = document.getElementById('parallaxHero');
+  if (!hero) { ticking = false; return; }
+
+  const rect = hero.getBoundingClientRect();
+  const heroH = hero.offsetHeight - window.innerHeight;
+  if (heroH <= 0) { ticking = false; return; }
+
+  let progress = -rect.top / heroH;
+  progress = Math.max(0, Math.min(1, progress));
+
+  // Compute frame index (1 to 101)
+  const targetFrame = Math.max(1, Math.min(FRAME_COUNT, Math.floor(progress * (FRAME_COUNT - 1)) + 1));
+  if (targetFrame !== currentFrame) {
+    drawFrame(targetFrame);
+  }
+
+  // Story Cards & Dot Indicator Sync
+  const c1 = document.getElementById('pxCard1');
+  const c2 = document.getElementById('pxCard2');
+  const c3 = document.getElementById('pxCard3');
+  const d1 = document.getElementById('dot1');
+  const d2 = document.getElementById('dot2');
+  const d3 = document.getElementById('dot3');
+
+  if (progress < 0.35) {
+    if (c1) c1.className = 'px-step-card active';
+    if (c2) c2.className = 'px-step-card hidden';
+    if (c3) c3.className = 'px-step-card hidden';
+    if (d1) d1.className = 'px-dot-wrap active';
+    if (d2) d2.className = 'px-dot-wrap';
+    if (d3) d3.className = 'px-dot-wrap';
+  } else if (progress < 0.72) {
+    if (c1) c1.className = 'px-step-card hidden';
+    if (c2) c2.className = 'px-step-card active';
+    if (c3) c3.className = 'px-step-card hidden';
+    if (d1) d1.className = 'px-dot-wrap';
+    if (d2) d2.className = 'px-dot-wrap active';
+    if (d3) d3.className = 'px-dot-wrap';
+  } else {
+    if (c1) c1.className = 'px-step-card hidden';
+    if (c2) c2.className = 'px-step-card hidden';
+    if (c3) c3.className = 'px-step-card active';
+    if (d1) d1.className = 'px-dot-wrap';
+    if (d2) d2.className = 'px-dot-wrap';
+    if (d3) d3.className = 'px-dot-wrap active';
+  }
+
+  ticking = false;
+}
+
+window.addEventListener('scroll', onScrollParallax, { passive: true });
+
+window.scrollToPx = function(stepIndex) {
+  const hero = document.getElementById('parallaxHero');
+  if (!hero) return;
+  const heroTop = hero.getBoundingClientRect().top + window.scrollY;
+  const heroH = hero.offsetHeight - window.innerHeight;
+  const offsets = [0, 0.5, 0.95];
+  window.scrollTo({
+    top: heroTop + (heroH * offsets[stepIndex]),
+    behavior: 'smooth'
+  });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  resizeCanvasCover();
+  updateParallax();
+});
+setTimeout(() => {
+  resizeCanvasCover();
+  updateParallax();
+}, 200);
 
 </script>
 
