@@ -1814,17 +1814,23 @@ window.addEventListener('hashchange', () => {
 });
 
 
-// ================= HERO VIDEO SINGLE PLAY & FREEZE CONTROLLER =================
+// ================= HERO VIDEO SINGLE PLAY & FREEZE CONTROLLER (0.9x SPEED) =================
 document.addEventListener('DOMContentLoaded', () => {
   const vid = document.getElementById('heroVideo');
   if (vid) {
     vid.loop = false;
     vid.muted = true;
+    vid.playbackRate = 0.9; // 90% 재생 속도 (0.9x Slow Motion)
+
+    // Ensure playback rate sticks across browser states
+    vid.addEventListener('loadedmetadata', () => { vid.playbackRate = 0.9; });
+    vid.addEventListener('play', () => { vid.playbackRate = 0.9; });
 
     const playPromise = vid.play();
     if (playPromise !== undefined) {
       playPromise.catch(() => {
         const onFirstInteract = () => {
+          vid.playbackRate = 0.9;
           vid.play();
           document.removeEventListener('click', onFirstInteract);
           document.removeEventListener('touchstart', onFirstInteract);
